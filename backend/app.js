@@ -1,9 +1,9 @@
-import express from "express";
-import userRouter from "./routes/user";
+const express =  require("express");
+const userRouter = require("./routes/user");
 
 const app = express();
 
-app.use(userRouter);
+app.use("/api", userRouter);
 
 app.get('/', (req, res) => {
     res.send("<h1>Hello I am from you backend server</h1>");
