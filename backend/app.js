@@ -1,6 +1,9 @@
 import express from "express";
+import userRouter from "./routes/user";
 
 const app = express();
+
+app.use(userRouter);
 
 app.get('/', (req, res) => {
     res.send("<h1>Hello I am from you backend server</h1>");
