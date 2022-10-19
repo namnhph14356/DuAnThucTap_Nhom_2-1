@@ -25,4 +25,4 @@ emailVerificationTokenSchema.pre('save', async function (next) {
     }
     next();
 })
-module.exports = mongoose.model("EmailVerificationTokenSchema", emailVerificationTokenSchema    );
+module.exports = mongoose.model("EmailVerificationTokenSchema", emailVerificationTokenSchema);
