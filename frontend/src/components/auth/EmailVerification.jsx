@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Container from "../Container";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
@@ -7,6 +7,18 @@ const OTP_LENGTH = 6;
 
 export default function EmailVerification() {
   const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(""));
+  const [activeOtpIndex, setActiveOptIndex] = useState(0);
+
+  const inputRef = useRef()
+  const handleOtpChange = ({target}, index) => {
+    const { value } = target;
+    // setOtp([value]);
+    setActiveOptIndex(index + 1)
+  }
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, [activeOtpIndex])
+  
   return (
     <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
       <Container>
@@ -22,7 +34,11 @@ export default function EmailVerification() {
             {otp.map((_, index) => {
               return (
                 <input
+                  ref={activeOtpIndex === index ? inputRef : null}
+                  key={index}
                   type="number"
+                  value={otp[index] || ''}
+                  onChange={(e) => handleOtpChange(e, index)}
                   className="w-12 h-12 border-2 border-dark-subtle focus:border-white 
                   rounded bg-transparent ontline-none text-center text-white font-semibold text-xl"
                 />
