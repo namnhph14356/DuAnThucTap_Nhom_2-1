@@ -143,7 +143,7 @@ exports.forgetPassword = async(res, req) => {
     await newPasswordResetToken.save();
     const resetPasswordUrl = `http://localhost:3000/reset-password?token=${token}&id=${user._id}`;
 
-    var transport = generateMailTransporter()
+    const  transport = generateMailTransporter()
 
     transport.sendMail({
         from: 'security@reviewapp.com',
@@ -157,5 +157,37 @@ exports.forgetPassword = async(res, req) => {
     });
 
     res.json({message: 'Link sent to your email!'})
+};
+
+exports.sendResetPasswordTokenStatus = async (req, res) => {
+    res.json({valid: true});
+
 }
+exports.resetPassword = async (req, res) => {
+    const {newPassword, userId} = req.body;
+    const user =  await User.findById(userId);
+    const matched = user.compairePassword(newPassword)
+    if(!matched) return sendError(res, 'The new password  must be different from old one');
+    user.password = newPassword ;
+    await user.save();
+    await PasswordResetToken.findByIdAndDelete(req.resetToken._id)
+
+
+    const  transport = generateMailTransporter()
+
+    transport.sendMail({
+        from: 'security@reviewapp.com',
+        to: user.email,
+        subject: 'Password Reset Successfully',
+        html: `
+            <h1>Password Reset Successfully</h1>
+            <p>Now you can use new password.</p>
+
+        `
+    });
+
+    res.json({message: 'Password Reset Successfully, now you can use new password.'})
+    
+}
+
 
