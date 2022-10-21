@@ -30,6 +30,12 @@ export default function EmailVerification() {
     else focusNextInputField(index);
     setOtp([...newOtp]);
   }
+
+  const handleKeyDown = ({key}, index) => {
+    if (key === "Backspace") {
+      focusPrevInputField(index);
+    }
+  }
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex])
@@ -54,6 +60,7 @@ export default function EmailVerification() {
                   type="number"
                   value={otp[index] || ''}
                   onChange={(e) => handleOtpChange(e, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                   className="w-12 h-12 border-2 border-dark-subtle focus:border-white 
                   rounded bg-transparent ontline-none text-center text-white font-semibold text-xl"
                 />
