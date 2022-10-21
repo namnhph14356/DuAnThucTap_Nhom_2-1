@@ -12,7 +12,9 @@ export default function EmailVerification() {
   const inputRef = useRef()
   const handleOtpChange = ({target}, index) => {
     const { value } = target;
-    // setOtp([value]);
+    const newOtp = [...otp];
+    newOtp[index] = value.substring(value.length - 1, value.length);
+    setOtp([...newOtp]);
     setActiveOptIndex(index + 1)
   }
   useEffect(() => {
