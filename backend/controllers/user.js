@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const { isValidObjectId } = require('mongoose');
 const { sendError, generateRandomByte } = require("../utils/helper");
 const { generateMailTransporter } = require('../utils/mail');
+const jwt = require("jsonwebtoken");
 
 
 exports.create = async (req, res) => {
@@ -54,12 +55,12 @@ exports.verifyEmail = async (req, res) => {
     if (!isValidObjectId(userId)) return sendError(res, "Invalid User")
 
     const user = await User.findById(userId)
-    if (!user) return sendError(res, "User not found")  
+    if (!user) return sendError(res, "User not found")
 
-    if (user.isVerified) return sendError(res, "User is already verifiled") 
+    if (user.isVerified) return sendError(res, "User is already verifiled")
 
     const token = await EmailVerificationToken.findOne({ owner: userId })
-    if (!token) return sendError(res, "Token not found")  
+    if (!token) return sendError(res, "Token not found")
 
     const isMatched = await token.compaireToken(OTP)
     if (!isMatched) return sendError(res, "Please submit a valid OTP")
@@ -130,20 +131,20 @@ exports.resendEmailVerificationToken = async (req, res) => {
         message: "New OTP has been sent to your registered email accout.",
     });
 };
-exports.forgetPassword = async(res, req) => {
-    const {email} = req.body;
-    if(!email) return sendError(res, 'email is missing!');
-    const user = await User.findOne({email});
-    if(!user) return sendError(res, 'User not found!', 404);
-    const alreadyHasToken =  await PasswordResetToken.findOne({owner: user._id});
-    if(alreadyHasToken) return sendError(res, 'Only after  one hour you can request for another token!')
-    
-    const token = await generateRandomByte(); 
-    const newPasswordResetToken = await PasswordResetToken({owner: user._id, token})
+exports.forgetPassword = async (res, req) => {
+    const { email } = req.body;
+    if (!email) return sendError(res, 'email is missing!');
+    const user = await User.findOne({ email });
+    if (!user) return sendError(res, 'User not found!', 404);
+    const alreadyHasToken = await PasswordResetToken.findOne({ owner: user._id });
+    if (alreadyHasToken) return sendError(res, 'Only after  one hour you can request for another token!')
+
+    const token = await generateRandomByte();
+    const newPasswordResetToken = await PasswordResetToken({ owner: user._id, token })
     await newPasswordResetToken.save();
     const resetPasswordUrl = `http://localhost:3000/reset-password?token=${token}&id=${user._id}`;
 
-    const  transport = generateMailTransporter()
+    const transport = generateMailTransporter()
 
     transport.sendMail({
         from: 'security@reviewapp.com',
@@ -156,24 +157,24 @@ exports.forgetPassword = async(res, req) => {
         `
     });
 
-    res.json({message: 'Link sent to your email!'})
+    res.json({ message: 'Link sent to your email!' })
 };
 
 exports.sendResetPasswordTokenStatus = async (req, res) => {
-    res.json({valid: true});
+    res.json({ valid: true });
 
 }
 exports.resetPassword = async (req, res) => {
-    const {newPassword, userId} = req.body;
-    const user =  await User.findById(userId);
+    const { newPassword, userId } = req.body;
+    const user = await User.findById(userId);
     const matched = user.compairePassword(newPassword)
-    if(!matched) return sendError(res, 'The new password  must be different from old one');
-    user.password = newPassword ;
+    if (!matched) return sendError(res, 'The new password  must be different from old one');
+    user.password = newPassword;
     await user.save();
     await PasswordResetToken.findByIdAndDelete(req.resetToken._id)
 
 
-    const  transport = generateMailTransporter()
+    const transport = generateMailTransporter()
 
     transport.sendMail({
         from: 'security@reviewapp.com',
@@ -186,8 +187,23 @@ exports.resetPassword = async (req, res) => {
         `
     });
 
-    res.json({message: 'Password Reset Successfully, now you can use new password.'})
-    
+    res.json({ message: 'Password Reset Successfully, now you can use new password.' })
+
 }
 
+exports.signIn = async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return sendError(res, "Email/Password mismatch!");
+
+    const matched = await user.comparePassword(password);
+    if (!matched) return sendError(res, "Email/Password mismatch!");
+
+    const { _id, name } = user;
+
+    const jwtToken = jwt.sign({ userId: _id }, "ahha3u4hauijka4ua3a34");
+
+    res.json({ user: { id: _id, name, email, token: jwtToken } });
+};
 
