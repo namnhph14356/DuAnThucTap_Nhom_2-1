@@ -1,4 +1,5 @@
 import React from "react";
+import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import CustomLink from "../CustomLink";
 import FormInput from "../form/FormInput";
@@ -7,9 +8,9 @@ import Title from "../form/Title";
 
 export default function ForgetPassword() {
   return (
-    <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
+    <div className="fixed inset-0 dark:bg-primary :bg-white -z-10 flex justify-center items-center">
       <Container>
-        <form className="bg-secondary rounded p-6 w-96 space-y-6">
+        <form className={commonModalClasses +" w-96"}>
           <Title>Please Enter Your Email</Title>
           <FormInput label="Email" placeholder="john@email.com" name="email"/>
           <Submit value="Send Link" />
