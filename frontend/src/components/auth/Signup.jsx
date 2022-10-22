@@ -1,4 +1,6 @@
+/* eslint-disable no-useless-escape */
 import React, { useState } from "react";
+import { createUser } from "../../api/auth";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import CustomLink from "../CustomLink";
@@ -36,12 +38,14 @@ export default function Signup() {
     setUserInfo({ ...userInfo, [name]: value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const { ok, error } = validateUserInfo(userInfo)
-    if(!ok) return console.log(error)
-    console.log(userInfo);
+    if (!ok) return console.log(error);
 
+    const response = await createUser(userInfo);
+    if (response.error) return console.log(response.error);
+    console.log(response.user);
   }
 
 
