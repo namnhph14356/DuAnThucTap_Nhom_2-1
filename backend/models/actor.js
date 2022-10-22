@@ -25,7 +25,4 @@ const actorSchema = mongoose.Schema({
     }
 }, {timestamps:true});
 
-
-
-
 module.exports = mongoose.model("Actor", actorSchema); 
