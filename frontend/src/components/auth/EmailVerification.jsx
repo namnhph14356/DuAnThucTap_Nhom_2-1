@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { verifyUserEmail } from "../../api/auth";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import FormContainer from "../form/FormContainer";
@@ -58,21 +59,24 @@ export default function EmailVerification() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (isValidOTP(otp)) return console.log("invalid OTP");
+    if (!isValidOTP(otp)) return console.log("invalid OTP");
     // Submit OTP
-    console.log(otp);
+    const {error, message} = await verifyUserEmail({OTP: otp.join(''), userId: user.id})
+    if(error) return console.log(error);
+    console.log(message)
+
   }
 
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
   
-  // useEffect(() => {
-  //   if (!user) navigate('/not-found');
-  // }, [user])
+  useEffect(() => {
+    if (!user) navigate('/not-found');
+  }, [user])
 
   // if (!user) return null;
 
