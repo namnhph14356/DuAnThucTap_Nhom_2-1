@@ -45,13 +45,13 @@ exports.create = async (req, res) => {
         `
     })
 
-    res.status(201).json({ 
-        user: { 
+    res.status(201).json({
+        user: {
             id: newUser._id,
             name: newUser.name,
             email: newUser.email
         }
-     });
+    });
 }
 
 exports.verifyEmail = async (req, res) => {
@@ -82,9 +82,11 @@ exports.verifyEmail = async (req, res) => {
         subject: 'Wellcom Email',
         html: "<h1>Wellcome to our app and thanks for choosing us. </h1>"
     })
-    res.json({ message: 'your email is verified' })
-
-
+    const jwtToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    res.json({
+        user: { id: user._id, name: user.name, email: user.email, token: jwtToken },
+        message: "your email is verified.",
+        });
 }
 
 exports.resendEmailVerificationToken = async (req, res) => {
@@ -198,18 +200,18 @@ exports.resetPassword = async (req, res) => {
 
 exports.signIn = async (req, res, next) => {
     const { email, password } = req.body;
-  
+
     const user = await User.findOne({ email });
     if (!user) return sendError(res, "Email/Password mismatch!");
-  
+
     const matched = await user.comparePassword(password);
     if (!matched) return sendError(res, "Email/Password mismatch!");
-  
+
     const { _id, name } = user;
-  
+
     const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
-  
+
     res.json({ user: { id: _id, name, email, token: jwtToken } });
-  };
-  
+};
+
 
