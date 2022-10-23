@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import FormContainer from "../form/FormContainer";
@@ -22,7 +24,13 @@ export default function EmailVerification() {
     setActiveOptIndex(nextIndex);
   }
 
-  const inputRef = useRef()
+  const inputRef = useRef();
+
+  const { state } = useLocation();
+  const user = state?.user;
+
+  const navigate = useNavigate();
+
   const handleOtpChange = ({target}, index) => {
     const { value } = target;
     const newOtp = [...otp];
@@ -40,8 +48,14 @@ export default function EmailVerification() {
   }
   useEffect(() => {
     inputRef.current?.focus();
-  }, [activeOtpIndex])
+  }, [activeOtpIndex]);
   
+  useEffect(() => {
+    if (!user) navigate('/not-found');
+  }, [user])
+
+  // if (!user) return null;
+
   return (
     <FormContainer>
       <Container>
