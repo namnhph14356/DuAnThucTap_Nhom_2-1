@@ -33,7 +33,6 @@ export default function Signin() {
   const { handleLogin, authInfo } = useAuth();
   const { isPending, isLoggedIn } = authInfo;
 
-  console.log(authInfo)
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -52,6 +51,7 @@ export default function Signin() {
     // we want to move our user to somewhere else
     if (isLoggedIn) navigate("/");
   }, [isLoggedIn]);
+  
 
   return (
     <FormContainer>
