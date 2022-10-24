@@ -47,12 +47,18 @@ export default function AuthProvider({ children }) {
             error: "",
         });
     }
+
+    const handleLogout = () => {
+        localStorage.removeItem('auth-token');
+        setAuthInfo({ ...defaultAuthInfo });
+    }
+
     useEffect(() => {
         isAuth();
     },[])
     return (
         <AuthContext.Provider
-            value={{ authInfo, handleLogin, isAuth}}
+            value={{ authInfo, handleLogin, handleLogout, isAuth}}
         >
             {children}
         </AuthContext.Provider>
