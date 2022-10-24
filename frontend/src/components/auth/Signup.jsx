@@ -36,6 +36,8 @@ export default function Signup() {
   });
 
   const navigate = useNavigate();
+  const {authInfo} = useAuth();
+  const {isLoggedIn} =  authInfo;
 
   const {updateNotification} = useNotification()
 
@@ -56,6 +58,10 @@ export default function Signup() {
       replace: true,
     });
   };
+  useEffect(() => {
+    // we want to move our user to somewhere else
+    if (isLoggedIn) navigate("/");
+  }, [isLoggedIn]);
 
   const { name, email, password } = userInfo;
 
