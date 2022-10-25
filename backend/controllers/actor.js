@@ -100,3 +100,8 @@ exports.searchActor = async (req, res) => {
     const result = await Actor.find( {$text: { $search: `"${query.name}"` }} )
     res.json(result)
 };
+
+exports.getLatestActors = async (req,res) =>{
+   const result = await Actor.find().sort({creatAt: "-1"}).limit(12)
+   res.json(result)
+}
