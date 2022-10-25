@@ -105,3 +105,14 @@ exports.getLatestActors = async (req,res) =>{
    const result = await Actor.find().sort({creatAt: "-1"}).limit(12)
    res.json(result)
 }
+
+exports.getSingletActor = async (req,res) =>{
+    const {id} = req.params;
+
+    if(!isValidObjectId(id)) return sendError(res, "Invalid request!")
+
+    const actor = await Actor.findById(id)
+    if(!actor) return sendError(res, "Invalid request!, actor not found", 404)
+
+    res.json(actor)
+ }

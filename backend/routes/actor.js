@@ -1,5 +1,5 @@
 const express =  require('express');
-const { createActor, updateActor, removeActor, searchActor, getLatestActors } = require('../controllers/actor');
+const { createActor, updateActor, removeActor, searchActor, getLatestActors, getSingletActor } = require('../controllers/actor');
 const { validate, actorInfoValidator} = require("../middlewares/validator")
 const { uploadImage } = require('../middlewares/multer');
 
@@ -13,4 +13,6 @@ const router = express.Router();
     router.get("/search", searchActor)
     
     router.get("/latest-uploads", getLatestActors)
+
+    router.get("/single/:id", getSingletActor)
 module.exports = router;
