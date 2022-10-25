@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { verifyUserEmail } from "../../api/auth";
-import { useNotification } from "../../hooks";
+import { useAuth, useNotification } from "../../hooks";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import FormContainer from "../form/FormContainer";
@@ -26,6 +26,9 @@ export default function EmailVerification() {
   const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(""));
   const [activeOtpIndex, setActiveOptIndex] = useState(0);
 
+
+  const { isAuth, authInfo } = useAuth()
+  const { isLoggedIn } = authInfo
   const focusNextInputField = (index) => {
     setActiveOptIndex(index + 1)
   }
@@ -44,7 +47,7 @@ export default function EmailVerification() {
 
   const navigate = useNavigate();
 
-  const handleOtpChange = ({target}, index) => {
+  const handleOtpChange = ({ target }, index) => {
     const { value } = target;
     const newOtp = [...otp];
     newOtp[index] = value.substring(value.length - 1, value.length);
@@ -54,29 +57,32 @@ export default function EmailVerification() {
     setOtp([...newOtp]);
   }
 
-  const handleKeyDown = ({key}, index) => {
+  const handleKeyDown = ({ key }, index) => {
     if (key === "Backspace") {
       focusPrevInputField(index);
     }
   }
-  const {updateNotification} = useNotification()
+  const { updateNotification } = useNotification()
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isValidOTP(otp)) return updateNotification('error', "invalid OTP");
     // Submit OTP
-    const {error, message} = await verifyUserEmail({OTP: otp.join(''), userId: user.id})
-    if(error) return updateNotification('error', error);
+    const { error, message, user: userResponse } = await verifyUserEmail({ OTP: otp.join(''), userId: user.id })
+    if (error) return updateNotification('error', error);
     updateNotification('success', message)
+    localStorage.setItem('auth-token', userResponse.token)
+    isAuth()
   }
 
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
-  
+
   useEffect(() => {
     if (!user) navigate('/not-found');
-  }, [user])
+    if (!isLoggedIn) navigate('/');
+  }, [user, isLoggedIn])
 
   // if (!user) return null;
 
