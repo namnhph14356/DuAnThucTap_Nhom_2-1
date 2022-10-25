@@ -1,5 +1,5 @@
 const express =  require('express');
-const { createActor, updateActor, removeActor } = require('../controllers/actor');
+const { createActor, updateActor, removeActor, searchActor } = require('../controllers/actor');
 const { validate, actorInfoValidator} = require("../middlewares/validator")
 const { uploadImage } = require('../middlewares/multer');
 
@@ -10,4 +10,5 @@ const router = express.Router();
 
     router.delete("/:actorId", removeActor)
 
+    router.get("/search", searchActor)
 module.exports = router;
