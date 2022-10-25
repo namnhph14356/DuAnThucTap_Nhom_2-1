@@ -1,4 +1,6 @@
-import React from "react";
+import React, { isValidElement } from "react";
+import { forgetPassword } from "../../api/auth";
+import { useNotification } from "../../hooks";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import CustomLink from "../CustomLink";
@@ -7,12 +9,28 @@ import Submit from "../form/Submit";
 import Title from "../form/Title";
 
 export default function ForgetPassword() {
+  const [email, setEmail] = useState('');
+  const {updateNotification} = useNotification();
+
+  const handleChange = ({ target }) => {
+    const { value, name } = target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if(!isValidElement(email)) return updateNotification('error', 'Invalid email!'); 
+    const {error, message} = await forgetPassword(email)
+    if(error) return updateNotification('error', error)
+
+    updateNotification('success', message)
+  };
   return (
     <div className="fixed inset-0 dark:bg-primary :bg-white -z-10 flex justify-center items-center">
       <Container>
-        <form className={commonModalClasses +" w-96"}>
+        <form onSubmit={handleSubmit} className={commonModalClasses +" w-96"}>
           <Title>Please Enter Your Email</Title>
-          <FormInput label="Email" placeholder="john@email.com" name="email"/>
+          <FormInput onChange={handleChange} value={email} label="Email" placeholder="john@email.com" name="email"/>
           <Submit value="Send Link" />
 
           <div className="flex justify-between">
