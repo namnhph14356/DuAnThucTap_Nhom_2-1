@@ -115,7 +115,8 @@ export default function EmailVerification() {
             })}
           </div>
 
-          <Submit value="Verify Account" />
+          <Submit type="button" value="Verify Account" />
+          <button className="dark:text-white text-blue-500 font-semibold hover: underline mt-2">I don't have OTP </button>
         </form>
       </Container>
     </FormContainer>
