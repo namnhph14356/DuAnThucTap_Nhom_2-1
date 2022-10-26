@@ -7,11 +7,25 @@ import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
 
-export default function ConfirmPassword() {
+export default function ConfirmPassword() { 
+  const [isVerifying, setIsVerifying] = useState(true);
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const id = searchParams.get('id');
   console.log(token, id)
+
+  if(isVerifying) return (
+    <FormContainer>
+      <Container>
+        <div className='flex space-x-2 items-center'>
+
+        </div>
+        <h1 className='text-4xl font-semibold dark:text-white text-primary'>Please wait we are  verifying your</h1>
+        <ImSpinner3 className="animate-spin text-4xl" /> 
+      </Container>
+    </FormContainer>
+  )
+  
   return (
     <FormContainer className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
       <Container>
