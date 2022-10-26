@@ -1,6 +1,6 @@
 const { sendError } = require("../utils/helper");
 const cloudinary = require("../cloud");
-const Movee = require("../models/movie");
+const Movie = require("../models/movie");
 const { isValidObjectId } = require("mongoose");
 
 exports.uploadTrailer = async (req, res) => {
@@ -56,4 +56,22 @@ exports.createMovie = async (req, res) => {
     }
     newMovie.writers = writers
   }
+  // uploading poster
+  const cloudRes = await cloudinary.uploader.upload(
+    file.path, {
+      transformation: {
+        width: 1280,
+        height: 720
+      },
+      responsive_breakpoints: { 
+        create_derived: true,
+        max_width: 640,
+        max_image: 3
+      }
+    }
+  );
+  console.log(cloudRes);
+  console.log(cloudRes.responsive_breakpoints[0].breakpoints);
+  res.send("ok");
+  
 };
