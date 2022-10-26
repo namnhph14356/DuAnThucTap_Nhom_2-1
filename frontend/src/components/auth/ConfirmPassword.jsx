@@ -8,6 +8,11 @@ import Submit from "../form/Submit";
 import Title from "../form/Title";
 
 export default function ConfirmPassword() { 
+  const [password, setPassword] = useState({
+    one: '',
+    two: '',
+
+  });
   const [isVerifying, setIsVerifying] = useState(true);
   const [isValid, setIsValid] = useState(false);
   const [searchParams] = useSearchParams();
@@ -37,6 +42,18 @@ export default function ConfirmPassword() {
     
   }
 
+  const handleChange = ({target}) => {
+    const {name, value} = target
+    setPassword({...password, [name]: value})
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if(password.one.trim()) return updateNotification('error', 'Password is missing! ')
+    if(password.one.trim().length < 8) return updateNotification('error', 'Password must be 8 characters long')
+    if(password.one !== password.two) return updateNotification('error', 'Password do not match!')
+  }
+
   if(isVerifying) return (
     <FormContainer>
       <Container>
@@ -59,10 +76,10 @@ export default function ConfirmPassword() {
   return (
     <FormContainer className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
       <Container>
-        <form className={commonModalClasses +" w-96"}>
+        <form onSubmit={handleSubmit} className={commonModalClasses +" w-96"}>
           <Title>Enter New Password</Title>
-          <FormInput label="New Password" placeholder="***********" name="password" type="password"/>
-          <FormInput label="Confirm Password" placeholder="***********" name="confirmPassword" type="password"/>
+          <FormInput value={password.one} onChange={handleChange} label="New Password" placeholder="***********" name="one" type="password"/>
+          <FormInput value={password.two} onChange={handleChange} label="Confirm Password" placeholder="***********" name="two" type="password"/>
           <Submit value="Confirm Password" />
         </form>
       </Container>
