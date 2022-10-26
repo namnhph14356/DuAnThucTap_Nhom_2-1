@@ -6,6 +6,7 @@ import FormContainer from '../form/FormContainer';
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
+import { resetPassword } from '../../api/auth';
 
 export default function ConfirmPassword() { 
   const [password, setPassword] = useState({
@@ -46,12 +47,21 @@ export default function ConfirmPassword() {
     const {name, value} = target
     setPassword({...password, [name]: value})
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     if(password.one.trim()) return updateNotification('error', 'Password is missing! ')
+    
     if(password.one.trim().length < 8) return updateNotification('error', 'Password must be 8 characters long')
+    
     if(password.one !== password.two) return updateNotification('error', 'Password do not match!')
+    
+    const {error,message} = await resetPassword({newPassword: password.one, userId: id, token})
+    if(error) return updateNotification("error", error);
+
+    updateNotification("success", message);
+    navigate('/auth/signin', {replace: true})
+    
   }
 
   if(isVerifying) return (

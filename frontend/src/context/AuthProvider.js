@@ -19,6 +19,7 @@ export default function AuthProvider({ children }) {
         setAuthInfo({ ...authInfo, isPending: true });
         const { error, user } = await signInUser({ email, password });
         if (error) {
+            updateNotification('error', error)
             return setAuthInfo({ ...authInfo, isPending: false, error });
         }
 
@@ -38,6 +39,7 @@ export default function AuthProvider({ children }) {
         setAuthInfo({ ...authInfo, isPending: true });
         const {error, user} = await getIsAuth(token)
         if (error) {
+            updateNotification('error', error)
             return setAuthInfo({ ...authInfo, isPending: false, error });
         }
         setAuthInfo({
