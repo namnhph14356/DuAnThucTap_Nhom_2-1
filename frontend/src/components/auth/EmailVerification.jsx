@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { verifyUserEmail } from "../../api/auth";
+import { resendEmailVerificationToken, verifyUserEmail } from "../../api/auth";
 import { useAuth, useNotification } from "../../hooks";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
@@ -57,6 +57,12 @@ export default function EmailVerification() {
     else focusNextInputField(index);
     setOtp([...newOtp]);
   }
+  const handleOTPResend =async () => {
+    const {error, message} = await resendEmailVerificationToken(user.id);
+
+    if(error) return updateNotification("error", error);
+    updateNotification("success", message)
+  }
 
   const handleKeyDown = ({ key }, index) => {
     if (key === "Backspace") {
@@ -83,7 +89,7 @@ export default function EmailVerification() {
   useEffect(() => {
     if (!user) navigate('/not-found');
     if (isLoggedIn && isVerified) navigate('/');
-  }, [user, isLoggedIn])
+  }, [user, isLoggedIn, isVerified])
 
   // if (!user) return null;
 
@@ -116,7 +122,7 @@ export default function EmailVerification() {
           </div>
 
           <Submit type="button" value="Verify Account" />
-          <button className="dark:text-white text-blue-500 font-semibold hover: underline mt-2">I don't have OTP </button>
+          <button onClick={handleOTPResend} className="dark:text-white text-blue-500 font-semibold hover: underline mt-2">I don't have OTP </button>
         </form>
       </Container>
     </FormContainer>
