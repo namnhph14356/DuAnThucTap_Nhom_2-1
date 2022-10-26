@@ -12,8 +12,15 @@ exports.isAuth =  async (req, res, next) => {
     const { userId } = decode;
 
     const user = await User.findById(userId);
-    if (!user) return sendError(res, 'Invalid token user not found!', 404);
+    if (!user) return sendError(res, 'unauthorized access');
 
     req.user = user;
+    next();
+}
+
+exports.isAdmin = (req, res, next) => {
+    const {user} = req;
+
+    if (user.role !== 'admin') return sendError(res, 'unauthorized access')
     next();
 }
