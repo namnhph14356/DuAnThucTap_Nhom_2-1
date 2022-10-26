@@ -49,18 +49,29 @@ exports.validateMovie = [
     for(let g of value) {
       if (!genres.includes(g)) throw Error('Invalid genres!');
     }
+
+    return true;
   }),
+
   check('tags').isArray({min: 1}).withMessage("Tags must be an array of strings!").custom((tags) => {
     for(let tag of tags) {
       if (typeof tag !== 'string') throw Error('Tags must be an array of strings!');
     }
+
+    return true;
+
   }),
   check('cast').isArray().withMessage("cast must be an array of objects!").custom((cast) => {
     for(let c of cast) {
       if (!isValidObjectId(c.id)) throw Error('Invalid cast id inside cast!');
       if (!c.roleAs?.trim()) throw Error('Role as is missing inside cast!');
       if (typeof c.leadActor !== 'boolean') throw Error('Only accepted boolean value inside leadActor inside cast!');
+
+      return true;
     }
+
+    
+
   }),
   check('trailerInfo').isObject().withMessage("TrailerInfo must be an object with url and public_id!").custom(({ url, public_id }) => {
     try {
@@ -72,12 +83,16 @@ exports.validateMovie = [
 
       if (public_id !== publicId) throw Error('Trailer public_id is invalid!');
 
+      return true;
+
     } catch (error) {
       throw Error('Trailer url is invalid!');
     }
   }),
   check('poster').custom((_, { req }) => {
     if (!req.file) throw Error('Poster file is missing!');
+
+    return true;
   })
 ]
 
