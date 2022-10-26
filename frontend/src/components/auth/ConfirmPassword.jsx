@@ -1,6 +1,6 @@
 import React from 'react'
 import { commonModalClasses } from '../../utils/theme';
-import {useSearchParams} from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 import Container from "../Container";
 import FormContainer from '../form/FormContainer';
 import FormInput from "../form/FormInput";
@@ -9,18 +9,45 @@ import Title from "../form/Title";
 
 export default function ConfirmPassword() { 
   const [isVerifying, setIsVerifying] = useState(true);
+  const [isValid, setIsValid] = useState(false);
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const id = searchParams.get('id');
-  console.log(token, id)
+  
+  const {updateNotification} = useNotification();
+  const navigate = useNavigate()
+  useEffect(() => {
+    isValidToken()
+  }, [input]);
+
+  const isValidToken = async () => {
+   const {error, valid } =  await verifyPasswordResetToken(token, id);
+   setIsVerifying(false);
+   if(error) return updateNotification('error', error);
+
+   if(!valid){
+    setIsValid(false);
+    setIsVerifying(false);
+    navigate('/auth/reset-password', {replace: true})
+   }
+    setIsValid(true);
+    
+  }
 
   if(isVerifying) return (
     <FormContainer>
       <Container>
         <div className='flex space-x-2 items-center'>
-
-        </div>
         <h1 className='text-4xl font-semibold dark:text-white text-primary'>Please wait we are  verifying your</h1>
+        <ImSpinner3 className="animate-spin text-4xl" /> 
+        </div>
+      </Container>
+    </FormContainer>
+  )
+  if(!isValid) return (
+    <FormContainer>
+      <Container>
+        <h1 className='text-4xl font-semibold dark:text-white text-primary'>Sorry the token is invalid</h1>
         <ImSpinner3 className="animate-spin text-4xl" /> 
       </Container>
     </FormContainer>
