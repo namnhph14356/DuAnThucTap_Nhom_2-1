@@ -17,7 +17,7 @@ if(file){
 }
 
 await newActor.save();
-res.status(201).json(formatActor(actor));
+res.status(201).json(formatActor(newActor));
 };
 
 
