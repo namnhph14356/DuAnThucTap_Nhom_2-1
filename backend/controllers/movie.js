@@ -1,5 +1,6 @@
 const { sendError } = require("../utils/helper");
 const cloudinary = require("../cloud");
+
 exports.uploadTrailer = async (req, res) => {
   const { file } = req;
   if (!file) return sendError(res, "Video file is missing!");
@@ -8,4 +9,24 @@ exports.uploadTrailer = async (req, res) => {
     { resource_type: "video" }
   );
   res.status(201).json({ secure_url: url, public_id });
+};
+
+exports.createMovie = async (req, res) => {
+  const { file , body} = req
+
+  const {
+      title,
+      storyLine,
+      director,
+      releseDate,
+      status,
+      type,
+      genres,
+      tags,
+      cast,
+      writers,
+      poster,
+      trailer,
+      language
+  } = body
 };
