@@ -29,4 +29,7 @@ exports.createMovie = async (req, res) => {
       trailer,
       language
   } = body
+
+  console.log(typeof JSON.parse(req.body.trailerInfo));
+  res.send("ok")
 };
