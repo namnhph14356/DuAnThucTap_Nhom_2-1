@@ -63,7 +63,7 @@ exports.validateMovie = [
   }),
   check('cast').isArray().withMessage("cast must be an array of objects!").custom((cast) => {
     for(let c of cast) {
-      if (!isValidObjectId(c.id)) throw Error('Invalid cast id inside cast!');
+      if (!isValidObjectId(c.actor)) throw Error('Invalid cast id inside cast!');
       if (!c.roleAs?.trim()) throw Error('Role as is missing inside cast!');
       if (typeof c.leadActor !== 'boolean') throw Error('Only accepted boolean value inside leadActor inside cast!');
 
@@ -73,7 +73,7 @@ exports.validateMovie = [
     
 
   }),
-  check('trailerInfo').isObject().withMessage("TrailerInfo must be an object with url and public_id!").custom(({ url, public_id }) => {
+  check('trailer').isObject().withMessage("Trailer must be an object with url and public_id!").custom(({ url, public_id }) => {
     try {
     const result = new URL(url);
       if (!result.protocol.includes('http')) throw Error('Trailer url is invalid!');

@@ -1,5 +1,7 @@
 const { sendError } = require("../utils/helper");
 const cloudinary = require("../cloud");
+const Movee = require("../models/movie");
+const { isValidObjectId } = require("mongoose");
 
 exports.uploadTrailer = async (req, res) => {
   const { file } = req;
@@ -30,6 +32,28 @@ exports.createMovie = async (req, res) => {
       language
   } = body
 
-  console.log(typeof JSON.parse(req.body.trailerInfo));
-  res.send("ok")
+  const newMovie = new Movie({
+    title,
+      storyLine,
+      releseDate,
+      status,
+      type,
+      genres,
+      tags,
+      cast,
+      trailer,
+      language
+  })
+
+  if(director){
+    if(!isValidObjectId(director)) return sendError(res, "Invalid director id!")
+    newMovie.director = director
+  }
+
+  if(writers){
+    for(let writerId of writers){
+      if(!isValidObjectId(writerId)) return sendError(res, "Invalid writer id!")
+    }
+    newMovie.writers = writers
+  }
 };
