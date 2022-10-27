@@ -38,7 +38,7 @@ export const signInUser = async (userInfo) => {
 export const getIsAuth = async (token) => {
     try {
         const { data } = await client.get("/user/is-auth", {
-            Headers: {
+            headers: {
                 Authorization: 'Bearer' + token, 
                 accept: 'application/json',
             }
