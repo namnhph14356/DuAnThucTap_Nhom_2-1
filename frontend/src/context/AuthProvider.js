@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useEffect, useState } from "react";
 import { getIsAuth, signInUser } from "../api/auth";
 import { useNotification } from "../hooks";

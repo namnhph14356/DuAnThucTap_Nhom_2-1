@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -28,7 +29,7 @@ export default function EmailVerification() {
 
 
   const { isAuth, authInfo } = useAuth()
-  const { isLoggedIn } = authInfo;
+  const { isLoggedIn, profile } = authInfo;
   const isVerified = profile?.isVerified;
   const focusNextInputField = (index) => {
     setActiveOptIndex(index + 1)

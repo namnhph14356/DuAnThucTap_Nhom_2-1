@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import client from "./client"
 
 export const createUser = async (userInfo) => {
