@@ -1,4 +1,4 @@
-import React, { isValidElement } from "react";
+import React, { isValidElement, useState } from "react";
 import { forgetPassword } from "../../api/auth";
 import { useNotification } from "../../hooks";
 import { commonModalClasses } from "../../utils/theme";
@@ -13,8 +13,8 @@ export default function ForgetPassword() {
   const {updateNotification} = useNotification();
 
   const handleChange = ({ target }) => {
-    const { value, name } = target;
-    setUserInfo({ ...userInfo, [name]: value });
+    const { value } = target;
+    setEmail(value);
   };
 
   const handleSubmit = async (e) => {

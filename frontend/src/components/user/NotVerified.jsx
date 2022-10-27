@@ -17,7 +17,7 @@ export default function NotVerified() {
 
     return (
         <Container className={null}>
-            {isLoggedIn && !isVerified ? (<p className='text-lg text-center bg-blue-50 p-2'>It looks like you haven't verified your account, {''}
+            {isLoggedIn && !isVerified ? (<p className='text-lg text-center bg-blue-50 p-2'>It looks like you haven't verified your account,
             <button onClick={navigateToverification} className='text-blue-500 font-semibold hover:underline'>Click here to verify your account.</button>
             </p> ) : null}
         </Container>

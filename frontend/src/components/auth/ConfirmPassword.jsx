@@ -1,4 +1,6 @@
-import React from 'react'
+/* eslint-disable no-undef */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
 import { commonModalClasses } from '../../utils/theme';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 import Container from "../Container";
@@ -6,7 +8,9 @@ import FormContainer from '../form/FormContainer';
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
-import { resetPassword } from '../../api/auth';
+import { resetPassword, verifyPasswordResetToken } from '../../api/auth';
+import { useNotification } from '../../hooks';
+import { ImSpinner3 } from 'react-icons/im';
 
 export default function ConfirmPassword() { 
   const [password, setPassword] = useState({

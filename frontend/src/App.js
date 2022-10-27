@@ -8,8 +8,11 @@ import Signup from './components/auth/Signup'
 import Home from './components/Home'
 import NotFound from './components/NotFound'
 import Navbar from './components/user/Navbar'
+import { useAuth } from './hooks'
 
 export default function App() {
+  const { authInfo } = useAuth();
+  console.log(authInfo);
   return (
     <>
       <Navbar />
