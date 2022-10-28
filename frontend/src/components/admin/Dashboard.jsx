@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
 export default function Dashboard() {
+  const [showOptions, setShowOptions] = useState(false);
   return (
     <div className="flex item-center justify-between relative">
       <input
@@ -12,6 +13,7 @@ export default function Dashboard() {
       />
 
       <button
+        onClick={() => setShowOptions(!showOptions)}
         className="flex items-center space-x-2 border-secondary hover:border-primary text-secondary hover:opacity-80
       transition font-semibold border-2 rounded text-lg px-3 py-1"
       >
@@ -19,12 +21,13 @@ export default function Dashboard() {
         <AiOutlinePlus />
       </button>
 
-      <CreateOptions />
+      <CreateOptions visible={showOptions} />
     </div>
   );
 }
 
-const CreateOptions = () => {
+const CreateOptions = ({ visible }) => {
+  if (!visible) return null;
   return (
     <div className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded">
       <Option>Add Movie</Option>
@@ -35,7 +38,10 @@ const CreateOptions = () => {
 
 const Option = ({ children, onClick }) => {
   return (
-    <button onClick={onClick} className="dark:text-white text-secondary hover:opacity-80 transition">
+    <button
+      onClick={onClick}
+      className="dark:text-white text-secondary hover:opacity-80 transition"
+    >
       {children}
     </button>
   );
