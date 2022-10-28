@@ -53,15 +53,19 @@ const CreateOptions = ({ visible, onClose }) => {
             document.removeEventListener("click", handleClose);
         }
     }, [visible]);
+
+
+    const handleAnimationEnd = (e) => {
+      if (e.target.classList.contains('animate-scale-reverse')) onClose();
+      e.target.classList.remove('animate-scale');
+    }
+    
   if (!visible) return null;
   return (
     <div ref={container}
     id={containerID}
     className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
-    onAnimationEnd={(e) => {
-      if (e.target.classList.contains('animate-scale-reverse')) onClose();
-      e.target.classList.remove('animate-scale');
-    }}
+    onAnimationEnd={handleAnimationEnd}
     >
       <Option>Add Movie</Option>
       <Option>Add Actor</Option>
