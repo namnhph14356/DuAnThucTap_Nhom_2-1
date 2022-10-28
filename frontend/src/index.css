@@ -14,6 +14,19 @@ input[type='number']::-webkit-outer-spin-button {
   75% { transform: scale(0.95, 1.05); }
 }
 
+.animate-scale {
+  transform-origin: 0% 0%;
+  animation: scale 0.2s;
+}
+
+@keyframes scale {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
 
 @tailwind base;
 @tailwind components;
