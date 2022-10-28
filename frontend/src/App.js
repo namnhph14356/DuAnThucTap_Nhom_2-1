@@ -14,7 +14,6 @@ import AdminNavigator from './navigator/AdminNavigator'
 export default function App() {
   const { authInfo } = useAuth();
   const isAdmin = authInfo.profile?.role === 'admin';
-  console.log(isAdmin);
 
   if (isAdmin) return <AdminNavigator />
   return (
