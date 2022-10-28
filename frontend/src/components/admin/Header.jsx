@@ -20,7 +20,7 @@ export default function Header() {
                 <BsFillSunFill size={24} />
         </button>
         <button
-          onClick={() => setShowOptions(true)}
+          onClick={() => setShowOptions(!showOptions)}
           className="flex items-center space-x-2 dark:border-dark-subtle border-light-subtle dark:text-dark-subtle text-light-subtle hover:opacity-80
       transition font-semibold border-2 rounded text-lg px-3 py-1"
         >
@@ -30,7 +30,7 @@ export default function Header() {
 
         <CreateOptions
           visible={showOptions}
-          onClose={() => setShowOptions(false)}
+          // onClose={() => setShowOptions(false)}
         />
       </div>
     </div>
@@ -45,8 +45,8 @@ const CreateOptions = ({ visible, onClose }) => {
             if (!visible) return;
             const { parentElement, id } = e.target;
             if (parentElement.id === containerID || id === containerID) return;
-            container.current.classList.remove('animate-scale');
-            container.current.classList.add('animate-scale-reverse');
+            // container.current.classList.remove('animate-scale');
+            // container.current.classList.add('animate-scale-reverse');
         };
         document.addEventListener("click", handleClose);
         return () => {
