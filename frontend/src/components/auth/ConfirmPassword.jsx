@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { ImSpinner3 } from "react-icons/im";
 import { useNavigate, useSearchParams } from "react-router-dom";
