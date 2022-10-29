@@ -1,6 +1,7 @@
 import React, { isValidElement, useState } from "react";
 import { forgetPassword } from "../../api/auth";
 import { useNotification } from "../../hooks";
+import { isValidEmail } from "../../utils/helper";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
 import CustomLink from "../CustomLink";
@@ -19,7 +20,7 @@ export default function ForgetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!isValidElement(email)) return updateNotification('error', 'Invalid email!'); 
+    if(!isValidEmail(email)) return updateNotification('error', 'Invalid email!'); 
     const {error, message} = await forgetPassword(email)
     if(error) return updateNotification('error', error)
 
