@@ -39,7 +39,7 @@ export const getIsAuth = async (token) => {
     try {
         const { data } = await client.get("/user/is-auth", {
             headers: {
-                Authorization: 'Bearer ' + token, 
+                Authorization: 'Bearer ' + token,
                 accept: 'application/json',
             }
         });
@@ -51,9 +51,9 @@ export const getIsAuth = async (token) => {
         return { error: error.message || error };
     }
 };
-export const forgetPassword = async (token) => {
+export const forgetPassword = async (email) => {
     try {
-        const { data } = await client.get("/user/forget-password", {email});
+        const { data } = await client.post("/user/forget-password", { email });
         return data;
     } catch (error) {
         const { response } = error;
@@ -64,7 +64,10 @@ export const forgetPassword = async (token) => {
 };
 export const verifyPasswordResetToken = async (token, userId) => {
     try {
-        const { data } = await client.get("/user/verify-pass-reset-token", {token, userId});
+        const { data } = await client.post("/user/verify-pass-reset-token", {
+            token,
+            userId,
+        });
         return data;
     } catch (error) {
         const { response } = error;
@@ -75,7 +78,7 @@ export const verifyPasswordResetToken = async (token, userId) => {
 };
 export const resetPassword = async (passwordInfo) => {
     try {
-        const { data } = await client.get("/user/reset-password", passwordInfo);
+        const { data } = await client.post("/user/reset-password", passwordInfo);
         return data;
     } catch (error) {
         const { response } = error;
