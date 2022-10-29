@@ -12,8 +12,8 @@ export default function AdminNavigator() {
     <div className="flex dark:bg-primary bg-white">
       <Navbar />
       <div className="flex-1 p-2 max-w-screen-xl">
-        <Header />
-        <Routes>
+        <Header onAddMovieClick = {() => console.log("adding movie")} />
+        <Routes> 
           <Route path="/" element={<Dashboard />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/actors" element={<Actors />} />
