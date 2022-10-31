@@ -8,28 +8,58 @@ export default function MovieUpload() {
   const [videoSelected, setVideoSelected] = useState(false);
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [videoInfo, setVideoInfo] = useState({});
+  const [movieInfo, setMovieInfo] = useState({
+    title: "",
+    storyLine: "",
+    tags: [],
+    cast: [],
+    director: {},
+    writers: [],
+    releseDate: "",
+    poster: null,
+    genres: "",
+    type: "",
+    language: "",
+    status: "",
+    trailer: {
+      url: "",
+      public_id: "",
+    },
+  });
   const { updateNotification } = useNotification();
   const handleTypeError = (error) => {
     updateNotification("error", error);
   };
-  const handleChange = async (file) => {
+
+  const handleUploadTrailer = async (data) => {
+    const { error, url, public_id } = await uploadTrailer(
+      data,
+      setUploadProgress
+    );
+    if (error) return updateNotification("error", error);
+
+    setVideoUploaded(true);
+    setVideoInfo({url, public_id});
+  }
+
+  console.log(videoInfo);
+
+  const handleChange = (file) => {
     const formData = new FormData();
     formData.append("video", file);
 
     setVideoSelected(true);
-    const res = await uploadTrailer(formData, setUploadProgress);
-    if (!res.error) {
-      setVideoUploaded(true);
-    }
+    handleUploadTrailer(formData);
   };
 
   const getUploadProgressValue = () => {
     if (!videoUploaded && uploadProgress >= 100) {
-      return 'Processing'
+      return "Processing";
     }
 
-    return `Upload progress ${uploadProgress}%`
-  }
+    return `Upload progress ${uploadProgress}%`;
+  };
   return (
     <div className="fixed inset-0 dark:bg-white dark:bg-opacity-50 bg-primary bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
       <div className="dark:bg-primary bg-white rounded w-[45rem] h-[40rem] overflow-auto p-2">
