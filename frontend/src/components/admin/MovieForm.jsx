@@ -27,7 +27,7 @@ export default function MovieForm() {
           </textarea>
         </div>
 
-        <TagsInput/>
+        <TagsInput />
 
       </div>
       <div className="w-[30%] h-5 bg-blue-400"></div>
@@ -35,10 +35,12 @@ export default function MovieForm() {
   );
 }
 const Label = ({ children, htmlFor }) => {
-  return <label
-    htmlFor={htmlFor}
-    className="dark:text-dark-subtle text-light-subtle font-semibold"
-  >
-    {children}
-  </label>
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="dark:text-dark-subtle text-light-subtle font-semibold"
+    >
+      {children}
+    </label>
+  )
 }
