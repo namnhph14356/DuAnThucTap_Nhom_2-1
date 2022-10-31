@@ -20,17 +20,21 @@ export default function TagsInput() {
             setTag('')
         }
 
-        if(key === 'Backspace' && !tag && tags.length){
+        if (key === 'Backspace' && !tag && tags.length) {
             const newTags = tags.filter((_, index) => index !== tags.length - 1)
-            setTags (newTags)
+            setTags(newTags)
         }
+    }
+    const removeTag = tagToRemove => {
+        const newTags = tags.filter((tag) => tag !== tagToRemove)
+        setTags(newTags)
     }
     return (
         <div>
             <div onKeyDown={handleKeyDown} className='border-2 bg-transparent dark:border-dark-subtle border-light-subtle px-2 h-10 
             rounded w-full text-white flex items-center space-x-2'>
                 {tags.map((t) => (
-                    <Tag key={t}>{t}</Tag>
+                    <Tag onClick={() => removeTag(t)} key={t}>{t}</Tag>
                 ))}
                 <input
                     type="text"
