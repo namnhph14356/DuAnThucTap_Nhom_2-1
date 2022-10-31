@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 
 export default function TagsInput() {
     const [tag, setTag] = useState('')
     const [tags, setTags] = useState([])
+
+    const input = useRef()
 
     const handleOnchange = ({ target }) => {
         const { value } = target;
@@ -29,6 +31,10 @@ export default function TagsInput() {
         const newTags = tags.filter((tag) => tag !== tagToRemove)
         setTags(newTags)
     }
+
+    useEffect(() => {
+        input.current.scrollIntoView()
+    }, [tag])
     return (
         <div>
             <div onKeyDown={handleKeyDown} className='border-2 bg-transparent dark:border-dark-subtle border-light-subtle px-2 h-10 
@@ -37,6 +43,7 @@ export default function TagsInput() {
                     <Tag onClick={() => removeTag(t)} key={t}>{t}</Tag>
                 ))}
                 <input
+                    ref={input}
                     type="text"
                     className='h-full flex-grow bg-transparent outline-none dark:text-white'
                     placeholder='Tag one, tag two'
