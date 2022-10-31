@@ -6,7 +6,7 @@ export const uploadTrailer = async (formData) => {
     const { data } = await client.post("/movie/upload-trailer", formData, {
       headers: {
         authorization: "Bearer " + token,
-        "content-type": "multipart/form-data",
+        "Content-Type": "multipart/form-data",
       },
     });
     return data;
