@@ -10,7 +10,7 @@ exports.uploadTrailer = async (req, res) => {
     file.path,
     { resource_type: "video" }
   );
-  res.status(201).json({ secure_url: url, public_id });
+  res.status(201).json({ url, public_id });
 };
 
 exports.createMovie = async (req, res) => {
