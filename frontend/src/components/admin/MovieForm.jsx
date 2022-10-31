@@ -4,8 +4,11 @@ import TagsInput from "../TagsInput";
 const commonInputClasses =
   'w-full bg-transparent outline-none dark:text-white dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary transition'
 export default function MovieForm() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
   return (
-    <form className="flex space-x-3">
+    <form onClick={handleSubmit} className="flex space-x-3">
       <div className="w-[70%] h-5 space-y-5">
         <div>
           <Label htmlFor="title">Title</Label>
