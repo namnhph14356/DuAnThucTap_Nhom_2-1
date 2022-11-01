@@ -57,10 +57,10 @@ export default function LiveSearch() {
 
         //more selection up and down
         if (key === 'ArrowDown') {
-            nextCount = focusedIndex + 1;
+            nextCount = (focusedIndex + 1) % results.length;
         }
         if (key === 'ArrowUp') {
-            nextCount = focusedIndex - 1;
+            nextCount = (focusedIndex + results.length - 1 ) % results.length;
         }
         setFocusedIndex(nextCount);
     }
