@@ -42,12 +42,27 @@ export const results = [
 
 export default function LiveSearch() {
     const [displaySearch, setDisplayedSearch] = useState(false);
-
+    const [focusedIndex, setFocusedIndex] = useState(-1);
     const handleOnFocus = () => {
         if (results.length) setDisplayedSearch(true);
     }
     const handleOnBlur = () => {
         setDisplayedSearch(false);
+    }
+    const handleKeyDown = ({key}) => {
+        let nextCount;
+        // console.log(key);
+        const keys = ['ArrowDown', 'ArrowUp', 'Enter', 'Escape']
+        if (!keys.includes(key)) return;
+
+        //more selection up and down
+        if (key === 'ArrowDown') {
+            nextCount = focusedIndex + 1;
+        }
+        if (key === 'ArrowUp') {
+            nextCount = focusedIndex - 1;
+        }
+        setFocusedIndex(nextCount);
     }
   return (
     <div className="relative">
@@ -57,21 +72,22 @@ export default function LiveSearch() {
         placeholder="Search profile"
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
+        onKeyDown={handleKeyDown}
       />
-      <SearchResults visible={displaySearch} results={results}/>
+      <SearchResults focusedIndex={focusedIndex} visible={displaySearch} results={results}/>
     </div>
   );
 }
 
-const SearchResults = ({visible, results = []}) => {
+const SearchResults = ({visible, results = [], focusedIndex}) => {
     if (!visible) return null;
     return (
         <div className="absolute right-0 left-0 top-10 bg-white dark:bg-secondary shadow-md p-2 max-h-64 space-y-2 mt-1 overflow-auto custom-scroll-bar">
-        {results.map(({ id, name, avatar }) => {
+        {results.map(({ id, name, avatar }, index) => {
           return (
             <div
               key={id}
-              className="cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition flex space-x-2"
+              className={(index === focusedIndex ? "dark:bg-dark-subtle bg-light-subtle" : "") + " cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition flex space-x-2"}
             >
               <img
                 src={avatar}
