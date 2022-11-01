@@ -1,12 +1,13 @@
 import React from "react";
+import { commonInputClasses } from "../../utils/theme";
+import LiveSearch from "../LiveSearch";
 import TagsInput from "../TagsInput";
 
-const commonInputClasses =
-  'w-full bg-transparent outline-none dark:text-white dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary transition'
+
 export default function MovieForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
-  }
+  };
   return (
     <form onClick={handleSubmit} className="flex space-x-3">
       <div className="w-[70%] h-5 space-y-5">
@@ -15,7 +16,10 @@ export default function MovieForm() {
           <input
             id="title"
             type="text"
-            className={commonInputClasses + " border-b-2 font-semibold  text-primary text-xl"}
+            className={
+              commonInputClasses +
+              " border-b-2 font-semibold  text-primary text-xl"
+            }
             placeholder="Titanic"
           />
         </div>
@@ -26,12 +30,13 @@ export default function MovieForm() {
             id="storyLine"
             className={commonInputClasses + " resize-none h-24 border-b-2"}
             placeholder="Movie story line...."
-          >
-          </textarea>
+          ></textarea>
         </div>
-
-        <TagsInput />
-
+        <div>
+          <Label htmlFor="tags">Tags</Label>
+          <TagsInput name="tags" />
+        </div>
+        <LiveSearch />
       </div>
       <div className="w-[30%] h-5 bg-blue-400"></div>
     </form>
@@ -45,5 +50,5 @@ const Label = ({ children, htmlFor }) => {
     >
       {children}
     </label>
-  )
-}
+  );
+};
