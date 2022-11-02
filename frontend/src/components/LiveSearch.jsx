@@ -48,6 +48,7 @@ export default function LiveSearch() {
   };
   const handleOnBlur = () => {
     setDisplayedSearch(false);
+    setFocusedIndex(-1);
   };
   const handleKeyDown = ({ key }) => {
     let nextCount;
