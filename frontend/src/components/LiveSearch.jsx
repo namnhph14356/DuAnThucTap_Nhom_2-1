@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { commonInputClasses } from "../utils/theme";
 
 export const results = [
@@ -41,29 +41,29 @@ export const results = [
 ];
 
 export default function LiveSearch() {
-    const [displaySearch, setDisplayedSearch] = useState(false);
-    const [focusedIndex, setFocusedIndex] = useState(-1);
-    const handleOnFocus = () => {
-        if (results.length) setDisplayedSearch(true);
-    }
-    const handleOnBlur = () => {
-        setDisplayedSearch(false);
-    }
-    const handleKeyDown = ({key}) => {
-        let nextCount;
-        // console.log(key);
-        const keys = ['ArrowDown', 'ArrowUp', 'Enter', 'Escape']
-        if (!keys.includes(key)) return;
+  const [displaySearch, setDisplayedSearch] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const handleOnFocus = () => {
+    if (results.length) setDisplayedSearch(true);
+  };
+  const handleOnBlur = () => {
+    setDisplayedSearch(false);
+  };
+  const handleKeyDown = ({ key }) => {
+    let nextCount;
+    // console.log(key);
+    const keys = ["ArrowDown", "ArrowUp", "Enter", "Escape"];
+    if (!keys.includes(key)) return;
 
-        //more selection up and down
-        if (key === 'ArrowDown') {
-            nextCount = (focusedIndex + 1) % results.length;
-        }
-        if (key === 'ArrowUp') {
-            nextCount = (focusedIndex + results.length - 1 ) % results.length;
-        }
-        setFocusedIndex(nextCount);
+    //more selection up and down
+    if (key === "ArrowDown") {
+      nextCount = (focusedIndex + 1) % results.length;
     }
+    if (key === "ArrowUp") {
+      nextCount = (focusedIndex + results.length - 1) % results.length;
+    }
+    setFocusedIndex(nextCount);
+  };
   return (
     <div className="relative">
       <input
@@ -74,30 +74,47 @@ export default function LiveSearch() {
         onBlur={handleOnBlur}
         onKeyDown={handleKeyDown}
       />
-      <SearchResults focusedIndex={focusedIndex} visible={displaySearch} results={results}/>
+      <SearchResults
+        focusedIndex={focusedIndex}
+        visible={displaySearch}
+        results={results}
+      />
     </div>
   );
 }
 
-const SearchResults = ({visible, results = [], focusedIndex}) => {
-    if (!visible) return null;
-    return (
-        <div className="absolute right-0 left-0 top-10 bg-white dark:bg-secondary shadow-md p-2 max-h-64 space-y-2 mt-1 overflow-auto custom-scroll-bar">
-        {results.map(({ id, name, avatar }, index) => {
-          return (
-            <div
-              key={id}
-              className={(index === focusedIndex ? "dark:bg-dark-subtle bg-light-subtle" : "") + " cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition flex space-x-2"}
-            >
-              <img
-                src={avatar}
-                alt={name}
-                className="w-16 h-16 rounded object-cover"
-              />
-              <p className="dark:text-white font-semibold">{name}</p>
-            </div>
-          );
-        })}
-      </div>
-    )
-}
+const SearchResults = ({ visible, results = [], focusedIndex }) => {
+  const resultContainer = useRef();
+  useEffect(() => {
+    resultContainer.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  }, [focusedIndex]);
+  if (!visible) return null;
+  return (
+    <div className="absolute right-0 left-0 top-10 bg-white dark:bg-secondary shadow-md p-2 max-h-64 space-y-2 mt-1 overflow-auto custom-scroll-bar">
+      {results.map(({ id, name, avatar }, index) => {
+        return (
+          <div
+            ref={index === focusedIndex ? resultContainer : null}
+            key={id}
+            className={
+              (index === focusedIndex
+                ? "dark:bg-dark-subtle bg-light-subtle"
+                : "") +
+              " cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition flex space-x-2"
+            }
+          >
+            <img
+              src={avatar}
+              alt={name}
+              className="w-16 h-16 rounded object-cover"
+            />
+            <p className="dark:text-white font-semibold">{name}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
