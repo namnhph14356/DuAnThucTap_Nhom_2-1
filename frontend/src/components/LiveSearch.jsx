@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { commonInputClasses } from "../utils/theme";
 
 export const results = [
@@ -48,17 +48,17 @@ export default function LiveSearch() {
   };
   const closeSearch = () => {
     setDisplayedSearch(false);
-    setFocusedIndex(-1)
-  }
+    setFocusedIndex(-1);
+  };
   const handleOnBlur = () => {
-   setTimeout(()=>{
+    setTimeout(() => {
       closeSearch();
-   }, 100)
+    }, 100);
   };
 
   const handleSelection = (selectedItem) => {
     console.log(selectedItem);
-  }
+  };
   const handleKeyDown = ({ key }) => {
     let nextCount;
     // console.log(key);
@@ -72,7 +72,7 @@ export default function LiveSearch() {
     if (key === "ArrowUp") {
       nextCount = (focusedIndex + results.length - 1) % results.length;
     }
-    if (key === 'Enter') return handleSelection(results[focusedIndex]);
+    if (key === "Enter") return handleSelection(results[focusedIndex]);
     setFocusedIndex(nextCount);
   };
   return (
@@ -95,7 +95,24 @@ export default function LiveSearch() {
   );
 }
 
-const SearchResults = ({ visible, results = [], focusedIndex, onSelect }) => {
+const renderItem = ({ id, name, avatar }) => {
+  return (
+    <div className="flex">
+      <img src={avatar} alt="" />
+      <p>{name}</p>
+    </div>
+  );
+};
+
+const SearchResults = ({
+  visible,
+  results = [],
+  focusedIndex,
+  onSelect,
+  // renderItem,
+  resultContainerStyle,
+  selectedResultStyle,
+}) => {
   const resultContainer = useRef();
   useEffect(() => {
     resultContainer.current?.scrollIntoView({
@@ -107,28 +124,49 @@ const SearchResults = ({ visible, results = [], focusedIndex, onSelect }) => {
   return (
     <div className="absolute right-0 left-0 top-10 bg-white dark:bg-secondary shadow-md p-2 max-h-64 space-y-2 mt-1 overflow-auto custom-scroll-bar">
       {results.map((result, index) => {
-        const { id, name, avatar } = result;
+        const getSelectedClass = () => {
+          return selectedResultStyle
+            ? selectedResultStyle
+            : "dark:bg-dark-subtle bg-light-subtle";
+        };
         return (
-          <div
-            onClick={() => onSelect(result)}
+          <ResultCard
             ref={index === focusedIndex ? resultContainer : null}
-            key={id}
-            className={
-              (index === focusedIndex
-                ? "dark:bg-dark-subtle bg-light-subtle"
-                : "") +
-              " cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition flex space-x-2"
+            key={result.id}
+            item={result}
+            renderItem={renderItem}
+            resultContainerStyle={resultContainerStyle}
+            selectedResultStyle={
+              index === focusedIndex ? getSelectedClass() : ""
             }
-          >
-            <img
-              src={avatar}
-              alt={name}
-              className="w-16 h-16 rounded object-cover"
-            />
-            <p className="dark:text-white font-semibold">{name}</p>
-          </div>
+            onClick={() => onSelect(result)}
+          />
         );
       })}
     </div>
   );
 };
+
+const ResultCard = forwardRef((props, ref) => {
+  const {
+    item,
+    renderItem,
+    resultContainerStyle,
+    selectedResultStyle,
+    onClick,
+  } = props;
+
+  const getCLasses = () => {
+    if (resultContainerStyle)
+      return resultContainerStyle + " " + selectedResultStyle;
+    return (
+      selectedResultStyle +
+      " cursor-pointer rounded overflow-hidden dark:hover:bg-dark-subtle hover:bg-light-subtle transition"
+    );
+  };
+  return (
+    <div onClick={onClick} ref={ref} className={getCLasses()}>
+      {renderItem(item)}
+    </div>
+  );
+});
