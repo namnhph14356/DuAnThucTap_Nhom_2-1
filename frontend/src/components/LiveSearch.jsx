@@ -46,9 +46,14 @@ export default function LiveSearch() {
   const handleOnFocus = () => {
     if (results.length) setDisplayedSearch(true);
   };
-  const handleOnBlur = () => {
+  const closeSearch = () => {
     setDisplayedSearch(false);
-    setFocusedIndex(-1);
+    setFocusedIndex(-1)
+  }
+  const handleOnBlur = () => {
+   setTimeout(()=>{
+      closeSearch();
+   }, 100)
   };
 
   const handleSelection = (selectedItem) => {
