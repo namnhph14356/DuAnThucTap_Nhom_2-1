@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
+import React, { useState } from "react";
 import { commonInputClasses } from "../../utils/theme";
 import LiveSearch from "../LiveSearch";
 import TagsInput from "../TagsInput";
@@ -43,7 +43,23 @@ export const results = [
   },
 ];
 
+const defaultMovieInfo = {
+  title: "",
+  storyLine: "",
+  tags: [],
+  cast: [],
+  director: {},
+  writers: [],
+  releaseDate: "",
+  poster: null,
+  genres: [],
+  type: "",
+  language: "",
+  status: "",
+};
+
 export default function MovieForm() {
+  const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -60,12 +76,21 @@ export default function MovieForm() {
       </div>
     );
   };
+
+  const handleChange = ({ target }) => {
+    const { value, name } = target;
+    setMovieInfo({ ...movieInfo, [name]: value });
+  };
+  const { title, storyLine, director } = movieInfo;
   return (
     <form onClick={handleSubmit} className="flex space-x-3">
       <div className="w-[70%] h-5 space-y-5">
         <div>
           <Label htmlFor="title">Title</Label>
           <input
+            value={title}
+            onChange={handleChange}
+            name="title"
             id="title"
             type="text"
             className={
@@ -79,6 +104,9 @@ export default function MovieForm() {
         <div>
           <Label htmlFor="storyLine">Story Line</Label>
           <textarea
+            value={storyLine}
+            onChange={handleChange}
+            name="storyLine"
             id="storyLine"
             className={commonInputClasses + " resize-none h-24 border-b-2"}
             placeholder="Movie story line...."
