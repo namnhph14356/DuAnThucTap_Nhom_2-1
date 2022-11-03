@@ -2,9 +2,10 @@ import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { commonInputClasses } from "../utils/theme";
 
 export default function LiveSearch({
-  // value = "",
+  value= "",
   placeholder = "",
   results = [],
+  name,
   selectedResultStyle,
   resultContainerStyle,
   inputStyle,
@@ -55,14 +56,15 @@ export default function LiveSearch({
     <div className="relative">
       <input
         type="text"
+        id={name}
+        name={name}
         className={getInputStyle()}
         placeholder={placeholder}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         onKeyDown={handleKeyDown}
-        // value={value}
+        value={value}
         onChange={onChange}
-        // defaultValue={[]}
       />
       <SearchResults
         focusedIndex={focusedIndex}
