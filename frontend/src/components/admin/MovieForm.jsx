@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { commonInputClasses } from "../../utils/theme";
 import LiveSearch from "../LiveSearch";
 import TagsInput from "../TagsInput";
-
+import Submit from "../form/Submit";
 export const results = [
   {
     id: "1",
@@ -62,6 +62,7 @@ export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(movieInfo);
   };
 
   const renderItem = (result) => {
@@ -81,9 +82,15 @@ export default function MovieForm() {
     const { value, name } = target;
     setMovieInfo({ ...movieInfo, [name]: value });
   };
+
+
+  const updateTags = (tags) => {
+    setMovieInfo({ ...movieInfo, tags });
+  };
+
   const { title, storyLine, director } = movieInfo;
   return (
-    <form onClick={handleSubmit} className="flex space-x-3">
+    <form onSubmit={handleSubmit} className="flex space-x-3">
       <div className="w-[70%] h-5 space-y-5">
         <div>
           <Label htmlFor="title">Title</Label>
@@ -114,7 +121,7 @@ export default function MovieForm() {
         </div>
         <div>
           <Label htmlFor="tags">Tags</Label>
-          <TagsInput name="tags" />
+          <TagsInput name="tags" onChange={updateTags}/>
         </div>
         <LiveSearch
           placeholder="Search profile"
@@ -122,6 +129,7 @@ export default function MovieForm() {
           renderItem={renderItem}
           onSelect={(result) => console.log(result)}
         />
+        <Submit value="Upload"/>
       </div>
       <div className="w-[30%] h-5 bg-blue-400"></div>
     </form>
