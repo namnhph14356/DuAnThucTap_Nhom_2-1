@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { commonInputClasses } from "../utils/theme";
 
 export default function LiveSearch({
-  value = "",
+  // value = "",
   placeholder = "",
   results = [],
   selectedResultStyle,
@@ -60,7 +60,7 @@ export default function LiveSearch({
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
         onKeyDown={handleKeyDown}
-        value={value}
+        // value={value}
         onChange={onChange}
         // defaultValue={[]}
       />
