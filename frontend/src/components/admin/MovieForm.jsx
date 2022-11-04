@@ -100,6 +100,10 @@ export default function MovieForm() {
   const updateDirector = (profile) => {
     setMovieInfo({ ...movieInfo, director: profile });
   };
+  const updateCast = (castInfo) => {
+    const {cast} = movieInfo
+    setMovieInfo({ ...movieInfo, cast: [...cast, castInfo] });
+  };
 
   const updateWriters = (profile) => {
     const { writers } = movieInfo;
@@ -196,7 +200,10 @@ export default function MovieForm() {
               onSelect={updateWriters}
             />
           </div>
-          <CastForm />
+          <div>
+            <LabelWithBadge>Add Cast & Crew</LabelWithBadge>
+            <CastForm onSubmit={updateCast} />
+          </div>
           <Submit value="Upload" />
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>
@@ -221,7 +228,7 @@ const Label = ({ children, htmlFor }) => {
   );
 };
 
-const LabelWithBadge = ({ children, htmlFor, badge }) => {
+const LabelWithBadge = ({ children, htmlFor, badge=0 }) => {
   const renderBadge = () => {
     return (
       <span className="dark:bg-dark-subtle bg-light-subtle text-white absolute top-0 right-0 translate-x-2 -translate-y-1 text-xs w-5 h-5 rounded-full flex justify-center items-center">
