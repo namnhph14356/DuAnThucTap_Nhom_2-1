@@ -5,7 +5,8 @@ import LiveSearch from "../LiveSearch";
 import TagsInput from "../TagsInput";
 import Submit from "../form/Submit";
 import { useNotification } from "../../hooks";
-import ModalContainer from "../modals/ModalContainer";
+// import ModalContainer from "../modals/ModalContainer";
+import WritersModal from "../modals/WritersModal";
 
 export const results = [
   {
@@ -63,7 +64,7 @@ const defaultMovieInfo = {
 
 export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
-  const [showModal, setShowModal] = useState(false);
+  const [showWritersModal, setShowWritersModal] = useState(false);
   const { updateNotification } = useNotification();
 
   const handleSubmit = (e) => {
@@ -163,7 +164,7 @@ export default function MovieForm() {
               <LabelWithBadge badge={writers.length} htmlFor="writers">
                 Writers
               </LabelWithBadge>
-              <button onClick={() => setShowModal(true)} className="dark:text-white text-primary hover:underline transition">
+              <button onClick={() => setShowWritersModal(true)} className="dark:text-white text-primary hover:underline transition">
                 View All
               </button>
             </div>
@@ -179,9 +180,7 @@ export default function MovieForm() {
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>
       </form>
-      <ModalContainer onClose={() => setShowModal(false)} visible={showModal}>
-        <div className="p-20 bg-red-200"></div>
-      </ModalContainer>
+      <WritersModal onClose={() => setShowWritersModal(false)} profile={writers} visible={showWritersModal} />
     </>
   );
 }
