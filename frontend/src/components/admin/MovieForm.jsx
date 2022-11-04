@@ -143,6 +143,12 @@ export default function MovieForm() {
     if (!newWriters.length) hideWritersModal();
     setMovieInfo({ ...movieInfo, writers: [...newWriters] });
   };
+  const handleCastRemove = (profileId) => {
+    const { cast } = movieInfo;
+    const newCast = cast.filter(({ profile }) => profile.id !== profileId);
+    if (!newCast.length) hideCastModal();
+    setMovieInfo({ ...movieInfo, cast: [...newCast] });
+  };
   const { title, storyLine, director, writers, cast } = movieInfo;
   return (
     <>
@@ -231,7 +237,7 @@ export default function MovieForm() {
         onClose={hideCastModal}
         casts={cast}
         visible={showCastModal}
-        // onRemoveClick={handleWriterRemove}
+        onRemoveClick={handleCastRemove}
       />
     </>
   );
