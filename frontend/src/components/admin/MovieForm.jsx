@@ -111,6 +111,20 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, writers: [...writers, profile] });
   };
 
+  const hideWritersModal = () => {
+    setShowWritersModal(false);
+  }
+
+  const displayWritersModal = () => {
+    setShowWritersModal(true);
+  }
+
+  const handleWriterRemove = (profileId) => {
+    const { writers } = movieInfo;
+    const newWriters = writers.filter(({ id }) => id !== profileId);
+    if (!newWriters.length) hideWritersModal();
+    setMovieInfo({ ...movieInfo, writers: [...newWriters] });
+  };
   const { title, storyLine, director, writers } = movieInfo;
   return (
     <>
@@ -165,7 +179,7 @@ export default function MovieForm() {
                 Writers
               </LabelWithBadge>
               <button
-                onClick={() => setShowWritersModal(true)}
+                onClick={displayWritersModal}
                 className="dark:text-white text-primary hover:underline transition"
               >
                 View All
@@ -184,9 +198,10 @@ export default function MovieForm() {
         <div className="w-[30%] h-5 bg-blue-400"></div>
       </form>
       <WritersModal
-        onClose={() => setShowWritersModal(false)}
+        onClose={hideWritersModal}
         profile={writers}
         visible={showWritersModal}
+        onRemoveClick={handleWriterRemove}
       />
     </>
   );

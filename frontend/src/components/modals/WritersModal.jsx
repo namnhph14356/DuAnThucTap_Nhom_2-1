@@ -2,7 +2,12 @@ import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import ModalContainer from "./ModalContainer";
 
-export default function WritersModal({ profile = [], visible, onClose }) {
+export default function WritersModal({
+  profile = [],
+  visible,
+  onClose,
+  onRemoveClick,
+}) {
   return (
     <ModalContainer ignoreContainer onClose={onClose} visible={visible}>
       <div className="space-y-2 dark:bg-primary bg-white rounded max-w-[45rem] max-h-[40rem] overflow-auto p-2 custom-scroll-bar">
@@ -17,7 +22,7 @@ export default function WritersModal({ profile = [], visible, onClose }) {
               <p className="w-full font-semibold dark:text-white text-primary">
                 {name}
               </p>
-              <button className="dark:text-white text-primary hover:opacity-80 transition p-2">
+              <button onClick={() => onRemoveClick(id)} className="dark:text-white text-primary hover:opacity-80 transition p-2">
                 <AiOutlineClose />
               </button>
             </div>
