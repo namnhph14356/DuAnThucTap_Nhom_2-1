@@ -62,6 +62,7 @@ const defaultMovieInfo = {
   status: "",
 };
 
+
 export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
@@ -193,6 +194,7 @@ export default function MovieForm() {
               onSelect={updateWriters}
             />
           </div>
+          <CastForm/>
           <Submit value="Upload" />
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>
