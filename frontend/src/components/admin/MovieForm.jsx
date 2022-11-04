@@ -164,7 +164,10 @@ export default function MovieForm() {
               <LabelWithBadge badge={writers.length} htmlFor="writers">
                 Writers
               </LabelWithBadge>
-              <button onClick={() => setShowWritersModal(true)} className="dark:text-white text-primary hover:underline transition">
+              <button
+                onClick={() => setShowWritersModal(true)}
+                className="dark:text-white text-primary hover:underline transition"
+              >
                 View All
               </button>
             </div>
@@ -180,7 +183,11 @@ export default function MovieForm() {
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>
       </form>
-      <WritersModal onClose={() => setShowWritersModal(false)} profile={writers} visible={showWritersModal} />
+      <WritersModal
+        onClose={() => setShowWritersModal(false)}
+        profile={writers}
+        visible={showWritersModal}
+      />
     </>
   );
 }
