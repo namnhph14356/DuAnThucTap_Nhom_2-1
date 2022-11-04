@@ -5,6 +5,7 @@ import LiveSearch from "../LiveSearch";
 import TagsInput from "../TagsInput";
 import Submit from "../form/Submit";
 import { useNotification } from "../../hooks";
+import ModalContainer from "../modals/ModalContainer";
 
 export const results = [
   {
@@ -62,7 +63,7 @@ const defaultMovieInfo = {
 
 export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
-
+  const [showModal, setShowModal] = useState(false);
   const { updateNotification } = useNotification();
 
   const handleSubmit = (e) => {
@@ -111,72 +112,77 @@ export default function MovieForm() {
 
   const { title, storyLine, director, writers } = movieInfo;
   return (
-    <form onSubmit={handleSubmit} className="flex space-x-3">
-      <div className="w-[70%] h-5 space-y-5">
-        <div>
-          <Label htmlFor="title">Title</Label>
-          <input
-            value={title}
-            onChange={handleChange}
-            name="title"
-            id="title"
-            type="text"
-            className={
-              commonInputClasses +
-              " border-b-2 font-semibold  text-primary text-xl"
-            }
-            placeholder="Titanic"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="storyLine">Story Line</Label>
-          <textarea
-            value={storyLine}
-            onChange={handleChange}
-            name="storyLine"
-            id="storyLine"
-            className={commonInputClasses + " resize-none h-24 border-b-2"}
-            placeholder="Movie story line...."
-          ></textarea>
-        </div>
-        <div>
-          <Label htmlFor="tags">Tags</Label>
-          <TagsInput name="tags" onChange={updateTags} />
-        </div>
-        <div>
-          <Label htmlFor="director">Director</Label>
-          <LiveSearch
-            name="director"
-            value={director.name}
-            placeholder="Search profile"
-            results={results}
-            renderItem={renderItem}
-            onSelect={updateDirector}
-          />
-        </div>
-
-        <div>
-          <div className="flex justify-between">
-            <LabelWithBadge badge={writers.length} htmlFor="writers">
-              Writers
-            </LabelWithBadge>
-            <button className="dark:text-white text-primary hover:underline transition">
-              View All
-            </button>
+    <>
+      <form onSubmit={handleSubmit} className="flex space-x-3">
+        <div className="w-[70%] h-5 space-y-5">
+          <div>
+            <Label htmlFor="title">Title</Label>
+            <input
+              value={title}
+              onChange={handleChange}
+              name="title"
+              id="title"
+              type="text"
+              className={
+                commonInputClasses +
+                " border-b-2 font-semibold  text-primary text-xl"
+              }
+              placeholder="Titanic"
+            />
           </div>
-          <LiveSearch
-            name="writers"
-            placeholder="Search profile"
-            results={results}
-            renderItem={renderItem}
-            onSelect={updateWriters}
-          />
+
+          <div>
+            <Label htmlFor="storyLine">Story Line</Label>
+            <textarea
+              value={storyLine}
+              onChange={handleChange}
+              name="storyLine"
+              id="storyLine"
+              className={commonInputClasses + " resize-none h-24 border-b-2"}
+              placeholder="Movie story line...."
+            ></textarea>
+          </div>
+          <div>
+            <Label htmlFor="tags">Tags</Label>
+            <TagsInput name="tags" onChange={updateTags} />
+          </div>
+          <div>
+            <Label htmlFor="director">Director</Label>
+            <LiveSearch
+              name="director"
+              value={director.name}
+              placeholder="Search profile"
+              results={results}
+              renderItem={renderItem}
+              onSelect={updateDirector}
+            />
+          </div>
+
+          <div>
+            <div className="flex justify-between">
+              <LabelWithBadge badge={writers.length} htmlFor="writers">
+                Writers
+              </LabelWithBadge>
+              <button onClick={() => setShowModal(true)} className="dark:text-white text-primary hover:underline transition">
+                View All
+              </button>
+            </div>
+            <LiveSearch
+              name="writers"
+              placeholder="Search profile"
+              results={results}
+              renderItem={renderItem}
+              onSelect={updateWriters}
+            />
+          </div>
+          <Submit value="Upload" />
         </div>
-        <Submit value="Upload" />
-      </div>
-      <div className="w-[30%] h-5 bg-blue-400"></div>
-    </form>
+        <div className="w-[30%] h-5 bg-blue-400"></div>
+      </form>
+      <ModalContainer onClose={() => setShowModal(false)} visible={showModal}>
+        <div className="p-20 bg-red-200"></div>
+      </ModalContainer>
+    </>
   );
 }
 const Label = ({ children, htmlFor }) => {
@@ -192,10 +198,12 @@ const Label = ({ children, htmlFor }) => {
 
 const LabelWithBadge = ({ children, htmlFor, badge }) => {
   const renderBadge = () => {
-    return <span className="dark:bg-dark-subtle bg-light-subtle text-white absolute top-0 right-0 translate-x-2 -translate-y-1 text-xs w-5 h-5 rounded-full flex justify-center items-center">
-    {badge <= 9 ? badge : '9+'}
-  </span>
-  }
+    return (
+      <span className="dark:bg-dark-subtle bg-light-subtle text-white absolute top-0 right-0 translate-x-2 -translate-y-1 text-xs w-5 h-5 rounded-full flex justify-center items-center">
+        {badge <= 9 ? badge : "9+"}
+      </span>
+    );
+  };
   return (
     <div className="relative">
       <Label htmlFor={htmlFor}>{children}</Label>
