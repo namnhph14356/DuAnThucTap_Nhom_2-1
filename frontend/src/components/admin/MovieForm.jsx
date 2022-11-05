@@ -68,7 +68,7 @@ const defaultMovieInfo = {
   cast: [],
   director: {},
   writers: [],
-  releaseDate: "",
+  releseDate: "",
   poster: null,
   genres: [],
   type: "",
@@ -219,10 +219,15 @@ export default function MovieForm() {
                 Add Cast & Crew
               </LabelWithBadge>
               <ViewAllBtn onClick={displayCastModal} visible={cast.length} >View All</ViewAllBtn>
-
             </div>
             <CastForm onSubmit={updateCast} />
           </div>
+
+          <input  type="date" className={commonInputClasses + " border-2 rounded p-1 w-auto"}
+          onChange={handleChange} name='releseDate'
+
+          />
+
           <Submit value="Upload" onClick={handleSubmit} type='button'/>
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>
