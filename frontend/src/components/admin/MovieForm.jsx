@@ -149,7 +149,7 @@ export default function MovieForm() {
     if (!newCast.length) hideCastModal();
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
-  const { title, storyLine, director, writers, cast } = movieInfo;
+  const { title, storyLine, director, writers, cast, tags } = movieInfo;
   return (
     <>
       <div className="flex space-x-3">
@@ -183,7 +183,7 @@ export default function MovieForm() {
           </div>
           <div>
             <Label htmlFor="tags">Tags</Label>
-            <TagsInput name="tags" onChange={updateTags} />
+            <TagsInput value={tags} name="tags" onChange={updateTags} />
           </div>
           <div>
             <Label htmlFor="director">Director</Label>
