@@ -10,6 +10,7 @@ import WritersModal from "../modals/WritersModal";
 import CastForm from "../form/CastForm";
 import CastModal from "../modals/CastModal";
 import PosterSelector from "../../components/PosterSelector";
+import GenresSelector from "../GenresSelector";
 
 export const results = [
   {
@@ -247,13 +248,14 @@ export default function MovieForm() {
 
           <Submit value="Upload" onClick={handleSubmit} type="button" />
         </div>
-        <div className="w-[30%]">
+        <div className="w-[30%] space-y-5">
           <PosterSelector
             name="poster"
             onChange={handleChange}
             selectedPoster={selectedPosterForUI}
             accept="image/jpg, image/jpeg, image/png"
           />
+          <GenresSelector />
         </div>
       </div>
       <WritersModal
