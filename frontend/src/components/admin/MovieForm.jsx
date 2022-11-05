@@ -47,6 +47,18 @@ export const results = [
     name: "Edward Howell",
   },
 ];
+export const renderItem = (result) => {
+  return (
+    <div key={result.id} className="flex space-x-2 rounded overflow-hidden">
+      <img
+        src={result.avatar}
+        alt={result.name}
+        className="w-16 h-16 object-cover"
+      />
+      <p className="dark:text-white font-semibold">{result.name}</p>
+    </div>
+  );
+};
 
 const defaultMovieInfo = {
   title: "",
@@ -74,18 +86,7 @@ export default function MovieForm() {
     console.log(movieInfo);
   };
 
-  const renderItem = (result) => {
-    return (
-      <div key={result.id} className="flex space-x-2 rounded overflow-hidden">
-        <img
-          src={result.avatar}
-          alt={result.name}
-          className="w-16 h-16 object-cover"
-        />
-        <p className="dark:text-white font-semibold">{result.name}</p>
-      </div>
-    );
-  };
+
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -195,7 +196,7 @@ export default function MovieForm() {
               onSelect={updateWriters}
             />
           </div>
-          <CastForm/>
+          <CastForm />
           <Submit value="Upload" />
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>
