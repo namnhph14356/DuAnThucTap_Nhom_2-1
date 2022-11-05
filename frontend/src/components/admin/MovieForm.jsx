@@ -9,6 +9,7 @@ import { useNotification } from "../../hooks";
 import WritersModal from "../modals/WritersModal";
 import CastForm from "../form/CastForm";
 import CastModal from "../modals/CastModal";
+import PosterSelector from "../../components/PosterSelector"
 
 export const results = [
   {
@@ -225,12 +226,14 @@ export default function MovieForm() {
 
           <input  type="date" className={commonInputClasses + " border-2 rounded p-1 w-auto"}
           onChange={handleChange} name='releseDate'
-
           />
 
           <Submit value="Upload" onClick={handleSubmit} type='button'/>
         </div>
-        <div className="w-[30%] h-5 bg-blue-400"></div>
+        <div className="w-[30%]">
+          <PosterSelector />
+
+        </div>
       </div>
       <WritersModal
         onClose={hideWritersModal}
