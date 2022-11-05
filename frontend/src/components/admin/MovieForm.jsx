@@ -152,7 +152,7 @@ export default function MovieForm() {
   const { title, storyLine, director, writers, cast } = movieInfo;
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex space-x-3">
+      <div className="flex space-x-3">
         <div className="w-[70%] h-5 space-y-5">
           <div>
             <Label htmlFor="title">Title</Label>
@@ -223,10 +223,10 @@ export default function MovieForm() {
             </div>
             <CastForm onSubmit={updateCast} />
           </div>
-          <Submit value="Upload" />
+          <Submit value="Upload" onClick={handleSubmit} type='button'/>
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>
-      </form>
+      </div>
       <WritersModal
         onClose={hideWritersModal}
         profile={writers}
@@ -274,6 +274,7 @@ const ViewAllBtn = ({ visible, children, onClick }) => {
   if (!visible) return null
   return <button
     onClick={onClick}
+    type='button'
     className="dark:text-white text-primary hover:underline transition"
   >
     {children}
