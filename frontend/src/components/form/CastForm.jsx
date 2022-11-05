@@ -45,7 +45,7 @@ export default function CastForm({ onSubmit }) {
 
     return (
         <div className='flex items-center space-x-2'>
-            <input type="checkbox" name='leadActor' className='w-4 h-4' checked={leadActor} onChange={handleOnChange} />
+            <input type="checkbox" name='leadActor' className='w-4 h-4' checked={leadActor} onChange={handleOnChange} title='Set at a let actor' />
             <LiveSearch
                 placeholder='Search profile'
                 value={profile.name}
