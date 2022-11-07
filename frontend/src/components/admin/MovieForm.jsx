@@ -173,7 +173,7 @@ export default function MovieForm() {
     if (!newCast.length) hideCastModal();
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
-  const { title, storyLine, director, writers, cast, tags } = movieInfo;
+  const { title, storyLine, director, writers, cast, tags, genres } = movieInfo;
   return (
     <>
       <div className="flex space-x-3">
@@ -269,7 +269,7 @@ export default function MovieForm() {
             selectedPoster={selectedPosterForUI}
             accept="image/jpg, image/jpeg, image/png"
           />
-          <GenresSelector onClick={displayGenresModal}/>
+          <GenresSelector badge={genres.length} onClick={displayGenresModal}/>
         </div>
       </div>
       <WritersModal
