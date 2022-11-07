@@ -93,10 +93,10 @@ export default function MovieForm() {
     console.log(movieInfo);
   };
 
-  const updatePosterForUI = file => {
+  const updatePosterForUI = (file) => {
     const url = URL.createObjectURL(file);
     setSelectedPosterForUI(url);
-  }
+  };
 
   const handleChange = ({ target }) => {
     const { value, name, files } = target;
@@ -269,7 +269,7 @@ export default function MovieForm() {
             selectedPoster={selectedPosterForUI}
             accept="image/jpg, image/jpeg, image/png"
           />
-          <GenresSelector badge={genres.length} onClick={displayGenresModal}/>
+          <GenresSelector badge={genres.length} onClick={displayGenresModal} />
         </div>
       </div>
       <WritersModal
@@ -284,7 +284,12 @@ export default function MovieForm() {
         visible={showCastModal}
         onRemoveClick={handleCastRemove}
       />
-      <GenresModal onSubmit={updateGenres} visible={showGenresModal} onClose={hideGenresModal} />
+      <GenresModal
+        onSubmit={updateGenres}
+        visible={showGenresModal}
+        onClose={hideGenresModal}
+        previousSelection={genres}
+      />
     </>
   );
 }
