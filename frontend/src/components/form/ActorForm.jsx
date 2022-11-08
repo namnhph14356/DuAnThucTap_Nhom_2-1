@@ -1,12 +1,20 @@
 import React, { useState } from 'react'
 import { commonInputClasses } from '../../utils/theme'
 import PosterSelector from '../PosterSelector'
+import Selector from '../Selector'
 
 const defaultActorInfo = {
     name: '',
     about: '',
-    avatar: null
+    avatar: null,
+    gender: ''
 }
+
+const genderOption = [
+    { title: 'Male', value: 'male' },
+    { title: 'Female', value: 'female' },
+    { title: 'Other', value: 'other' },
+]
 
 export default function ActorForm({ title, btnTitle }) {
     const [actorInfo, setActorInfo] = useState({ ...defaultActorInfo })
@@ -32,7 +40,7 @@ export default function ActorForm({ title, btnTitle }) {
         console.log(actorInfo);
     }
 
-    const { name, about } = actorInfo
+    const { name, about, gender } = actorInfo
 
     return (
         <div >
@@ -78,6 +86,9 @@ export default function ActorForm({ title, btnTitle }) {
 
                         </textarea>
                     </div>
+                </div>
+                <div className='mt-3'>
+                    <Selector options={genderOption} label='Gender' value={gender} onChange={handleChange} name='gender' />
                 </div>
             </form>
         </div>
