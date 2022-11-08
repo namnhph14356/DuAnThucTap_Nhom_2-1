@@ -13,6 +13,7 @@ import PosterSelector from "../../components/PosterSelector";
 import GenresSelector from "../GenresSelector";
 import GenresModal from "../modals/GenresModal";
 import Selector from "../Selector";
+import { languageOptions, statusOptions, typeOptions } from "../../utils/options";
 
 export const results = [
   {
@@ -271,9 +272,9 @@ export default function MovieForm() {
             accept="image/jpg, image/jpeg, image/png"
           />
           <GenresSelector badge={genres.length} onClick={displayGenresModal} />
-          <Selector label="Type" />
-          <Selector label="Language" />
-          <Selector label="Status" />
+          <Selector options={typeOptions} label="Type" />
+          <Selector options={languageOptions} label="Language" />
+          <Selector options={statusOptions} label="Status" />
         </div>
       </div>
       <WritersModal
