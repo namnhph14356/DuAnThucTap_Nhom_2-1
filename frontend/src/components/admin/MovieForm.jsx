@@ -175,7 +175,7 @@ export default function MovieForm() {
     if (!newCast.length) hideCastModal();
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
-  const { title, storyLine, director, writers, cast, tags, genres } = movieInfo;
+  const { title, storyLine, director, writers, cast, tags, genres, type, language, status } = movieInfo;
   return (
     <>
       <div className="flex space-x-3">
@@ -272,9 +272,9 @@ export default function MovieForm() {
             accept="image/jpg, image/jpeg, image/png"
           />
           <GenresSelector badge={genres.length} onClick={displayGenresModal} />
-          <Selector options={typeOptions} label="Type" />
-          <Selector options={languageOptions} label="Language" />
-          <Selector options={statusOptions} label="Status" />
+          <Selector value={type} name="type" onChange={handleChange} options={typeOptions} label="Type" />
+          <Selector value={language} name="language" onChange={handleChange} options={languageOptions} label="Language" />
+          <Selector value={status} name="status" onChange={handleChange} options={statusOptions} label="Status" />
         </div>
       </div>
       <WritersModal
