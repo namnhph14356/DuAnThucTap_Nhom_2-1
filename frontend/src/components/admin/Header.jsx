@@ -8,9 +8,9 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
   const { toggleTheme } = useTheme();
 
   const options = [
-    {title: "Add Movie", onClick: onAddMovieClick},
-    {title: "Add Actor", onClick: onAddActorClick},
-   ];
+    { title: "Add Movie", onClick: onAddMovieClick },
+    { title: "Add Actor", onClick: onAddActorClick },
+  ];
   return (
     <div className="flex item-center justify-between relative">
       <input
@@ -21,8 +21,8 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
       />
 
       <div className="flex items-center space-x-3">
-      <button onClick={toggleTheme} className="dark:text-white text-light-subtle">
-                <BsFillSunFill size={24} />
+        <button onClick={toggleTheme} className="dark:text-white text-light-subtle">
+          <BsFillSunFill size={24} />
         </button>
         <button
           onClick={() => setShowOptions(!showOptions)}
@@ -36,45 +36,49 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
         <CreateOptions
           visible={showOptions}
           // onClose={() => setShowOptions(false)}
-          options = {options}
+          options={options}
         />
       </div>
     </div>
   );
 }
 
-const CreateOptions = ({options, visible, onClose }) => {
-    const container = useRef();
-    const containerID = "options-container";
-    useEffect(() => {
-        const handleClose = (e) => {
-            if (!visible) return;
-            const { parentElement, id } = e.target;
-            if (parentElement.id === containerID || id === containerID) return;
-            // container.current.classList.remove('animate-scale');
-            // container.current.classList.add('animate-scale-reverse');
-        };
-        document.addEventListener("click", handleClose);
-        return () => {
-            document.removeEventListener("click", handleClose);
-        }
-    }, [visible]);
-
-
-    const handleAnimationEnd = (e) => {
-      if (e.target.classList.contains('animate-scale-reverse')) onClose();
-      e.target.classList.remove('animate-scale');
+const CreateOptions = ({ options, visible, onClose }) => {
+  const container = useRef();
+  const containerID = "options-container";
+  useEffect(() => {
+    const handleClose = (e) => {
+      if (!visible) return;
+      const { parentElement, id } = e.target;
+      if (parentElement.id === containerID || id === containerID) return;
+      // container.current.classList.remove('animate-scale');
+      // container.current.classList.add('animate-scale-reverse');
+    };
+    document.addEventListener("click", handleClose);
+    return () => {
+      document.removeEventListener("click", handleClose);
     }
-    
+  }, [visible]);
+
+
+  const handleAnimationEnd = (e) => {
+    if (e.target.classList.contains('animate-scale-reverse')) onClose();
+    e.target.classList.remove('animate-scale');
+  }
+  const handleClick = (fn) => {
+    fn()
+    onClose()
+  }
+
   if (!visible) return null;
   return (
     <div ref={container}
-    id={containerID}
-    className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
-    onAnimationEnd={handleAnimationEnd}
+      id={containerID}
+      className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
+      onAnimationEnd={handleAnimationEnd}
     >
-      {options.map(({title, onClick}) => {
-          return <Option onClick={onClick}>{title}</Option>
+      {options.map(({ title, onClick }) => {
+        return <Option onClick={() => handleClick(onClick)}>{title}</Option>
       })}
     </div>
   );
