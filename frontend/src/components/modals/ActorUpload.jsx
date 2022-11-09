@@ -3,9 +3,12 @@ import ActorForm from '../form/ActorForm'
 import ModalContainer from './ModalContainer'
 
 export default function ActorUpload({visible, onClose}) {
+  const handleSubmit = data => {
+    console.log(data)
+  }
   return (
     <ModalContainer visible={visible} onClose={onClose} ignoreContainer>
-        <ActorForm title='Creat New Actor' btnTitle='Creat' />
+        <ActorForm onSubmit={handleSubmit} title='Creat New Actor' btnTitle='Create' />
     </ModalContainer>
   )
 }
