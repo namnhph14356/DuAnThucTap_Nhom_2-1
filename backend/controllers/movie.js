@@ -271,3 +271,25 @@ exports.removeMovie = async (req, res) => {
 
   res.json({ message: 'Movie removed successfully.'});
 }
+
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+
+exports.searchMovies = async (req, res) =>{
+  const {title} = req.query
+  const movies = await Movie.find({title: {$regex: title, $options: "i" }})
+  res.json({results: movies.map(m =>{
+    return {
+      id: m._id,
+      title: m.title,
+      poster: m.poster?.url,
+      genres: m.genres,
+      status: m.status
+    }
+  })})
+}
