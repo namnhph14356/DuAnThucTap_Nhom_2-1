@@ -20,6 +20,7 @@ export default function Selector({ name, options, value, label, onChange }) {
           </option>
         );
       })}
+      
     </select>
   );
 }
