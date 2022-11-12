@@ -18,5 +18,21 @@ exports.addReview = async ( req, res ) =>{
     if(isAlreadyReviewed) return sendError(res, "Invalid request, review is already their!")
 
     // creat and update review.
+    const newReview = new Review({
+        owner : userId,
+        parentMovie: movie._id,
+        content,
+        rating
+    })
 
+
+    // updating review for movie
+    movie.reviews.push(newReview._id)
+    await movie.save()
+
+
+    // saving new reviews
+    await newReview.save()
+
+    res.json({message: "Your review has been added."})
 }
