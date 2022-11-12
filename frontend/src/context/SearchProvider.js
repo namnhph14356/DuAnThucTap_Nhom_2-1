@@ -1,0 +1,42 @@
+import React, {createContext, useState} from 'react'
+import { useNotification } from '../hooks';
+
+const SearchContext = createContext();
+
+let timoutId;
+const debounce = (func, delay) => {
+  return (...args) => {
+    if(timoutId) clearTimeout(timoutId);
+    timoutId = setTimeout(() => {
+      func.apply(null, args)
+    }, delay);
+  };
+};
+
+export default function SearchProvider ({children}) {
+    const [searching, setSearching] = useState(false);
+    const [results, setResults] = useState([]);
+    const [resultsNotFound, setResultsNotFound] = useState(false);
+    const {updateNotification} = useNotification();
+
+    const search = async (method, query) => {
+        const {error, results} = await method(query);
+        if(error) return updateNotification('error', error);
+        if(!results.length) return setResultsNotFound(true);
+
+        setResults(results);
+    }
+    const debounceFunc = debounce(search, 300);
+    const handleSearch = (method, query) => {
+        setSearching(true);
+        if(!query.trim()){
+            setSearching(false);
+            setResults([]);
+            setResultsNotFound(false)
+        }
+        debounceFunc(method, query);
+    }
+  return (
+    <SearchContext.Provider value={{handleSearch, searching, resultsNotFound, results }}>{children}</SearchContext.Provider>
+  )
+}
