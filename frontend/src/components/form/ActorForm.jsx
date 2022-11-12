@@ -3,6 +3,7 @@ import { commonInputClasses } from '../../utils/theme'
 import PosterSelector from '../PosterSelector'
 import Selector from '../Selector'
 import { useNotification } from "../../hooks";
+import { ImSpinner3 } from 'react-icons/im';
 const defaultActorInfo = {
     name: '',
     about: '',
@@ -25,7 +26,7 @@ const validateActor = ({avatar, name, about, gender}) => {
     return {error: null}
 }
 
-export default function ActorForm({ title, btnTitle , onSubmit}) {
+export default function ActorForm({ title, btnTitle , busy, onSubmit}) {
     const [actorInfo, setActorInfo] = useState({ ...defaultActorInfo })
     const [selectedAvatarForUI, setSelectedAvatarForUI] = useState('');
     const {updateNotification} = useNotification();
@@ -69,9 +70,9 @@ export default function ActorForm({ title, btnTitle , onSubmit}) {
                     <h1 className='font-semibold text-xl dark:text-white text-primary'>{title}</h1>
                     <button
                         type='submit'
-                        className='px-3 py-1 bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded'
+                        className='h-8 w-24 flex items-center justify-center bg-primary text-white dark:bg-white dark:text-primary hover:opacity-80 transition rounded'
                     >
-                        {btnTitle}
+                        {busy? <ImSpinner3 className='animate-spin' />: btnTitle}
                     </button>
                 </div>
                 <div className='flex space-x-2'>
