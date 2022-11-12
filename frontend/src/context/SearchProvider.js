@@ -1,7 +1,7 @@
 import React, {createContext, useState} from 'react'
 import { useNotification } from '../hooks';
 
-const SearchContext = createContext();
+export const SearchContext = createContext();
 
 let timoutId;
 const debounce = (func, delay) => {
