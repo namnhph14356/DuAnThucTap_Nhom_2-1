@@ -16,6 +16,8 @@ import { languageOptions, statusOptions, typeOptions } from "../../utils/options
 import Label from "../Label";
 import DirectorSelector from "../DirectorSelector";
 import WriterSelector from "../WriterSelector";
+import ViewAllBtn from "../ViewAllButton";
+import LabelWithBadge from "../LabelWithBadge";
 
 
 const defaultMovieInfo = {
@@ -238,33 +240,3 @@ export default function MovieForm() {
     </>
   );
 }
-
-const LabelWithBadge = ({ children, htmlFor, badge = 0 }) => {
-  const renderBadge = () => {
-    if (!badge) return null;
-    return (
-      <span className="dark:bg-dark-subtle bg-light-subtle text-white absolute top-0 right-0 translate-x-2 -translate-y-1 text-xs w-5 h-5 rounded-full flex justify-center items-center">
-        {badge <= 9 ? badge : "9+"}
-      </span>
-    );
-  };
-  return (
-    <div className="relative">
-      <Label htmlFor={htmlFor}>{children}</Label>
-      {renderBadge()}
-    </div>
-  );
-};
-
-const ViewAllBtn = ({ visible, children, onClick }) => {
-  if (!visible) return null;
-  return (
-    <button
-      onClick={onClick}
-      type="button"
-      className="dark:text-white text-primary hover:underline transition"
-    >
-      {children}
-    </button>
-  );
-};
