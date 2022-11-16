@@ -88,6 +88,7 @@ export default function MovieForm() {
   const [showCastModal, setShowCastModal] = useState(false);
   const [showGenresModal, setShowGenresModal] = useState(false);
   const [selectedPosterForUI, setSelectedPosterForUI] = useState("");
+  const [writerName, setWriterName] = useState("")
 
   const { updateNotification } = useNotification();
   const {handleSearch, searching, results, resetSearch} = useSearch()
@@ -109,6 +110,8 @@ export default function MovieForm() {
       updatePosterForUI(poster);
       return setMovieInfo({ ...movieInfo, poster });
     }
+
+    if(name === 'writers') return setWriterName(value)
     setMovieInfo({ ...movieInfo, [name]: value });
   };
 
@@ -252,6 +255,8 @@ export default function MovieForm() {
               results={results}
               renderItem={renderItem}
               onSelect={updateWriters}
+              onChange={handleChange}
+              value={writerName}
             />
           </div>
           <div>
