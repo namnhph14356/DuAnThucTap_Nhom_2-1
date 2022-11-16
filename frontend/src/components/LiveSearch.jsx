@@ -12,6 +12,7 @@ export default function LiveSearch({
   renderItem = null,
   onChange = null,
   onSelect = null,
+  visible,
 }) {
   const [displaySearch, setDisplayedSearch] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -56,6 +57,11 @@ export default function LiveSearch({
       ? inputStyle
       : commonInputClasses + " border-2 rounded p-1 text-lg";
   };
+
+  useEffect(() => {
+    if(visible) return setDisplayedSearch(visible)
+    setDisplayedSearch(false)
+  },[visible])
   return (
     <div className="relative">
       <input

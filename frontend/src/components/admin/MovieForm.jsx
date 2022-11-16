@@ -90,7 +90,7 @@ export default function MovieForm() {
   const [selectedPosterForUI, setSelectedPosterForUI] = useState("");
 
   const { updateNotification } = useNotification();
-  const {handleSearch, searching, results} = useSearch()
+  const {handleSearch, searching, results, resetSearch} = useSearch()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -118,6 +118,8 @@ export default function MovieForm() {
 
   const updateDirector = (profile) => {
     setMovieInfo({ ...movieInfo, director: profile });
+    resetSearch()
+
   };
   const updateCast = (castInfo) => {
     const { cast } = movieInfo;
@@ -228,6 +230,7 @@ export default function MovieForm() {
               renderItem={renderItem}
               onSelect={updateDirector}
               onChange={handleFileChange}
+              visible={results.length}
             />
           </div>
 
