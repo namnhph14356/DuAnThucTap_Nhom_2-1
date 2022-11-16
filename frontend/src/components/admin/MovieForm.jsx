@@ -91,7 +91,7 @@ export default function MovieForm() {
   const [writerName, setWriterName] = useState("")
 
   const { updateNotification } = useNotification();
-  const {handleSearch, searching, results, resetSearch} = useSearch()
+  const { handleSearch, searching, results, resetSearch } = useSearch()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -111,7 +111,6 @@ export default function MovieForm() {
       return setMovieInfo({ ...movieInfo, poster });
     }
 
-    if(name === 'writers') return setWriterName(value)
     setMovieInfo({ ...movieInfo, [name]: value });
   };
 
@@ -182,10 +181,14 @@ export default function MovieForm() {
     if (!newCast.length) hideCastModal();
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
-  const handleFileChange = ({target}) => {
-    setMovieInfo({...movieInfo, director:{name: target.value}})
+  const handleProfileChange = ({ target }) => {
+    const { name, value } = target
+    if (name === "director")
+      setMovieInfo({ ...movieInfo, director: { name: target.value } })
+    if (name === 'writers') setWriterName(value)
+
     handleSearch(searchActor, target.value)
-    
+
   }
   const { title, storyLine, director, writers, cast, tags, genres, type, language, status } = movieInfo;
   return (
@@ -232,7 +235,7 @@ export default function MovieForm() {
               results={results}
               renderItem={renderItem}
               onSelect={updateDirector}
-              onChange={handleFileChange}
+              onChange={handleProfileChange}
               visible={results.length}
             />
           </div>
@@ -255,8 +258,9 @@ export default function MovieForm() {
               results={results}
               renderItem={renderItem}
               onSelect={updateWriters}
-              onChange={handleChange}
+              onChange={handleProfileChange}
               value={writerName}
+              visible={results.length}
             />
           </div>
           <div>
