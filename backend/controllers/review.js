@@ -91,7 +91,21 @@ exports.getReviewsByMovie = async (req, res) =>{
             path: "owner",
             select: "name"
          },
-        }).select("reviews")
+        }).select("reviews");
 
-        res.json(movie.reviews)
+        const reviews = movie.reviews.map((r) =>{
+            const {owner, content, rating, _id: reviewID} = r
+            const {name, _id: ownerId} = owner
+            return {
+                id: reviewID,
+                owner: {
+                    id: ownerId,
+                    name: name
+                },
+                content,
+                rating
+            }
+        })
+
+        res.json({reviews});
 }
