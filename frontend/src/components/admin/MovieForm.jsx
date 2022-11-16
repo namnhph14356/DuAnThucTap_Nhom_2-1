@@ -89,6 +89,9 @@ export default function MovieForm() {
   const [showGenresModal, setShowGenresModal] = useState(false);
   const [selectedPosterForUI, setSelectedPosterForUI] = useState("");
   const [writerName, setWriterName] = useState("")
+  const [writerProfile, SetWriterProfile] = useState([])
+  const [directorProfile, SetDirectorProfile] = useState([])
+
 
   const { updateNotification } = useNotification();
   const { handleSearch, searching, results, resetSearch } = useSearch()
@@ -183,11 +186,15 @@ export default function MovieForm() {
   };
   const handleProfileChange = ({ target }) => {
     const { name, value } = target
-    if (name === "director")
+    if (name === "director"){
       setMovieInfo({ ...movieInfo, director: { name: target.value } })
-    if (name === 'writers') setWriterName(value)
-
-    handleSearch(searchActor, target.value)
+      handleSearch(searchActor, value, SetDirectorProfile) 
+    }
+    if (name === 'writers'){
+      setWriterName(value)
+      handleSearch(searchActor, value, SetWriterProfile) 
+    } 
+    
 
   }
   const { title, storyLine, director, writers, cast, tags, genres, type, language, status } = movieInfo;
@@ -232,11 +239,11 @@ export default function MovieForm() {
               name="director"
               value={director.name}
               placeholder="Search profile"
-              results={results}
+              results={directorProfile}
               renderItem={renderItem}
               onSelect={updateDirector}
               onChange={handleProfileChange}
-              visible={results.length}
+              visible={directorProfile.length}
             />
           </div>
 
@@ -255,12 +262,12 @@ export default function MovieForm() {
             <LiveSearch
               name="writers"
               placeholder="Search profile"
-              results={results}
+              results={writerProfile}
               renderItem={renderItem}
               onSelect={updateWriters}
               onChange={handleProfileChange}
               value={writerName}
-              visible={results.length}
+              visible={writerProfile.length}
             />
           </div>
           <div>
