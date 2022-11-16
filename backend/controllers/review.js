@@ -67,7 +67,7 @@ exports.removeReview = async (req, res) =>{
     if(!review) return sendError(res, "Invalid request, review not found!")
 
     const movie = await Movie.findById(review.parentMovie).select("reviews")
-   movie.reviews = movie.reviews.filter(rId => rId !== reviewId)
+   movie.reviews = movie.reviews.filter((rId) => rId.toString() !== reviewId)
 
    await Review.findByIdAndDelete(reviewId);
    
