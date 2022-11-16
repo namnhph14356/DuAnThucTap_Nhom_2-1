@@ -59,9 +59,9 @@ export default function LiveSearch({
   };
 
   useEffect(() => {
-    if(visible) return setDisplayedSearch(visible)
+    if(results.length) return setDisplayedSearch(true)
     setDisplayedSearch(false)
-  },[visible])
+  },[results.length])
   return (
     <div className="relative">
       <input
