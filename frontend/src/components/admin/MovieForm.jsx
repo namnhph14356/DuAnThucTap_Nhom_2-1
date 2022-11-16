@@ -4,7 +4,7 @@ import { commonInputClasses } from "../../utils/theme";
 import LiveSearch from "../LiveSearch";
 import TagsInput from "../TagsInput";
 import Submit from "../form/Submit";
-import { useNotification } from "../../hooks";
+import { useNotification, useSearch } from "../../hooks";
 // import ModalContainer from "../modals/ModalContainer";
 import WritersModal from "../modals/WritersModal";
 import CastForm from "../form/CastForm";
@@ -14,6 +14,7 @@ import GenresSelector from "../GenresSelector";
 import GenresModal from "../modals/GenresModal";
 import Selector from "../Selector";
 import { languageOptions, statusOptions, typeOptions } from "../../utils/options";
+import { searchActor } from "../../api/actor";
 
 export const results = [
   {
@@ -89,6 +90,7 @@ export default function MovieForm() {
   const [selectedPosterForUI, setSelectedPosterForUI] = useState("");
 
   const { updateNotification } = useNotification();
+  const {handleSearch, searching, results} = useSearch()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -175,6 +177,11 @@ export default function MovieForm() {
     if (!newCast.length) hideCastModal();
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
+  const handleFileChange = ({target}) => {
+    setMovieInfo({...movieInfo, director:{name: target.value}})
+    handleSearch(searchActor, target.value)
+    
+  }
   const { title, storyLine, director, writers, cast, tags, genres, type, language, status } = movieInfo;
   return (
     <>
@@ -220,6 +227,7 @@ export default function MovieForm() {
               results={results}
               renderItem={renderItem}
               onSelect={updateDirector}
+              onChange={handleFileChange}
             />
           </div>
 
