@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { useNotification } from '../../hooks'
+import { searchActor } from '../../api/actor'
+import { useNotification, useSearch } from '../../hooks'
 import { renderItem } from '../../utils/helper'
 import { commonInputClasses } from '../../utils/theme'
 import { results } from '../admin/MovieForm'
@@ -15,8 +16,10 @@ const defaultCastInfo = {
 
 export default function CastForm({ onSubmit }) {
     const [castInfo, setCastInfo] = useState({ ...defaultCastInfo })
+    const [profiles, setProfiles] = useState([])
 
     const { updateNotification } = useNotification()
+    const {handleSearch, resetSearch} = useSearch()
 
     const handleOnChange = ({ target }) => {
         const { checked, name, value } = target
@@ -38,21 +41,30 @@ export default function CastForm({ onSubmit }) {
         if (!roleAs.trim()) return updateNotification('error', 'Cast role is missing!')
 
         onSubmit(castInfo)
-        setCastInfo({ ...defaultCastInfo })
+        setCastInfo({ ...defaultCastInfo, profile:{name: ''} })
+        resetSearch()
+        setProfiles([])
     }
 
     const { leadActor, profile, roleAs } = castInfo
 
-
+    const handleProfileChange = ({target}) => {
+        const {value} = target 
+        const {profile} = castInfo 
+        profile.name = value
+        setCastInfo({...castInfo, ...profile})
+        handleSearch(searchActor, value, setProfiles)
+    }
     return (
         <div className='flex items-center space-x-2'>
             <input type="checkbox" name='leadActor' className='w-4 h-4' checked={leadActor} onChange={handleOnChange} title='Set at a let actor' />
             <LiveSearch
                 placeholder='Search profile'
                 value={profile.name}
-                results={results}
+                results={profiles}
                 onSelect={handleProfileSelect}
                 renderItem={renderItem}
+                onChange={handleProfileChange}
             />
             <span className='dark:text-dark-subtle text-light-subtle font-semibold'>as</span>
             <div className="flex-grow">
