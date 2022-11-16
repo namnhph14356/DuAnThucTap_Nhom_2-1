@@ -25,13 +25,13 @@ export default function SearchProvider({ children }) {
     if (!results.length) return setResultsNotFound(true);
 
     setResults(results);
-    updaterFun([...results])
+    updaterFun && updaterFun([...results])
   }
   const debounceFunc = debounce(search, 300);
   const handleSearch = (method, query, updaterFun) => {
     setSearching(true);
     if (!query.trim()) {
-      updaterFun([])
+      updaterFun && updaterFun([])
       resetSearch()
     }
     debounceFunc(method, query, updaterFun);
