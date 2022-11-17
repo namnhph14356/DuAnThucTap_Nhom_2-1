@@ -51,6 +51,22 @@ export default function MovieForm({onSubmit}) {
     e.preventDefault();
     const {error} = validateMovie(movieInfo); 
     if(error) return updateNotification('error', error);
+
+    //error , tags, genres , writers
+    const {tags, genres, cart, writers, director} = movieInfo;
+    const formData = new FormData();
+    formData.append('tags', JSON.stringify(tags))
+    formData.append('genres', JSON.stringify(genres))
+
+    const finalCast = cart.map( c => c.id);
+    formData.append('cast', JSON.stringify(finalCast));
+    if(writers.length){
+    const finalWriters = writers.map(w => w.id);
+    formData.append('cast', JSON.stringify(finalWriters));
+    }
+    if(director.id){
+      formData.append('director', director.id);
+    }
     
     onSubmit(movieInfo)
   };
