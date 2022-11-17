@@ -53,22 +53,31 @@ export default function MovieForm({onSubmit}) {
     if(error) return updateNotification('error', error);
 
     //error , tags, genres , writers
-    const {tags, genres, cart, writers, director} = movieInfo;
+    const {tags, genres, cart, writers, director, poster} = movieInfo;
+
     const formData = new FormData();
-    formData.append('tags', JSON.stringify(tags))
-    formData.append('genres', JSON.stringify(genres))
+    const finalMovieInfo = {
+      ...movieInfo,
+    }
+    finalMovieInfo.tags = JSON.stringify(tags);
+    finalMovieInfo.genres = JSON.stringify(genres);
 
     const finalCast = cart.map( c => c.id);
-    formData.append('cast', JSON.stringify(finalCast));
+    finalMovieInfo.cast = JSON.stringify(finalCast);
+
     if(writers.length){
     const finalWriters = writers.map(w => w.id);
-    formData.append('cast', JSON.stringify(finalWriters));
+    finalMovieInfo.writers = JSON.stringify(finalWriters);
     }
-    if(director.id){
-      formData.append('director', director.id);
+
+    if(director.id) finalMovieInfo.director = director.id;
+    if(poster) finalMovieInfo.poster = poster.id;
+
+    for( let key in finalMovieInfo){
+      formData.append(key, finalMovieInfo[key])
     }
     
-    onSubmit(movieInfo)
+    onSubmit(formData)
   };
 
   const updatePosterForUI = (file) => {
