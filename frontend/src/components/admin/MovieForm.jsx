@@ -45,7 +45,7 @@ const validateMovie = (movieInfo) => {
   if(!type.trim()) return {error: 'Type is missing!'}
 
   //validate for genres we are checking if genres is an array or not
-  if(!Array.isArray(genres)) return {error: 'Genres are missing!'}
+  if(!genres.length ) return {error: 'Genres are missing!'}
   // we are checking genres needs to field with string value
   for( let gen of genres){
     if( !gen.trim()) return {error: 'Invalid genres!'}
@@ -59,7 +59,7 @@ const validateMovie = (movieInfo) => {
   }
 
    //validate for cast we are checking if cast is an array or not
-    if(!Array.isArray(cast)) return {error: 'cast and crew are missing!'}
+    if(!cast.length) return {error: 'Cast and crew are missing!'}
     // we are checking cast needs to field with string value
     for( let c of cast){
       if( typeof c !== "object") return {error: 'Invalid cast!'}
