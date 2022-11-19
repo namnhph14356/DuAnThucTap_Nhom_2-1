@@ -18,3 +18,18 @@ export const uploadTrailer = async (formData, onUploadProgress) => {
     return cathError(error)
   }
 };
+
+export const uploadMovie = async (formData) => {
+  const token = getToken()
+  try {
+    const { data } = await client.post("/movie/create", formData, {
+      headers: {
+        authorization: "Bearer " + token,
+        "Content-Type": "multipart/form-data",
+      }
+    });
+    return data;
+  } catch (error) {
+    return cathError(error)
+  }
+};

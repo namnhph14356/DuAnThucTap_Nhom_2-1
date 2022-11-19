@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { uploadTrailer } from "../../api/movie";
+import { uploadMovie, uploadTrailer } from "../../api/movie";
 import { useNotification } from "../../hooks";
 import ModalContainer from "../modals/ModalContainer";
 import MovieForm from "./MovieForm";
@@ -11,7 +11,7 @@ export default function MovieUpload({ visible, onClose }) {
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [videoInfo, setVideoInfo] = useState({});
-  
+
   const { updateNotification } = useNotification();
   const handleTypeError = (error) => {
     updateNotification("error", error);
@@ -46,25 +46,29 @@ export default function MovieUpload({ visible, onClose }) {
     return `Upload progress ${uploadProgress}%`;
   };
 
-  const handleSubmit = (data) => {
-    if(!videoInfo.url || !videoInfo.public_id) return updateNotification('error', 'Trailer is missing!')
+  const handleSubmit = async (data) => {
+    if (!videoInfo.url || !videoInfo.public_id) return updateNotification('error', 'Trailer is missing!')
     data.append('trailer', JSON.stringify(videoInfo))
-    console.log(data)
+    const res = await uploadMovie(data)
+    console.log(res);
   }
   return (
     <ModalContainer visible={visible} >
       <UploadProgress
-          visible={!videoUploaded && videoSelected}
-          message={getUploadProgressValue()}
-          width={uploadProgress}
-          />
-          <TrailerSelector
+        visible={!videoUploaded && videoSelected}
+        message={getUploadProgressValue()}
+        width={uploadProgress}
+      />
+      {!videoSelected ? (
+        <TrailerSelector
           visible={!videoSelected}
           onTypeError={handleTypeError}
           handleChange={handleChange}
         />
+      ) : (
+        <MovieForm onSubmit={handleSubmit} />
+      )}
 
-      <MovieForm onSubmit={handleSubmit} />
     </ModalContainer>
 
   );
