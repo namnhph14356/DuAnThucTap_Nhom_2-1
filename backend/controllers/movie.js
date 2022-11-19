@@ -1,7 +1,10 @@
-const { sendError } = require("../utils/helper");
+const { sendError, averageRatingPipeline } = require("../utils/helper");
 const cloudinary = require("../cloud");
 const Movie = require("../models/movie");
-const { isValidObjectId } = require("mongoose");
+const Review = require("../models/review");
+
+const mongoose  = require("mongoose");
+const { isValidObjectId } = mongoose
 
 exports.uploadTrailer = async (req, res) => {
   const { file } = req;
@@ -315,6 +318,8 @@ exports.getLatestUploads = async (req, res) =>{
 exports.getSingleMovie = async (req, res) =>{
   const {movieId} = req.params;
 
+  // mongoose.Types.ObjectId(movieId)
+
 
   if(!isValidObjectId(movieId)) return sendError(res, "Movie id is not valid!")
 
@@ -322,7 +327,12 @@ exports.getSingleMovie = async (req, res) =>{
   const  movie = await Movie.findById(movieId).populate("director writers cast.actor")
 
 
-  const {_id: id, 
+  const reviews = await Review.aggregate(averageRatingPipeline(movie._id))
+
+    console.log(reviews)
+
+  const {
+    _id: id, 
     title, 
     storyLine, 
     cast, writers, 
@@ -333,7 +343,8 @@ exports.getSingleMovie = async (req, res) =>{
     language, 
     poster, 
     trailer, 
-    type } = movie
+    type 
+      } = movie
 
 
   res.json({
