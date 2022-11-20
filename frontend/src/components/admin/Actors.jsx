@@ -12,11 +12,11 @@ export default function Actors() {
   };
   return (
     <div className="grid grid-cols-4 gap-3 my-5">
-      <div className="bg-white shadow dark:shadow dark:bg-secondary rounded h-20 overflow-hidden">
+      <div className="bg-white shadow dark:shadow dark:bg-secondary rounded h-20 overflow-hidden relative">
         <div
           onMouseEnter={handleOnMouseEnter}
           onMouseLeave={handleOnMouseLeave}
-          className="flex cursor-pointer relative"
+          className="flex cursor-pointer"
         >
           <img
             src="https://images.unsplash.com/photo-1668770235702-44e39f4dfdb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
@@ -37,11 +37,17 @@ export default function Actors() {
           </div>
 
           {showOptions ? (
-            <div className="absolute inset-0 bg-primary bg-opacity-25 backdrop-blur-sm">
-              <button type="button">
+            <div className="absolute inset-0 bg-primary bg-opacity-25 backdrop-blur-sm flex justify-center items-center space-x-5">
+              <button
+                className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+                type="button"
+              >
                 <BsTrash />
               </button>
-              <button type="button">
+              <button
+                className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+                type="button"
+              >
                 <BsPencilSquare />
               </button>
             </div>
