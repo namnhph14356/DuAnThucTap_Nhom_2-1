@@ -7,54 +7,63 @@ export default function LatesUploads() {
         Recent Uploads
       </h1>
 
-      <MovieListItem />
+      <MovieListItem
+        movie={{
+          poster:
+            "https://images.unsplash.com/photo-1473830394358-91588751b241?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&q=80",
+          title: "Lorem ipsum dolor sit amet.",
+          status: "public",
+          genres: ["Action", "Comedy"],
+        }}
+      />
     </div>
   );
 }
 
-const MovieListItem = () => {
+const MovieListItem = ({ movie, onDeleteClick, onEditClick, onOpenClick }) => {
+  const { poster, title, genres = [], status } = movie;
   return (
     <table className="w-full border-b">
       <tbody>
         <tr>
           <td>
             <div className="w-24">
-              <img
-                className="w-full aspect-video"
-                src="https://images.unsplash.com/photo-1473830394358-91588751b241?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&q=80"
-                alt=""
-              />
+              <img className="w-full aspect-video" src={poster} alt={title} />
             </div>
           </td>
           <td className="w-full pl-5">
             <div>
               <h1 className="text-lg font-semibold text-primary dark:text-white">
-                Lorem ipsum dolor sit amet.
+                {title}
               </h1>
               <div className="space-x-1">
-                <span className="text-primary dark:text-white text-xs">
-                  Action
-                </span>
-                <span className="text-primary dark:text-white text-xs">
-                  Drama
-                </span>
+                {genres.map((g, index) => {
+                  return (
+                    <span
+                      key={g + index}
+                      className="text-primary dark:text-white text-xs"
+                    >
+                      {g}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </td>
 
           <td>
-            <p className="px-5 text-primary dark:text-white">public</p>
+            <p className="px-5 text-primary dark:text-white">{status}</p>
           </td>
 
           <td>
             <div className="flex items-center space-x-3 text-primary dark:text-white text-lg">
-              <button type="button">
+              <button onClick={onDeleteClick} type="button">
                 <BsTrash />
               </button>
-              <button type="button">
+              <button onClick={onEditClick} type="button">
                 <BsPencilSquare />
               </button>
-              <button type="button">
+              <button onClick={onOpenClick} type="button">
                 <BsBoxArrowUpRight />
               </button>
             </div>
