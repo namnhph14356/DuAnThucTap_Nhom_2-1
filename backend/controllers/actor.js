@@ -1,132 +1,128 @@
 const { isValidObjectId } = require("mongoose");
-const Actor = require("../models/actor")
-const {sendError, uploadImageToCloud, formatActor} = require("../utils/helper")
+const Actor = require("../models/actor");
+const {
+  sendError,
+  uploadImageToCloud,
+  formatActor,
+} = require("../utils/helper");
 const cloudinary = require("../cloud");
 const actor = require("../models/actor");
 
-exports.createActor = async (req,res) =>{
-    const {name, about, gender} = req.body;
-    const {file} = req
- 
-const newActor = new Actor({ name, about, gender })
+exports.createActor = async (req, res) => {
+  const { name, about, gender } = req.body;
+  const { file } = req;
 
-if(file){
-    const { url, public_id } = await uploadImageToCloud(file.path)
+  const newActor = new Actor({ name, about, gender });
 
-    newActor.avatar = {url, public_id}
-}
+  if (file) {
+    const { url, public_id } = await uploadImageToCloud(file.path);
 
-await newActor.save();
-res.status(201).json(formatActor(newActor));
+    newActor.avatar = { url, public_id };
+  }
+
+  await newActor.save();
+  res.status(201).json(formatActor(newActor));
 };
 
+exports.updateActor = async (req, res) => {
+  const { name, about, gender } = req.body;
+  const { file } = req;
+  const { actorId } = req.params;
 
+  if (!isValidObjectId(actorId)) return sendError(res, "Invalid request!");
+  const actor = await Actor.findById(actorId);
 
-exports.updateActor = async (req,res) =>{
-    const {name, about, gender} = req.body;
-    const {file} = req;
-    const {actorId} = req.params;
+  if (!actor) return sendError(res, "Invalid request, record not found");
 
-    if(!isValidObjectId(actorId)) return sendError(res, "Invalid request!")
-    const actor = await Actor.findById(actorId) 
+  const public_id = actor.avatar?.public_id;
 
-    if(!actor) return sendError(res, "Invalid request, record not found")
+  ///////////////////////////////
 
-    const public_id = actor.avatar?.public_id;
-
-    ///////////////////////////////
-
-    if(public_id && file){
-       const {result} = await cloudinary.uploader.destroy(public_id)
-       if(result !== "ok"){
-         return sendError(res, "Could not remove image from cloud!")
-       }
+  if (public_id && file) {
+    const { result } = await cloudinary.uploader.destroy(public_id);
+    if (result !== "ok") {
+      return sendError(res, "Could not remove image from cloud!");
     }
+  }
 
-    ////////////////////////////////
+  ////////////////////////////////
 
-    if(file){
-        const { url, public_id } = await uploadImageToCloud(file.path)
-        actor.avatar = {url, public_id}
-    }
+  if (file) {
+    const { url, public_id } = await uploadImageToCloud(file.path);
+    actor.avatar = { url, public_id };
+  }
 
-    actor.name = name;
-    actor.about = about;
-    actor.gender = gender
+  actor.name = name;
+  actor.about = about;
+  actor.gender = gender;
 
-    await actor.save();
-    res.status(201).json(formatActor(actor));
-
+  await actor.save();
+  res.status(201).json(formatActor(actor));
 };
 
+exports.removeActor = async (req, res) => {
+  const { actorId } = req.params;
 
-exports.removeActor = async (req,res) =>{
-    const {actorId} = req.params;
+  if (!isValidObjectId(actorId)) return sendError(res, "Invalid request!");
 
-    if(!isValidObjectId(actorId)) return sendError(res, "Invalid request!")
+  const actor = await Actor.findById(actorId);
+  if (!actor) return sendError(res, "Invalid request, record not found");
 
-    const actor = await Actor.findById(actorId) 
-    if(!actor) return sendError(res, "Invalid request, record not found");
+  const public_id = actor.avatar?.public_id;
 
+  ///////////////////////////////
 
-    const public_id = actor.avatar?.public_id;
-
-    ///////////////////////////////
-
-    if(public_id){
-       const {result} = await cloudinary.uploader.destroy(public_id)
-       if(result !== "ok"){
-         return sendError(res, "Could not remove image from cloud!")
-       }
+  if (public_id) {
+    const { result } = await cloudinary.uploader.destroy(public_id);
+    if (result !== "ok") {
+      return sendError(res, "Could not remove image from cloud!");
     }
+  }
 
-    await Actor.findByIdAndDelete(actorId)
+  await Actor.findByIdAndDelete(actorId);
 
-    res.json({message: "Record remove successfully"})
+  res.json({ message: "Record remove successfully" });
 };
-
 
 exports.searchActor = async (req, res) => {
+  const { query } = req;
 
-    const {query} = req
-    
-    const result = await Actor.find( {$text: { $search: `"${query.name}"` }} )
+  const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
 
-    const actors = result.map(actor => formatActor(actor))
+  const actors = result.map((actor) => formatActor(actor));
 
-    res.json({results: actors})
+  res.json({ results: actors });
 };
 
-exports.getLatestActors = async (req,res) =>{
-   const result = await Actor.find().sort({creatAt: "-1"}).limit(12)
-   
-   const actors = result.map(actor => formatActor(actor))
+exports.getLatestActors = async (req, res) => {
+  const result = await Actor.find().sort({ creatAt: "-1" }).limit(12);
 
-    res.json(actors)
-}
+  const actors = result.map((actor) => formatActor(actor));
 
-exports.getSingletActor = async (req,res) =>{
-    const {id} = req.params;
+  res.json(actors);
+};
 
-    if(!isValidObjectId(id)) return sendError(res, "Invalid request!")
+exports.getSingletActor = async (req, res) => {
+  const { id } = req.params;
 
-    const actor = await Actor.findById(id)
-    if(!actor) return sendError(res, "Invalid request!, actor not found", 404)
+  if (!isValidObjectId(id)) return sendError(res, "Invalid request!");
 
-    res.json(formatActor(actor ))
- }
+  const actor = await Actor.findById(id);
+  if (!actor) return sendError(res, "Invalid request!, actor not found", 404);
 
- exports.getActors = async (req, res)  =>{
-    const {pageNo, limit} = req.query;
+  res.json(formatActor(actor));
+};
 
+exports.getActors = async (req, res) => {
+  const { pageNo, limit } = req.query;
 
-    const actors = await Actor.find({})
-    .sort({creatAt: -1})
+  const actors = await Actor.find({})
+    .sort({ creatAt: -1 })
     .skip(parseInt(pageNo) * parseInt(limit))
-    .limit(parseInt(limit))
+    .limit(parseInt(limit));
 
-
-    res.json({
-        profiles: formatActor(actors),
-    });
- }
+  const profiles = actors.map((actor) => formatActor(actor));
+  res.json({
+    profiles,
+  });
+};
