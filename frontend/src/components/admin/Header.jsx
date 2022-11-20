@@ -21,7 +21,10 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
       />
 
       <div className="flex items-center space-x-3">
-        <button onClick={toggleTheme} className="dark:text-white text-light-subtle">
+        <button
+          onClick={toggleTheme}
+          className="dark:text-white text-light-subtle"
+        >
           <BsFillSunFill size={24} />
         </button>
         <button
@@ -35,7 +38,7 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
 
         <CreateOptions
           visible={showOptions}
-          // onClose={() => setShowOptions(false)}
+          onClose={() => setShowOptions(false)}
           options={options}
         />
       </div>
@@ -57,28 +60,32 @@ const CreateOptions = ({ options, visible, onClose }) => {
     document.addEventListener("click", handleClose);
     return () => {
       document.removeEventListener("click", handleClose);
-    }
+    };
   }, [visible]);
 
-
   const handleAnimationEnd = (e) => {
-    if (e.target.classList.contains('animate-scale-reverse')) onClose();
-    e.target.classList.remove('animate-scale');
-  }
+    if (e.target.classList.contains("animate-scale-reverse")) onClose();
+    e.target.classList.remove("animate-scale");
+  };
   const handleClick = (fn) => {
-    fn()
-    onClose()
-  }
+    fn();
+    onClose();
+  };
 
   if (!visible) return null;
   return (
-    <div ref={container}
+    <div
+      ref={container}
       id={containerID}
       className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
       onAnimationEnd={handleAnimationEnd}
     >
       {options.map(({ title, onClick }) => {
-        return <Option key={title} onClick={() => handleClick(onClick)}>{title}</Option>
+        return (
+          <Option key={title} onClick={() => handleClick(onClick)}>
+            {title}
+          </Option>
+        );
       })}
     </div>
   );
