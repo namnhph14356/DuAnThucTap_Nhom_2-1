@@ -1,50 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
+import { getActors } from "../../api/actor";
 
 export default function Actors() {
-  return (
-    <div className="grid grid-cols-4 gap-3 my-5">
-      <ActorProfile
-        profile={{
-          name: "John Doe",
-          avatar:
-            "https://images.unsplash.com/photo-1668770235702-44e39f4dfdb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-          about:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, vel sed architecto dignissimos consequuntur temporibus deleniti! Amet ea ad nemo! Magni quasi vel assumenda unde corporis neque laborum commodi nemo!",
-        }}
-      />
+  const fetchActors = async () => {
+    const res = await getActors(0, 5);
+    console.log(res);
+  };
 
-      <ActorProfile
-        profile={{
-          name: "John Doe",
-          avatar:
-            "https://images.unsplash.com/photo-1668770235702-44e39f4dfdb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-          about:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, vel sed architecto dignissimos consequuntur temporibus deleniti! Amet ea ad nemo! Magni quasi vel assumenda unde corporis neque laborum commodi nemo!",
-        }}
-      />
-
-      <ActorProfile
-        profile={{
-          name: "John Doe",
-          avatar:
-            "https://images.unsplash.com/photo-1668770235702-44e39f4dfdb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-          about:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, vel sed architecto dignissimos consequuntur temporibus deleniti! Amet ea ad nemo! Magni quasi vel assumenda unde corporis neque laborum commodi nemo!",
-        }}
-      />
-
-      <ActorProfile
-        profile={{
-          name: "John Doe",
-          avatar:
-            "https://images.unsplash.com/photo-1668770235702-44e39f4dfdb1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-          about:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, vel sed architecto dignissimos consequuntur temporibus deleniti! Amet ea ad nemo! Magni quasi vel assumenda unde corporis neque laborum commodi nemo!",
-        }}
-      />
-    </div>
-  );
+  useEffect(() => {
+    fetchActors();
+  }, []);
+  return <div className="grid grid-cols-4 gap-3 my-5"></div>;
 }
 
 const ActorProfile = ({ profile }) => {
