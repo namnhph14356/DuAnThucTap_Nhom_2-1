@@ -11,6 +11,7 @@ export default function MovieUpload({ visible, onClose }) {
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [videoInfo, setVideoInfo] = useState({});
+  const [busy, setBusy] = useState(false);
 
   const { updateNotification } = useNotification();
   const handleTypeError = (error) => {
@@ -26,7 +27,7 @@ export default function MovieUpload({ visible, onClose }) {
 
     setVideoUploaded(true);
     setVideoInfo({ url, public_id });
-  }
+  };
 
   // console.log(videoInfo);
 
@@ -47,18 +48,24 @@ export default function MovieUpload({ visible, onClose }) {
   };
 
   const handleSubmit = async (data) => {
-    if (!videoInfo.url || !videoInfo.public_id) return updateNotification('error', 'Trailer is missing!')
-    data.append('trailer', JSON.stringify(videoInfo))
-    const res = await uploadMovie(data)
+    if (!videoInfo.url || !videoInfo.public_id)
+      return updateNotification("error", "Trailer is missing!");
+    setBusy(true);
+    data.append("trailer", JSON.stringify(videoInfo));
+    const res = await uploadMovie(data);
+    setBusy(false);
     console.log(res);
-  }
+    onClose();
+  };
   return (
-    <ModalContainer visible={visible} >
-      <UploadProgress
-        visible={!videoUploaded && videoSelected}
-        message={getUploadProgressValue()}
-        width={uploadProgress}
-      />
+    <ModalContainer visible={visible}>
+      <div className="mb-5">
+        <UploadProgress
+          visible={!videoUploaded && videoSelected}
+          message={getUploadProgressValue()}
+          width={uploadProgress}
+        />
+      </div>
       {!videoSelected ? (
         <TrailerSelector
           visible={!videoSelected}
@@ -66,11 +73,9 @@ export default function MovieUpload({ visible, onClose }) {
           handleChange={handleChange}
         />
       ) : (
-        <MovieForm onSubmit={handleSubmit} />
+        <MovieForm busy={busy} onSubmit={!busy ? handleSubmit : null} />
       )}
-
     </ModalContainer>
-
   );
 }
 
