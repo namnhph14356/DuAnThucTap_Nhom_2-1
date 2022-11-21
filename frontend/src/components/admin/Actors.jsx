@@ -18,6 +18,7 @@ export default function Actors() {
     if (error) return updateNotification("error", error);
 
     if (!profiles.length) {
+      currentPageNo = pageNo - 1;
       return setReachedToEnd(true);
     }
 
@@ -27,6 +28,13 @@ export default function Actors() {
   const handleOnNextClick = () => {
     if (reachedToEnd) return;
     currentPageNo += 1;
+    fetchActors(currentPageNo);
+  };
+
+  const handleOnPrevClick = () => {
+    if (currentPageNo <= 0) return;
+
+    currentPageNo -= 1;
     fetchActors(currentPageNo);
   };
 
@@ -45,6 +53,7 @@ export default function Actors() {
         <button
           type="button"
           className="text-primary dark:text-white hover:underline"
+          onClick={handleOnPrevClick}
         >
           Prev
         </button>
