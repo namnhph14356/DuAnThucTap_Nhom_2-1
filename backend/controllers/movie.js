@@ -3,8 +3,8 @@ const cloudinary = require("../cloud");
 const Movie = require("../models/movie");
 const Review = require("../models/review");
 
-const mongoose  = require("mongoose");
-const { isValidObjectId } = mongoose
+const mongoose = require("mongoose");
+const { isValidObjectId } = mongoose;
 
 exports.uploadTrailer = async (req, res) => {
   const { file } = req;
@@ -249,8 +249,6 @@ exports.removeMovie = async (req, res) => {
 
   if (!isValidObjectId(movieId)) return sendError(res, "Invalid Movie ID!");
 
-
-
   const movie = await Movie.findById(movieId);
   if (!movie) return sendError(res, "Movie Not Found!", 404);
 
@@ -260,121 +258,140 @@ exports.removeMovie = async (req, res) => {
   const posterId = movie.poster?.public_id;
   if (posterId) {
     const { result } = await cloudinary.uploader.destroy(posterId);
-    if (result !== 'ok') return sendError(res, "Could not remove poster from cloud!");
+    if (result !== "ok")
+      return sendError(res, "Could not remove poster from cloud!");
   }
 
   // removing trailer
   const trailerId = movie.trailer?.public_id;
   if (!trailerId) return sendError(res, "Could not find trailer in the cloud!");
 
-  const { result } = await cloudinary.uploader.destroy(trailerId, { resource_type: 'video' });
-  if (result !== 'ok') return sendError(res, "Could not remove trailer from cloud!");
+  const { result } = await cloudinary.uploader.destroy(trailerId, {
+    resource_type: "video",
+  });
+  if (result !== "ok")
+    return sendError(res, "Could not remove trailer from cloud!");
 
   await Movie.findByIdAndDelete(movieId);
 
-  res.json({ message: 'Movie removed successfully.' });
-}
+  res.json({ message: "Movie removed successfully." });
+};
 
-// 
-// 
-// 
-// 
-// 
-// 
-// 
+exports.getMovies = async (req, res) => {
+  const { pageNo = 0, limit = 10 } = req.query;
+
+  const movies = await Movie.find({})
+    .sort({ createdAt: -1 })
+    .skip(parseInt(pageNo) * parseInt(limit))
+    .limit(parseInt(limit));
+
+  const results = movies.map((movie) => ({
+    id: movie._id,
+    title: movie.title,
+    poster: movie.poster?.url,
+    genres: movie.genres,
+    status: movie.status,
+  }));
+
+  res.json({ movies: results });
+};
 
 exports.searchMovies = async (req, res) => {
-  const { title } = req.query
-  const movies = await Movie.find({ title: { $regex: title, $options: "i" } })
+  const { title } = req.query;
+  const movies = await Movie.find({ title: { $regex: title, $options: "i" } });
   res.json({
-    results: movies.map(m => {
+    results: movies.map((m) => {
       return {
         id: m._id,
         title: m.title,
         poster: m.poster?.url,
         genres: m.genres,
-        status: m.status
-      }
-    })
-  })
-}
+        status: m.status,
+      };
+    }),
+  });
+};
 
 exports.getLatestUploads = async (req, res) => {
-  const { limit = 5 } = req.query
+  const { limit = 5 } = req.query;
 
-  const results = await Movie.find({ status: "public" }).sort("-createdAt").limit(parseInt(limit));
+  const results = await Movie.find({ status: "public" })
+    .sort("-createdAt")
+    .limit(parseInt(limit));
   const movies = results.map((m) => {
     return {
       id: m._id,
       title: m.title,
       storyLine: m.storyLine,
       poster: m.poster?.url,
-      trailer: m.trailer?.url
-    }
-  })
-  res.json({ movies })
-}
+      trailer: m.trailer?.url,
+    };
+  });
+  res.json({ movies });
+};
 
 exports.getSingleMovie = async (req, res) => {
   const { movieId } = req.params;
 
   // mongoose.Types.ObjectId(movieId)
 
+  if (!isValidObjectId(movieId))
+    return sendError(res, "Movie id is not valid!");
 
-  if (!isValidObjectId(movieId)) return sendError(res, "Movie id is not valid!")
+  const movie = await Movie.findById(movieId).populate(
+    "director writers cast.actor"
+  );
 
+  const reviews = await Review.aggregate(averageRatingPipeline(movie._id));
 
-  const movie = await Movie.findById(movieId).populate("director writers cast.actor")
-
-
-  const reviews = await Review.aggregate(averageRatingPipeline(movie._id))
-
-    console.log(reviews)
+  console.log(reviews);
 
   const {
-    _id: id, 
-    title, 
-    storyLine, 
-    cast, writers, 
-    director, 
-    releseDate, 
-    genres, 
-    tags, 
-    language, 
-    poster, 
-    trailer, 
-    type 
-      } = movie
-
+    _id: id,
+    title,
+    storyLine,
+    cast,
+    writers,
+    director,
+    releseDate,
+    genres,
+    tags,
+    language,
+    poster,
+    trailer,
+    type,
+  } = movie;
 
   res.json({
-     movie: {
-    id, 
-    title, 
-    storyLine,
-    releseDate, 
-    genres, 
-    tags, 
-    language,
-    poster: poster?.url, 
-    trailer: trailer?. url, 
-    type,  
-    cast: cast.map(c => ({
-      id: c._id,
-      profile: { id:c.actor._id ,
-                  name: c.actor.name, 
-                  avatar: c.actor?.avatar?.url},
-      leadActor: c.leadActor,
-      roleAs: c.roleAs            
-    })), 
-    writers: writers.map(w =>({
-      id: w._id,
-      name: w.name
-    })), 
-    director: {
-      id: director._id,
-      name: director.name
-    }, 
-   }
- })
-}
+    movie: {
+      id,
+      title,
+      storyLine,
+      releseDate,
+      genres,
+      tags,
+      language,
+      poster: poster?.url,
+      trailer: trailer?.url,
+      type,
+      cast: cast.map((c) => ({
+        id: c._id,
+        profile: {
+          id: c.actor._id,
+          name: c.actor.name,
+          avatar: c.actor?.avatar?.url,
+        },
+        leadActor: c.leadActor,
+        roleAs: c.roleAs,
+      })),
+      writers: writers.map((w) => ({
+        id: w._id,
+        name: w.name,
+      })),
+      director: {
+        id: director._id,
+        name: director.name,
+      },
+    },
+  });
+};
