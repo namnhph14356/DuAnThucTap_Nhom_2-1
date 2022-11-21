@@ -1,6 +1,6 @@
 import React from "react";
 import AppInfoBox from "../AppInfoBox";
-import LatesUploads from "../LatesUploads";
+import LatestUploads from "../LatestUploads";
 
 export default function Dashboard() {
   return (
@@ -9,7 +9,7 @@ export default function Dashboard() {
       <AppInfoBox title="Total Reviews" subTitle="1,500" />
       <AppInfoBox title="Total Users" subTitle="200" />
 
-      <LatesUploads />
+      <LatestUploads />
     </div>
   );
 }
