@@ -8,6 +8,7 @@ const {
   searchMovies,
   getLatestUploads,
   getSingleMovie,
+  getMovies,
 } = require("../controllers/movie");
 const { isAdmin, isAuth } = require("../middlewares/auth");
 const { uploadVideo, uploadImage } = require("../middlewares/multer");
@@ -55,15 +56,13 @@ router.patch(
   updateMovieWithPoster
 );
 
-router.delete('/:movieId', isAuth, isAdmin, removeMovie);
-// 
-// 
-router.get("/search", isAuth, isAdmin, searchMovies)
+router.delete("/:movieId", isAuth, isAdmin, removeMovie);
+router.get("/movies", isAuth, isAdmin, getMovies);
+//
+router.get("/search", isAuth, isAdmin, searchMovies);
 
 // for nomal user
-router.get("/latest-uploads", getLatestUploads)
-router.get("/single/:movieId", getSingleMovie)
-
-
+router.get("/latest-uploads", getLatestUploads);
+router.get("/single/:movieId", getSingleMovie);
 
 module.exports = router;
