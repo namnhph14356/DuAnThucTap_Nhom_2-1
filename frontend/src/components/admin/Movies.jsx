@@ -30,6 +30,14 @@ export default function Movies() {
     currentPageNo += 1;
     fetchMovies(currentPageNo);
   };
+
+  const handleOnPrevClick = () => {
+    if (currentPageNo <= 0) return;
+    if (reachedToEnd) setReachedToEnd(false);
+    currentPageNo -= 1;
+    fetchMovies(currentPageNo);
+  };
+
   useEffect(() => {
     fetchMovies();
   }, []);
@@ -41,7 +49,7 @@ export default function Movies() {
       <NextAndPrevButton
         className="mt-5"
         onNextClick={handleOnNextClick}
-        // onPrevClick={handleOnPrevClick}
+        onPrevClick={handleOnPrevClick}
       />
     </div>
   );
