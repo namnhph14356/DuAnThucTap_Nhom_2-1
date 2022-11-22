@@ -18,7 +18,7 @@ export default function Actors() {
   const [selectedProfile, setSelectedProfile] = useState(null);
 
   const { updateNotification } = useNotification();
-  const { handleSearch, resetSearch } = useSearch()
+  const { handleSearch, resetSearch, resultNotFound } = useSearch()
 
   const fetchActors = async (pageNo) => {
     const { profiles, error } = await getActors(pageNo, limit);
@@ -83,31 +83,29 @@ export default function Actors() {
         <div className="flex justify-end mb-5">
           <AppSearchForm onReset={handleSearchFormReset} showResetIcon={results.length} onSubmit={handleOnSearchSubmit} placeholder="Search Actors.." />
         </div>
-        <div className="grid grid-cols-4 gap-5">
-          {results.length
-            ? results.map((actor) => (
-              <ActorProfile
-                profile={actor}
-                key={actor.id}
-                onEditClick={() => handleOnEditClick(actor)}
-              />
-            ))
-            : actors.map((actor) => (
-              <ActorProfile
-                profile={actor}
-                key={actor.id}
-                onEditClick={() => handleOnEditClick(actor)}
-              />
-            ))
-          }
-
-          <UpdateActor
-            visible={showUpdateModal}
-            onClose={hideUpdateModal}
-            initialState={selectedProfile}
-            onSuccess={handleOnActorUpdate}
-          />
-        </div>
+        {resultNotFound ?
+          (<h1 className="font-semibold text-3xl text-secondary dark:text-white text-center py-5 opacity-40">
+            Record not found
+          </h1>)
+          :
+          (<div className="grid grid-cols-4 gap-5">
+            {results.length
+              ? results.map((actor) => (
+                <ActorProfile
+                  profile={actor}
+                  key={actor.id}
+                  onEditClick={() => handleOnEditClick(actor)}
+                />
+              ))
+              : actors.map((actor) => (
+                <ActorProfile
+                  profile={actor}
+                  key={actor.id}
+                  onEditClick={() => handleOnEditClick(actor)}
+                />
+              ))
+            }
+          </div>)}
 
         {!results.length ? <NextAndPrevButton
           className="mt-5"
@@ -115,6 +113,12 @@ export default function Actors() {
           onPrevClick={handleOnPrevClick}
         /> : null}
       </div>
+      <UpdateActor
+        visible={showUpdateModal}
+        onClose={hideUpdateModal}
+        initialState={selectedProfile}
+        onSuccess={handleOnActorUpdate}
+      />
     </>
   );
 }
