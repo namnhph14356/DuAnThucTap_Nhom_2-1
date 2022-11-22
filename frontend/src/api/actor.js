@@ -31,13 +31,26 @@ export const updateActor = async (id, formData) => {
   }
 };
 
+export const deleteActor = async (id) => {
+  const token = getToken();
+  try {
+    const { data } = await client.delete("/actor/" + id, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
+
 export const searchActor = async (query) => {
   const token = getToken();
   try {
     const { data } = await client(`/actor/search?name=${query}`, {
       headers: {
         authorization: "Bearer " + token,
-        "Content-Type": "multipart/form-data",
       },
     });
     return data;
