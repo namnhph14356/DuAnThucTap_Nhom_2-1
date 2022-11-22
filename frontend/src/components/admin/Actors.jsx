@@ -52,6 +52,17 @@ export default function Actors() {
     setShowUpdateModal(false);
   };
 
+  const handleOnActorUpdate = (profile) => {
+    const updatedActors = actors.map((actor) => {
+      if (profile.id === actor.id) {
+        return profile;
+      }
+      return actor;
+    });
+
+    setActors([...updatedActors]);
+  };
+
   useEffect(() => {
     fetchActors(currentPageNo);
   }, []);
@@ -73,6 +84,7 @@ export default function Actors() {
             visible={showUpdateModal}
             onClose={hideUpdateModal}
             initialState={selectedProfile}
+            onSuccess={handleOnActorUpdate}
           />
         </div>
 
