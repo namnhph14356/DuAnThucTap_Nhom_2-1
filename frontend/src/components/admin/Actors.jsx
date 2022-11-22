@@ -77,7 +77,7 @@ export default function Actors() {
     <>
       <div className="p-5">
         <div className="flex justify-end mb-5">
-          <AppSearchForm onSubmit={handleOnSearchSubmit} placeholder="Search Actors.." />
+          <AppSearchForm showResetIcon={results.length} onSubmit={handleOnSearchSubmit} placeholder="Search Actors.." />
         </div>
         <div className="grid grid-cols-4 gap-5">
           {results.length
