@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { AiOutlineClose } from 'react-icons/ai'
 
-function AppSearchForm({ showResetIcon, placeholder, onSubmit }) {
+function AppSearchForm({ showResetIcon, placeholder, onSubmit, onReset }) {
     const [value, setValue] = useState('')
     const handleOnSubmit = (e) => {
         e.preventDefault()
         onSubmit(value)
+    }
+    const handleReset = () => {
+        setValue('')
+        onReset()
     }
     return (
         <form className='retative' onSubmit={handleOnSubmit}>
@@ -18,7 +22,7 @@ function AppSearchForm({ showResetIcon, placeholder, onSubmit }) {
                 onChange={({ target }) => setValue(target.value)}
             />
             {showResetIcon ? (
-                <button className='absolute top-1/4 -translate-y-2/10 py-1 right-24 text-secondary dark:text-white'>
+                <button onClick={handleReset} className='absolute top-1/4 -translate-y-2/10 py-1 right-24 text-secondary dark:text-white'>
                     <AiOutlineClose />
                 </button>
             ) : null}
