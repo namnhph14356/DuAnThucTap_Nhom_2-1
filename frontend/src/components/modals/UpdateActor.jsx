@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { updateActor } from "../../api/actor";
 import { useNotification } from "../../hooks";
 import ActorForm from "../form/ActorForm";
 import ModalContainer from "./ModalContainer";
@@ -8,12 +9,12 @@ export default function UpdateActor({ visible, initialState, onClose }) {
   const { updateNotification } = useNotification();
 
   const handleSubmit = async (data) => {
-    //   setBusy(true);
-    //   const { error, actor } = await createActor(data);
-    //   setBusy(false)
-    //   if(error) return updateNotification('error', error);
-    //   updateNotification('success', 'Actor created successfully.');
-    //   onClose()
+    setBusy(true);
+    const { error, actor } = await updateActor(initialState.id, data);
+    setBusy(false);
+    if (error) return updateNotification("error", error);
+    updateNotification("success", "Actor updated successfully.");
+    onClose();
   };
 
   return (
