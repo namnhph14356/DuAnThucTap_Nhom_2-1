@@ -1,30 +1,27 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { createActor } from "../../api/actor";
 import { useNotification } from "../../hooks";
 import ActorForm from "../form/ActorForm";
 import ModalContainer from "./ModalContainer";
 
-export default function ActorUpload({ visible, onClose }) {
+export default function UpdateActor({ visible, onClose }) {
   const [busy, setBusy] = useState(false);
   const { updateNotification } = useNotification();
 
   const handleSubmit = async (data) => {
-    setBusy(true);
-    const { error, actor } = await createActor(data);
-    setBusy(false);
-    if (error) return updateNotification("error", error);
-
-    updateNotification("success", "Actor created successfully.");
-    onClose();
+    //   setBusy(true);
+    //   const { error, actor } = await createActor(data);
+    //   setBusy(false)
+    //   if(error) return updateNotification('error', error);
+    //   updateNotification('success', 'Actor created successfully.');
+    //   onClose()
   };
 
   return (
     <ModalContainer visible={visible} onClose={onClose} ignoreContainer>
       <ActorForm
         onSubmit={!busy ? handleSubmit : null}
-        title="Creat New Actor"
-        btnTitle="Create"
+        title="Update Actor"
+        btnTitle="Update"
         busy={busy}
       />
     </ModalContainer>

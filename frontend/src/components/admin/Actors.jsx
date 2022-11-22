@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
 import { getActors } from "../../api/actor";
 import { useNotification } from "../../hooks";
+import UpdateActor from "../modals/UpdateActor";
 import NextAndPrevButton from "../NextAndPrevButton";
 
 let currentPageNo = 0;
@@ -11,6 +12,7 @@ const limit = 20;
 export default function Actors() {
   const [actors, setActors] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   const { updateNotification } = useNotification();
 
@@ -41,26 +43,41 @@ export default function Actors() {
   };
 
   const handleOnEditClick = (profile) => {
-    console.log(profile)
-  }
+    setShowUpdateModal(true);
+    console.log(profile);
+  };
+
+  const hideUpdateModal = () => {
+    setShowUpdateModal(false);
+  };
 
   useEffect(() => {
     fetchActors(currentPageNo);
   }, []);
   return (
-    <div className="p-5">
-      <div className="grid grid-cols-4 gap-5">
-        {actors.map((actor) => {
-          return <ActorProfile profile={actor} key={actor.id} onEditClick={() => handleOnEditClick(actor)} />;
-        })}
-      </div>
+    <>
+      <div className="p-5">
+        <div className="grid grid-cols-4 gap-5">
+          {actors.map((actor) => {
+            return (
+              <ActorProfile
+                profile={actor}
+                key={actor.id}
+                onEditClick={() => handleOnEditClick(actor)}
+              />
+            );
+          })}
 
-      <NextAndPrevButton
-        className="mt-5"
-        onNextClick={handleOnNextClick}
-        onPrevClick={handleOnPrevClick}
-      />
-    </div>
+          <UpdateActor visible={showUpdateModal} onClose={hideUpdateModal} />
+        </div>
+
+        <NextAndPrevButton
+          className="mt-5"
+          onNextClick={handleOnNextClick}
+          onPrevClick={handleOnPrevClick}
+        />
+      </div>
+    </>
   );
 }
 
@@ -105,7 +122,7 @@ const ActorProfile = ({ profile, onEditClick }) => {
           </p>
         </div>
 
-        <Options onEditClick={onEditClick} visible={showOptions} /> 
+        <Options onEditClick={onEditClick} visible={showOptions} />
       </div>
     </div>
   );
