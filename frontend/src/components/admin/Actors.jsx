@@ -40,6 +40,10 @@ export default function Actors() {
     fetchActors(currentPageNo);
   };
 
+  const handleOnEditClick = (profile) => {
+    console.log(profile)
+  }
+
   useEffect(() => {
     fetchActors(currentPageNo);
   }, []);
@@ -47,7 +51,7 @@ export default function Actors() {
     <div className="p-5">
       <div className="grid grid-cols-4 gap-5">
         {actors.map((actor) => {
-          return <ActorProfile profile={actor} key={actor.id} />;
+          return <ActorProfile profile={actor} key={actor.id} onEditClick={() => handleOnEditClick(actor)} />;
         })}
       </div>
 
@@ -60,7 +64,7 @@ export default function Actors() {
   );
 }
 
-const ActorProfile = ({ profile }) => {
+const ActorProfile = ({ profile, onEditClick }) => {
   const [showOptions, setShowOptions] = useState(false);
   const acceptedNameLength = 15;
 
@@ -101,7 +105,7 @@ const ActorProfile = ({ profile }) => {
           </p>
         </div>
 
-        <Options visible={showOptions} />
+        <Options onEditClick={onEditClick} visible={showOptions} /> 
       </div>
     </div>
   );
