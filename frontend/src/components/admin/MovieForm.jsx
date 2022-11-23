@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { commonInputClasses } from "../../utils/theme";
 import TagsInput from "../TagsInput";
 import Submit from "../form/Submit";
@@ -39,7 +39,7 @@ const defaultMovieInfo = {
   status: "",
 };
 
-export default function MovieForm({ onSubmit, busy }) {
+export default function MovieForm({ onSubmit, initialState, busy }) {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
   const [showCastModal, setShowCastModal] = useState(false);
@@ -166,6 +166,13 @@ export default function MovieForm({ onSubmit, busy }) {
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
 
+  useEffect(() => {
+    if (initialState) {
+      setMovieInfo({ ...initialState, poster: null });
+      setSelectedPosterForUI(initialState.poster);
+    }
+  }, [initialState]);
+
   const {
     title,
     storyLine,
@@ -176,6 +183,7 @@ export default function MovieForm({ onSubmit, busy }) {
     type,
     language,
     status,
+    releseDate,
   } = movieInfo;
   return (
     <>
@@ -245,6 +253,7 @@ export default function MovieForm({ onSubmit, busy }) {
             className={commonInputClasses + " border-2 rounded p-1 w-auto"}
             onChange={handleChange}
             name="releseDate"
+            value={releseDate}
           />
 
           <Submit
