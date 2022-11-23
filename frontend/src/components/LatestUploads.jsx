@@ -1,21 +1,36 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
+import { getMovies } from "../api/movie";
+import { useNotification } from "../hooks";
 import MovieListItem from "./MovieListItem";
+
+const pageNo = 0;
+const limit = 5;
+
 export default function LatestUploads() {
+  const [movies, setMovies] = useState([]);
+  const { updateNotification } = useNotification();
+
+  const fetchLastestUploads = async () => {
+    const { error, movies } = await getMovies(pageNo, limit);
+    if (error) return updateNotification("error", error);
+
+    setMovies([...movies]);
+  };
+
+  useEffect(() => {
+    fetchLastestUploads();
+  }, []);
   return (
     <div className="bg-white shadow dark:shadow dark:bg-secondary p-5 rounded col-span-2">
       <h1 className="font-semibold text-2xl mb-2 text-primary dark:text-white">
         Recent Uploads
       </h1>
-
-      <MovieListItem
-        movie={{
-          poster:
-            "https://images.unsplash.com/photo-1473830394358-91588751b241?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&q=80",
-          title: "Lorem ipsum dolor sit amet.",
-          status: "public",
-          genres: ["Action", "Comedy"],
-        }}
-      />
+      <div className="space-y-3">
+        {movies.map((movie) => {
+          return <MovieListItem movie={movie} key={movie.id} />;
+        })}
+      </div>
     </div>
   );
 }
