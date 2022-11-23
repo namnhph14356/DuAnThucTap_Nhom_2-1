@@ -68,13 +68,27 @@ export const getMovies = async (pageNo, limit) => {
   }
 };
 
+export const deleteMovie = async (id) => {
+  const token = getToken();
+  try {
+    const { data } = await client.delete(`/movie/${id}`, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
+
 export const updateMovie = async (id, formData) => {
   const token = getToken();
   try {
     const { data } = await client.patch("/movie/update/" + id, formData, {
       headers: {
         authorization: "Bearer " + token,
-        "Content-Type": "multipart/form-data", 
+        "Content-Type": "multipart/form-data",
       },
     });
     return data;

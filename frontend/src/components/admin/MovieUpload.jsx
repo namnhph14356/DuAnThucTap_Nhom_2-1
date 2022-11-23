@@ -55,10 +55,11 @@ export default function MovieUpload({ visible, onClose }) {
     const res = await uploadMovie(data);
     setBusy(false);
     console.log(res);
+    updateNotification("success", "Created movie successfully!");
     onClose();
   };
   return (
-    <ModalContainer visible={visible}>
+    <ModalContainer visible={visible} onClose={onClose}>
       <div className="mb-5">
         <UploadProgress
           visible={!videoUploaded && videoSelected}
@@ -73,7 +74,11 @@ export default function MovieUpload({ visible, onClose }) {
           handleChange={handleChange}
         />
       ) : (
-        <MovieForm btnTitle="Upload" busy={busy} onSubmit={!busy ? handleSubmit : null} />
+        <MovieForm
+          btnTitle="Upload"
+          busy={busy}
+          onSubmit={!busy ? handleSubmit : null}
+        />
       )}
     </ModalContainer>
   );
