@@ -67,3 +67,18 @@ export const getMovies = async (pageNo, limit) => {
     return cathError(error);
   }
 };
+
+export const updateMovie = async (id, formData) => {
+  const token = getToken();
+  try {
+    const { data } = await client.patch("/movie/update/" + id, formData, {
+      headers: {
+        authorization: "Bearer " + token,
+        "Content-Type": "multipart/form-data", 
+      },
+    });
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
