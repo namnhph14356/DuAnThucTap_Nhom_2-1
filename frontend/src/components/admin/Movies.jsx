@@ -5,7 +5,7 @@ import MovieListItem from "../MovieListItem";
 import { useNotification } from "../../hooks";
 import NextAndPrevButton from "../NextAndPrevButton";
 import UpdateMovie from "../modals/UpdateMovie";
-
+import ConfirmModal from "../modals/ConfirmModal"
 const limit = 10;
 let currentPageNo = 0;
 
@@ -13,6 +13,7 @@ export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showConfirmModal, setShowConfimModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   const { updateNotification } = useNotification();
@@ -47,6 +48,13 @@ export default function Movies() {
     setSelectedMovie(movie);
     setShowUpdateModal(true);
   };
+  const handleOnDeleteClick = async (movie) => {
+    setShowUpdateModal(movie);
+    setShowConfimModal(true)
+  }
+  const handleOnDeleteConfirm = () => {
+
+  }
 
   const handleOnUpdate = (movie) => {
     const updateMovie = movie.map((m) => {
@@ -58,6 +66,7 @@ export default function Movies() {
   };
 
   const hideUpdateForm = () => setShowUpdateModal(false);
+  const hideConfirmModal = () => setShowConfimModal(false);
 
   useEffect(() => {
     fetchMovies(currentPageNo);
@@ -71,6 +80,7 @@ export default function Movies() {
               key={movie.id}
               movie={movie}
               onEditClick={() => handleOnEditClick(movie)}
+              onDeleteClick={() => handleOnDeleteClick(movie)}
             />
           );
         })}
@@ -80,7 +90,7 @@ export default function Movies() {
           onPrevClick={handleOnPrevClick}
         />
       </div>
-
+      <ConfirmModal visible={showConfirmModal} onConfirm={handleOnDeleteConfirm} onCancel={hideConfirmModal} title='Are you sure' subtitle='This action will remove this movie permanently!' />
       <UpdateMovie visible={showUpdateModal} initialState={selectedMovie} onSucces={handleOnUpdate} onClose={hideUpdateForm} />
     </>
   );
