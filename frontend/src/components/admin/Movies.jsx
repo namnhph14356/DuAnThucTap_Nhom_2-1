@@ -1,17 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { getMovieForUpdate, getMovies } from "../../api/movie";
+import { deleteMovie, getMovieForUpdate, getMovies } from "../../api/movie";
 import MovieListItem from "../MovieListItem";
 import { useNotification } from "../../hooks";
 import NextAndPrevButton from "../NextAndPrevButton";
 import UpdateMovie from "../modals/UpdateMovie";
-import ConfirmModal from "../modals/ConfirmModal"
+import ConfirmModal from "../modals/ConfirmModal";
 const limit = 10;
 let currentPageNo = 0;
 
 export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showConfirmModal, setShowConfimModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -48,21 +49,29 @@ export default function Movies() {
     setSelectedMovie(movie);
     setShowUpdateModal(true);
   };
-  const handleOnDeleteClick = async (movie) => {
-    setShowUpdateModal(movie);
-    setShowConfimModal(true)
-  }
-  const handleOnDeleteConfirm = () => {
+  const handleOnDeleteClick = (movie) => {
+    setSelectedMovie(movie);
+    setShowConfimModal(true);
+  };
+  const handleOnDeleteConfirm = async () => {
+    setBusy(true);
+    const { error, message } = await deleteMovie(selectedMovie.id);
+    setBusy(false);
 
-  }
+    if (error) return updateNotification("error", error);
+
+    updateNotification("success", message);
+    hideConfirmModal();
+    fetchMovies(currentPageNo);
+  };
 
   const handleOnUpdate = (movie) => {
-    const updateMovie = movie.map((m) => {
-      if(m.id === movie.id) return movie;
-      return m
+    const updateMovie = movies.map((m) => {
+      if (m.id === movie.id) return movie;
+      return m;
     });
 
-    setMovies([...updateMovie])
+    setMovies([...updateMovie]);
   };
 
   const hideUpdateForm = () => setShowUpdateModal(false);
@@ -90,8 +99,20 @@ export default function Movies() {
           onPrevClick={handleOnPrevClick}
         />
       </div>
-      <ConfirmModal visible={showConfirmModal} onConfirm={handleOnDeleteConfirm} onCancel={hideConfirmModal} title='Are you sure' subtitle='This action will remove this movie permanently!' />
-      <UpdateMovie visible={showUpdateModal} initialState={selectedMovie} onSucces={handleOnUpdate} onClose={hideUpdateForm} />
+      <ConfirmModal
+        visible={showConfirmModal}
+        onConfirm={handleOnDeleteConfirm}
+        onCancel={hideConfirmModal}
+        title="Are you sure"
+        subtitle="This action will remove this movie permanently!"
+        busy={busy}
+      />
+      <UpdateMovie
+        visible={showUpdateModal}
+        initialState={selectedMovie}
+        onSucces={handleOnUpdate}
+        onClose={hideUpdateForm}
+      />
     </>
   );
 }
