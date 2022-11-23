@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
-import { getActors, searchActor } from "../../api/actor";
+import { deleteActor, getActors, searchActor } from "../../api/actor";
 import { useNotification, useSearch } from "../../hooks";
 import AppSearchForm from "../form/AppSearchForm";
 import ConfirmModal from "../modals/ConfirmModal";
@@ -16,6 +16,7 @@ export default function Actors() {
   const [actors, setActors] = useState([]);
   const [results, setResults] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
@@ -77,10 +78,22 @@ export default function Actors() {
     setActors([...updatedActors]);
   };
   const handleOnDeleteClick = (profile) => {
-    console.log(profile);
+    setSelectedProfile(profile)
     setShowConfirmModal(true)
   }
+  const handleOnDeleteConfirm = async () => {
+    // setBusy(true)
+    // const {error, message} = await deleteActor(selectedProfile.id)
+    // setBusy(false)
 
+    // if(error) return updateNotification('error', error)
+
+    // updateNotification('success', message)
+    // hideConfirmModal()
+    // fetchActors(currentPageNo)
+
+  }
+  const hideConfirmModal = () => setShowConfirmModal(false)
   useEffect(() => {
     fetchActors(currentPageNo);
   }, []);
@@ -127,9 +140,11 @@ export default function Actors() {
 
       <ConfirmModal 
       visible={showConfirmModal} 
-      busy
       title="Are you sure?"
+      busy={busy}
       subtitle="This action will remove this profile permanently!"
+      onConfirm={handleOnDeleteConfirm}
+      onCancel={hideConfirmModal}
        />
 
       <UpdateActor
