@@ -384,7 +384,9 @@ exports.getSingleMovie = async (req, res) => {
     "director writers cast.actor"
   );
 
-  const [aggregatedResponse] = await Review.aggregate(averageRatingPipeline(movie._id));
+  const [aggregatedResponse] = await Review.aggregate(
+    averageRatingPipeline(movie._id)
+    );
 
     const reviews = {}
 
@@ -445,3 +447,7 @@ exports.getSingleMovie = async (req, res) => {
     },
   });
 };
+
+exports.getRelatedMovies = (req, res) =>{
+  
+}
