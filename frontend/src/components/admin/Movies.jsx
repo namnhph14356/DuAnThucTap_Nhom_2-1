@@ -48,6 +48,17 @@ export default function Movies() {
     setShowUpdateModal(true);
   };
 
+  const handleOnUpdate = (movie) => {
+    const updateMovie = movie.map((m) => {
+      if(m.id === movie.id) return movie;
+      return m
+    });
+
+    setMovies([...updateMovie])
+  };
+
+  const hideUpdateForm = () => setShowUpdateModal(false);
+
   useEffect(() => {
     fetchMovies(currentPageNo);
   }, []);
@@ -70,7 +81,7 @@ export default function Movies() {
         />
       </div>
 
-      <UpdateMovie visible={showUpdateModal} initialState={selectedMovie} />
+      <UpdateMovie visible={showUpdateModal} initialState={selectedMovie} onSucces={handleOnUpdate} onClose={hideUpdateForm} />
     </>
   );
 }
