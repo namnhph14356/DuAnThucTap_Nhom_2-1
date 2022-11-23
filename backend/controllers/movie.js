@@ -2,6 +2,7 @@ const {
   sendError,
   averageRatingPipeline,
   formatActor,
+  relatedMovieAggregation,
 } = require("../utils/helper");
 const cloudinary = require("../cloud");
 const Movie = require("../models/movie");
@@ -448,6 +449,14 @@ exports.getSingleMovie = async (req, res) => {
   });
 };
 
-exports.getRelatedMovies = (req, res) =>{
-  
+exports.getRelatedMovies = async (req, res) =>{
+  const {movieId} = req.params;
+  if(!isValidObjectId(movieId)) return sendError(res, "Invalid movie id")
+
+  const movie = await Movie.findById(movieId)
+
+  const movies = await Movie.aggregate(relatedMovieAggregation(movie.tags, movie._id))
+
+
+  res.json({movies})
 }
