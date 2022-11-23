@@ -18,7 +18,7 @@ export default function Actors() {
   const [selectedProfile, setSelectedProfile] = useState(null);
 
   const { updateNotification } = useNotification();
-  const { handleSearch } = useSearch()
+  const { handleSearch, resetSearch } = useSearch()
 
   const fetchActors = async (pageNo) => {
     const { profiles, error } = await getActors(pageNo, limit);
@@ -58,6 +58,10 @@ export default function Actors() {
   const handleOnSearchSubmit = (value) => {
     handleSearch(searchActor, value, setResults)
   };
+  const handleSearchFormReset = () => {
+    resetSearch()
+    setResults([])
+  }
 
   const handleOnActorUpdate = (profile) => {
     const updatedActors = actors.map((actor) => {
@@ -77,7 +81,7 @@ export default function Actors() {
     <>
       <div className="p-5">
         <div className="flex justify-end mb-5">
-          <AppSearchForm showResetIcon={results.length} onSubmit={handleOnSearchSubmit} placeholder="Search Actors.." />
+          <AppSearchForm onReset={handleSearchFormReset} showResetIcon={results.length} onSubmit={handleOnSearchSubmit} placeholder="Search Actors.." />
         </div>
         <div className="grid grid-cols-4 gap-5">
           {results.length
