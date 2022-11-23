@@ -35,6 +35,21 @@ export const uploadMovie = async (formData) => {
   }
 };
 
+export const getMovieForUpdate = async (id) => {
+  const token = getToken();
+  try {
+    const { data } = await client("/movie/for-update/" + id, {
+      headers: {
+        authorization: "Bearer " + token,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
+
 export const getMovies = async (pageNo, limit) => {
   const token = getToken();
   try {
