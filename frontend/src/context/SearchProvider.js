@@ -37,7 +37,7 @@ export default function SearchProvider({ children }) {
     setSearching(true);
     if (!query.trim()) {
       updaterFun && updaterFun([])
-      resetSearch()
+      return resetSearch()
     }
     debounceFunc(method, query, updaterFun);
   }
