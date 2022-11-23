@@ -168,7 +168,11 @@ export default function MovieForm({ onSubmit, initialState, busy }) {
 
   useEffect(() => {
     if (initialState) {
-      setMovieInfo({ ...initialState, poster: null });
+      setMovieInfo({
+        ...initialState,
+        releseDate: initialState.releseDate.split("T")[0],
+        poster: null,
+      });
       setSelectedPosterForUI(initialState.poster);
     }
   }, [initialState]);
