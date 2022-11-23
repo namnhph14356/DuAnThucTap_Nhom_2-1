@@ -22,8 +22,13 @@ export default function SearchProvider({ children }) {
   const search = async (method, query, updaterFun) => {
     const { error, results } = await method(query);
     if (error) return updateNotification('error', error);
-    if (!results.length) return setResultNotFound(true);
+    if (!results.length){
+      setResults([])
+      updaterFun && updaterFun([])
+      return setResultNotFound(true);
+    }
 
+    setResultNotFound(false);
     setResults(results);
     updaterFun && updaterFun([...results])
   }
