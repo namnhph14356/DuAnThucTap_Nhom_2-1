@@ -9,6 +9,7 @@ const {
   getMovies,
   getMovieForUpdate,
   updateMovie,
+  getRelatedMovies,
 } = require("../controllers/movie");
 const { isAdmin, isAuth } = require("../middlewares/auth");
 const { uploadVideo, uploadImage } = require("../middlewares/multer");
@@ -69,5 +70,7 @@ router.get("/search", isAuth, isAdmin, searchMovies);
 // for nomal user
 router.get("/latest-uploads", getLatestUploads);
 router.get("/single/:movieId", getSingleMovie);
+router.get("/related/:movieId", getRelatedMovies);
+
 
 module.exports = router;
