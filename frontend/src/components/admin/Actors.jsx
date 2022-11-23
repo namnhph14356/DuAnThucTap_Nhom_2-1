@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { BsTrash, BsPencilSquare } from "react-icons/bs";
-import { getActors } from "../../api/actor";
-import { useNotification } from "../../hooks";
+import { getActors, searchActor } from "../../api/actor";
+import { useNotification, useSearch } from "../../hooks";
 import AppSearchForm from "../form/AppSearchForm";
 import UpdateActor from "../modals/UpdateActor";
 import NextAndPrevButton from "../NextAndPrevButton";
@@ -12,11 +12,13 @@ const limit = 20;
 
 export default function Actors() {
   const [actors, setActors] = useState([]);
+  const [results, setResults] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
 
   const { updateNotification } = useNotification();
+  const { handleSearch } = useSearch()
 
   const fetchActors = async (pageNo) => {
     const { profiles, error } = await getActors(pageNo, limit);
@@ -54,7 +56,7 @@ export default function Actors() {
   };
 
   const handleOnSearchSubmit = (value) => {
-    console.log(value); 
+    handleSearch(searchActor, value, setResults)
   };
 
   const handleOnActorUpdate = (profile) => {
@@ -78,15 +80,22 @@ export default function Actors() {
           <AppSearchForm onSubmit={handleOnSearchSubmit} placeholder="Search Actors.." />
         </div>
         <div className="grid grid-cols-4 gap-5">
-          {actors.map((actor) => {
-            return (
+          {results.length
+            ? results.map((actor) => (
               <ActorProfile
                 profile={actor}
                 key={actor.id}
                 onEditClick={() => handleOnEditClick(actor)}
               />
-            );
-          })}
+            ))
+            : actors.map((actor) => (
+              <ActorProfile
+                profile={actor}
+                key={actor.id}
+                onEditClick={() => handleOnEditClick(actor)}
+              />
+            ))
+          }
 
           <UpdateActor
             visible={showUpdateModal}
@@ -96,11 +105,11 @@ export default function Actors() {
           />
         </div>
 
-        <NextAndPrevButton
+        {!results.length ? <NextAndPrevButton
           className="mt-5"
           onNextClick={handleOnNextClick}
           onPrevClick={handleOnPrevClick}
-        />
+        /> : null}
       </div>
     </>
   );
