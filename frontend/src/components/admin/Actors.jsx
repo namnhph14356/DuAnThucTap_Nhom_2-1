@@ -6,6 +6,7 @@ import { useNotification, useSearch } from "../../hooks";
 import AppSearchForm from "../form/AppSearchForm";
 import UpdateActor from "../modals/UpdateActor";
 import NextAndPrevButton from "../NextAndPrevButton";
+import NotFoundText from "../NotFoundText";
 
 let currentPageNo = 0;
 const limit = 20;
@@ -81,37 +82,39 @@ export default function Actors() {
     <>
       <div className="p-5">
         <div className="flex justify-end mb-5">
-          <AppSearchForm onReset={handleSearchFormReset} showResetIcon={results.length} onSubmit={handleOnSearchSubmit} placeholder="Search Actors.." />
+          <AppSearchForm
+            onReset={handleSearchFormReset}
+            onSubmit={handleOnSearchSubmit}
+            placeholder="Search Actors.."
+            showResetIcon={results.length || resultNotFound}
+          />
         </div>
-        {resultNotFound ?
-          (<h1 className="font-semibold text-3xl text-secondary dark:text-white text-center py-5 opacity-40">
-            Record not found
-          </h1>)
-          :
-          (<div className="grid grid-cols-4 gap-5">
-            {results.length
-              ? results.map((actor) => (
-                <ActorProfile
-                  profile={actor}
-                  key={actor.id}
-                  onEditClick={() => handleOnEditClick(actor)}
-                />
-              ))
-              : actors.map((actor) => (
-                <ActorProfile
-                  profile={actor}
-                  key={actor.id}
-                  onEditClick={() => handleOnEditClick(actor)}
-                />
-              ))
-            }
-          </div>)}
+        <NotFoundText text="Record not found" visible={resultNotFound} />
+        <div className="grid grid-cols-4 gap-5">
+          {results.length || resultNotFound
+            ? results.map((actor) => (
+              <ActorProfile
+                profile={actor}
+                key={actor.id}
+                onEditClick={() => handleOnEditClick(actor)}
+              />
+            ))
+            : actors.map((actor) => (
+              <ActorProfile
+                profile={actor}
+                key={actor.id}
+                onEditClick={() => handleOnEditClick(actor)}
+              />
+            ))
+          }
+        </div>
 
-        {!results.length ? <NextAndPrevButton
-          className="mt-5"
-          onNextClick={handleOnNextClick}
-          onPrevClick={handleOnPrevClick}
-        /> : null}
+        {!results.length && !resultNotFound ? (
+          <NextAndPrevButton
+            className="mt-5"
+            onNextClick={handleOnNextClick}
+            onPrevClick={handleOnPrevClick}
+          />) : null}
       </div>
       <UpdateActor
         visible={showUpdateModal}
