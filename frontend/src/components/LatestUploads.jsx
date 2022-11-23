@@ -48,6 +48,15 @@ export default function LatestUploads() {
     hideConfirmModal();
   };
 
+  const handleOnUpdate = (movie) => {
+    const updateMovie = movies.map((m) => {
+      if (m.id === movie.id) return movie;
+      return m;
+    });
+
+    setMovies([...updateMovie]);
+  };
+
   const hideConfirmModal = () => setShowConfirmModal(false);
   const hideUpdateModal = () => setShowUpdateModal(false);
 
@@ -85,6 +94,7 @@ export default function LatestUploads() {
       <UpdateMovie
         visible={showUpdateModal}
         onClose={hideUpdateModal}
+        onSucces={handleOnUpdate}
         initialState={selectedMovie}
       />
     </>
