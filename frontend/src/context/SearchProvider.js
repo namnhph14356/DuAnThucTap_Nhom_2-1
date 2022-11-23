@@ -16,13 +16,13 @@ const debounce = (func, delay) => {
 export default function SearchProvider({ children }) {
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState([]);
-  const [resultsNotFound, setResultsNotFound] = useState(false);
+  const [resultNotFound, setResultNotFound] = useState(false);
   const { updateNotification } = useNotification();
 
   const search = async (method, query, updaterFun) => {
     const { error, results } = await method(query);
     if (error) return updateNotification('error', error);
-    if (!results.length) return setResultsNotFound(true);
+    if (!results.length) return setResultNotFound(true);
 
     setResults(results);
     updaterFun && updaterFun([...results])
@@ -40,9 +40,9 @@ export default function SearchProvider({ children }) {
   const resetSearch = () => {
     setSearching(false);
     setResults([]);
-    setResultsNotFound(false)
+    setResultNotFound(false)
   }
   return (
-    <SearchContext.Provider value={{ handleSearch, resetSearch, searching, resultsNotFound, results }}>{children}</SearchContext.Provider>
+    <SearchContext.Provider value={{ handleSearch, resetSearch, searching, resultNotFound, results }}>{children}</SearchContext.Provider>
   )
 }

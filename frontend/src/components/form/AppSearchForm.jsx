@@ -12,7 +12,7 @@ function AppSearchForm({ showResetIcon, placeholder, onSubmit, onReset }) {
         onReset()
     }
     return (
-        <form className='retative' onSubmit={handleOnSubmit}>
+        <form className="relative" onSubmit={handleOnSubmit}>
             <input
                 type="text"
                 className="border-2 dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary
@@ -22,7 +22,8 @@ function AppSearchForm({ showResetIcon, placeholder, onSubmit, onReset }) {
                 onChange={({ target }) => setValue(target.value)}
             />
             {showResetIcon ? (
-                <button onClick={handleReset} className='absolute top-1/4 -translate-y-2/10 py-1 right-24 text-secondary dark:text-white'>
+                <button onClick={handleReset} type='button' className='absolute top-1/2 -translate-y-1/2 right-2
+                 text-secondary dark:text-white'>
                     <AiOutlineClose />
                 </button>
             ) : null}
