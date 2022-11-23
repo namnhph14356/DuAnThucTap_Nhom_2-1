@@ -3,6 +3,7 @@ const {
   averageRatingPipeline,
   formatActor,
   relatedMovieAggregation,
+  getAverageRatings,
 } = require("../utils/helper");
 const cloudinary = require("../cloud");
 const Movie = require("../models/movie");
@@ -385,18 +386,19 @@ exports.getSingleMovie = async (req, res) => {
     "director writers cast.actor"
   );
 
-  const [aggregatedResponse] = await Review.aggregate(
-    averageRatingPipeline(movie._id)
-    );
+  // const [aggregatedResponse] = await Review.aggregate(
+  //   averageRatingPipeline(movie._id)
+  //   );
 
-    const reviews = {}
+  //   const reviews = {}
 
-    if(aggregatedResponse){
-      const {ratingAvg, reviewCount} = aggregatedResponse;
-      reviews.ratingAvg = parseFloat(ratingAvg).toFixed(1);
-      reviews.reviewCount = reviewCount
-    }
+  //   if(aggregatedResponse){
+  //     const {ratingAvg, reviewCount} = aggregatedResponse;
+  //     reviews.ratingAvg = parseFloat(ratingAvg).toFixed(1);
+  //     reviews.reviewCount = reviewCount
+  //   }
 
+  const reviews = await getAverageRatings(movie._id)
 
   const {
     _id: id,
@@ -458,5 +460,17 @@ exports.getRelatedMovies = async (req, res) =>{
   const movies = await Movie.aggregate(relatedMovieAggregation(movie.tags, movie._id))
 
 
-  res.json({movies})
+  const relatedMovies = movies.map( async (m) =>{
+    const reviews = await getAverageRatings(m._id)
+
+    return{
+      id: m._id,
+      title: m.title,
+      poster: m.poster,
+      reviews: {...reviews}
+    }
+  })
+
+
+  res.json({relatedMovies})
 }
