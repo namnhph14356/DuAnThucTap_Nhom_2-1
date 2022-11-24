@@ -3,10 +3,13 @@ import { BsBoxArrowUpRight, BsPencilSquare, BsTrash } from "react-icons/bs";
 import { deleteMovie } from "../api/movie";
 import { useNotification } from "../hooks";
 import ConfirmModal from "./modals/ConfirmModal";
+import UpdateMovie from "./modals/UpdateMovie";
 
-const MovieListItem = ({ movie, afterDelete }) => {
+const MovieListItem = ({ movie, afterDelete, afterUpdate }) => {
   const [showConfirmModal, setShowConfimModal] = useState(false);
   const [busy, setBusy] = useState(false)
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedMovieId,setSelectedMovieId] = useState(null)
 
   const { updateNotification } = useNotification();
 
@@ -21,12 +24,23 @@ const MovieListItem = ({ movie, afterDelete }) => {
     hideConfirmModal();
     afterDelete(movie)
   };
+
+  const handleOnEditClick = () => {
+    setShowUpdateModal(true)
+    setSelectedMovieId(movie.id)
+  }
+  const handleOnUpdate = (movie) => {
+    afterUpdate(movie)
+    setShowUpdateModal(false)
+    setSelectedMovieId(null)
+  }
+
   const displayConfirmModal = () => setShowConfimModal(true)
   const hideConfirmModal = () => setShowConfimModal(false)
 
   return (
     <>
-      <MovieCard movie={movie} onDeleteClick={displayConfirmModal} />
+      <MovieCard movie={movie} onDeleteClick={displayConfirmModal} onEditClick={handleOnEditClick} />
       <div className="p-0">
         <ConfirmModal
           visible={showConfirmModal}
@@ -35,6 +49,11 @@ const MovieListItem = ({ movie, afterDelete }) => {
           title="Are you sure"
           subtitle="This action will remove this movie permanently!"
           busy={busy}
+        />
+        <UpdateMovie
+          movieId={selectedMovieId}
+          visible={showUpdateModal}
+          onSucces={handleOnUpdate}
         />
       </div>
     </>

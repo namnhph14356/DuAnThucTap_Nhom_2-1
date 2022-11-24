@@ -17,7 +17,7 @@ export default function LatestUploads() {
   // const [selectedMovie, setSelectedMovie] = useState(null);
   // const { updateNotification } = useNotification();
 
-  const {fetchLastestUploads, latestUploads} = useMovies()
+  const { fetchLastestUploads, latestUploads } = useMovies()
 
   // const fetchLastestUploads = async () => {
   //   const { error, movies } = await getMovies(pageNo, limit);
@@ -61,7 +61,7 @@ export default function LatestUploads() {
 
   // const hideConfirmModal = () => setShowConfirmModal(false);
   // const hideUpdateModal = () => setShowUpdateModal(false);
-  const handleAfterDelete = () => fetchLastestUploads()
+  const handleUIUpdate = () => fetchLastestUploads()
 
   useEffect(() => {
     fetchLastestUploads();
@@ -80,8 +80,8 @@ export default function LatestUploads() {
                 key={movie.id}
                 // onDeleteClick={() => handleOnDeleteClick(movie)}
                 // onEditClick={() => handleOnEditClick(movie)}
-                afterDelete={handleAfterDelete}
-
+                afterDelete={handleUIUpdate}
+                afterUpdate={handleUIUpdate}
               />
             );
           })}
