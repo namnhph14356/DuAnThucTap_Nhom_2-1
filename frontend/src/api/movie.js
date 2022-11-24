@@ -96,3 +96,17 @@ export const updateMovie = async (id, formData) => {
     return cathError(error);
   }
 };
+
+export const searchMovieForAdmin = async (title) => {
+  const token = getToken();
+  try {
+    const { data } = await client(`/movie/search?title=${title}`, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
