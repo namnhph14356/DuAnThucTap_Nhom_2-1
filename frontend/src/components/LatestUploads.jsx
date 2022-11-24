@@ -10,12 +10,12 @@ const pageNo = 0;
 const limit = 5;
 
 export default function LatestUploads() {
-  const [movies, setMovies] = useState([]);
-  const [busy, setBusy] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const { updateNotification } = useNotification();
+  // const [movies, setMovies] = useState([]);
+  // const [busy, setBusy] = useState(false);
+  // const [showConfirmModal, setShowConfirmModal] = useState(false);
+  // const [showUpdateModal, setShowUpdateModal] = useState(false);
+  // const [selectedMovie, setSelectedMovie] = useState(null);
+  // const { updateNotification } = useNotification();
 
   const {fetchLastestUploads, latestUploads} = useMovies()
 
@@ -26,41 +26,42 @@ export default function LatestUploads() {
   //   setMovies([...movies]);
   // };
 
-  const handleOnEditClick = async ({ id }) => {
-    const { movie, error } = await getMovieForUpdate(id);
-    setShowUpdateModal(true);
+  // const handleOnEditClick = async ({ id }) => {
+  //   const { movie, error } = await getMovieForUpdate(id);
+  //   setShowUpdateModal(true);
 
-    if (error) return updateNotification("error", error);
+  //   if (error) return updateNotification("error", error);
 
-    setSelectedMovie(movie);
-  };
+  //   setSelectedMovie(movie);
+  // };
 
-  const handleOnDeleteClick = (movie) => {
-    setSelectedMovie(movie);
-    setShowConfirmModal(true);
-  };
+  // const handleOnDeleteClick = (movie) => {
+  //   setSelectedMovie(movie);
+  //   setShowConfirmModal(true);
+  // };
 
-  const handleOnDeleteConfirm = async () => {
-    setBusy(true);
-    const { error, message } = await deleteMovie(selectedMovie.id);
-    setBusy(false);
+  // const handleOnDeleteConfirm = async () => {
+  //   setBusy(true);
+  //   const { error, message } = await deleteMovie(selectedMovie.id);
+  //   setBusy(false);
 
-    if (error) return updateNotification("error", error);
-    updateNotification("success", message);
-    hideConfirmModal();
-  };
+  //   if (error) return updateNotification("error", error);
+  //   updateNotification("success", message);
+  //   hideConfirmModal();
+  // };
 
-  const handleOnUpdate = (movie) => {
-    const updateMovie = movies.map((m) => {
-      if (m.id === movie.id) return movie;
-      return m;
-    });
+  // const handleOnUpdate = (movie) => {
+  //   const updateMovie = movies.map((m) => {
+  //     if (m.id === movie.id) return movie;
+  //     return m;
+  //   });
 
-    setMovies([...updateMovie]);
-  };
+  //   setMovies([...updateMovie]);
+  // };
 
-  const hideConfirmModal = () => setShowConfirmModal(false);
-  const hideUpdateModal = () => setShowUpdateModal(false);
+  // const hideConfirmModal = () => setShowConfirmModal(false);
+  // const hideUpdateModal = () => setShowUpdateModal(false);
+  const handleAfterDelete = () => fetchLastestUploads()
 
   useEffect(() => {
     fetchLastestUploads();
@@ -77,14 +78,16 @@ export default function LatestUploads() {
               <MovieListItem
                 movie={movie}
                 key={movie.id}
-                onDeleteClick={() => handleOnDeleteClick(movie)}
-                onEditClick={() => handleOnEditClick(movie)}
+                // onDeleteClick={() => handleOnDeleteClick(movie)}
+                // onEditClick={() => handleOnEditClick(movie)}
+                afterDelete={handleAfterDelete}
+
               />
             );
           })}
         </div>
       </div>
-      <ConfirmModal
+      {/* <ConfirmModal
         title="Are you sure?"
         subtitle="This action will remove this movie permanently!"
         visible={showConfirmModal}
@@ -98,7 +101,7 @@ export default function LatestUploads() {
         onClose={hideUpdateModal}
         onSucces={handleOnUpdate}
         initialState={selectedMovie}
-      />
+      /> */}
     </>
   );
 }
