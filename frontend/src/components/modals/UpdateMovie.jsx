@@ -8,7 +8,6 @@ export default function UpdateMovie({
   visible,
   onSucces,
   movieId,
-  onClose,
 }) {
   const [busy, setBusy] = useState(false);
   const [ready, setReady] = useState(false);
@@ -17,13 +16,12 @@ export default function UpdateMovie({
 
   const handleSubmit = async (data) => {
     setBusy(true);
-    const { error, movie, message } = await updateMovie(movieId , data);
+    const { error, movie, message } = await updateMovie(movieId, data);
     setBusy(false);
     if (error) return updateNotification("error", error);
 
     updateNotification("success", message);
     onSucces(movie);
-    onClose();
   };
   const fetchMovieToUpdate = async () => {
     const { movie, error } = await getMovieForUpdate(movieId);
@@ -37,7 +35,7 @@ export default function UpdateMovie({
   }, [movieId])
 
   return (
-    <ModalContainer visible={visible} onClose={onClose}>
+    <ModalContainer visible={visible}>
       {ready ? (
         <MovieForm
           initialState={selectedMovie}

@@ -20,8 +20,8 @@ const MovieListItem = ({ movie, afterDelete, afterUpdate }) => {
 
     if (error) return updateNotification("error", error);
 
-    updateNotification("success", message);
     hideConfirmModal();
+    updateNotification("success", message);
     afterDelete(movie)
   };
 
