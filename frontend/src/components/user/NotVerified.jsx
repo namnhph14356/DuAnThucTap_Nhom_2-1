@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks';
-import Container from '../Container';
+
 
 
 export default function NotVerified() {
@@ -16,10 +16,10 @@ export default function NotVerified() {
     };
 
     return (
-        <Container className={null}>
+        <div className="">
             {isLoggedIn && !isVerified ? (<p className='text-lg text-center bg-blue-50 p-2'>It looks like you haven't verified your account,
             <button onClick={navigateToverification} className='text-blue-500 font-semibold hover:underline'>Click here to verify your account.</button>
             </p> ) : null}
-        </Container>
+        </div>
     );
 }
