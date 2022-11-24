@@ -66,7 +66,7 @@ export default function Movies() {
   //   fetchMovies(currentPageNo);
   // };
 
-  // const handleOnUpdate = (movie) => {
+  // const handleAfterUpdate = (movie) => {
   //   const updateMovie = movies.map((m) => {
   //     if (m.id === movie.id) return movie;
   //     return m;
@@ -78,7 +78,7 @@ export default function Movies() {
   // const hideUpdateForm = () => setShowUpdateModal(false);
   // const hideConfirmModal = () => setShowConfimModal(false);
 
-  const handleAfterDelete = () => fetchMovies()
+  const handleUIUpdate = () => fetchMovies()
 
   useEffect(() => {
     fetchMovies(currentPageNo);
@@ -93,7 +93,8 @@ export default function Movies() {
               movie={movie}
               // onEditClick={() => handleOnEditClick(movie)}
               // onDeleteClick={() => handleOnDeleteClick(movie)}
-              afterDelete={handleAfterDelete}
+              afterDelete={handleUIUpdate}
+              afterUpdate={handleUIUpdate}
             />
           );
         })}
