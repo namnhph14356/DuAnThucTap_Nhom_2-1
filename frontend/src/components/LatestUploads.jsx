@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { deleteMovie, getMovieForUpdate, getMovies } from "../api/movie";
-import { useNotification } from "../hooks";
+import { useMovies, useNotification } from "../hooks";
 import ConfirmModal from "./modals/ConfirmModal";
 import UpdateMovie from "./modals/UpdateMovie";
 import MovieListItem from "./MovieListItem";
@@ -17,12 +17,14 @@ export default function LatestUploads() {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const { updateNotification } = useNotification();
 
-  const fetchLastestUploads = async () => {
-    const { error, movies } = await getMovies(pageNo, limit);
-    if (error) return updateNotification("error", error);
+  const {fetchLastestUploads, latestUploads} = useMovies()
 
-    setMovies([...movies]);
-  };
+  // const fetchLastestUploads = async () => {
+  //   const { error, movies } = await getMovies(pageNo, limit);
+  //   if (error) return updateNotification("error", error);
+
+  //   setMovies([...movies]);
+  // };
 
   const handleOnEditClick = async ({ id }) => {
     const { movie, error } = await getMovieForUpdate(id);
@@ -70,7 +72,7 @@ export default function LatestUploads() {
           Recent Uploads
         </h1>
         <div className="space-y-3">
-          {movies.map((movie) => {
+          {latestUploads.map((movie) => {
             return (
               <MovieListItem
                 movie={movie}

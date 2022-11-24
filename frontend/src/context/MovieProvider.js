@@ -7,9 +7,17 @@ const limit = 10;
 let currentPageNo = 0;
 const MovieProvider = ({ children }) => {
     const [movies, setMovies] = useState([]);
+    const [latestUploads, setLatestUploads] = useState([])
     const [reachedToEnd, setReachedToEnd] = useState(false);
 
     const { updateNotification } = useNotification()
+
+    const fetchLastestUploads = async (qty = 5) => {
+        const { error, movies } = await getMovies(0, qty);
+        if (error) return updateNotification("error", error);
+
+        setLatestUploads([...movies]);
+    };
 
     const fetchMovies = async (pageNo) => {
         const { error, movies } = await getMovies(pageNo, limit);
@@ -34,6 +42,17 @@ const MovieProvider = ({ children }) => {
         fetchMovies(currentPageNo);
     };
 
-    return (<MovieContext.Provider value={{ movies, fetchMovies, fetchNextPage, fetchPrePage }}>{children}</MovieContext.Provider>)
+    return (
+        <MovieContext.Provider
+            value={{
+                movies,
+                latestUploads,
+                fetchLastestUploads,
+                fetchMovies,
+                fetchNextPage,
+                fetchPrePage
+            }}>
+            {children}
+        </MovieContext.Provider>)
 }
 export default MovieProvider
