@@ -48,7 +48,6 @@ export default function EmailVerification() {
   const user = state?.user;
 
   const navigate = useNavigate();
-
   const handleOtpChange = ({ target }, index) => {
     const { value } = target;
     const newOtp = [...otp];
@@ -58,10 +57,12 @@ export default function EmailVerification() {
     else focusNextInputField(index);
     setOtp([...newOtp]);
   }
-  const handleOTPResend =async () => {
-    const {error, message} = await resendEmailVerificationToken(user.id);
+  const handleOTPResend = async () => {
+    const { error, message } = await resendEmailVerificationToken({
+      userId: user.id
+    });
 
-    if(error) return updateNotification("error", error);
+    if (error) return updateNotification("error", error);
     updateNotification("success", message)
   }
 
@@ -122,7 +123,7 @@ export default function EmailVerification() {
             })}
           </div>
 
-          <Submit type="button" value="Verify Account" />
+          <Submit type="Submit" value="Verify Account" />
           <button onClick={handleOTPResend} className="dark:text-white text-blue-500 font-semibold hover: underline mt-2">I don't have OTP </button>
         </form>
       </Container>
