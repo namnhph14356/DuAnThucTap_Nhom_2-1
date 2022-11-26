@@ -141,5 +141,5 @@ exports.getAverageRatings = async (movieId) => {
       reviews.reviewCount = reviewCount
     }
 
-    return review;
+    return reviews;
 }
