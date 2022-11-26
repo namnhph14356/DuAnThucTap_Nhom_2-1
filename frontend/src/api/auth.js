@@ -89,7 +89,7 @@ export const resetPassword = async (passwordInfo) => {
 };
 export const resendEmailVerificationToken = async (userId) => {
     try {
-        const { data } = await client.post("/user/resend-email-verfication-token", userId);
+        const { data } = await client.post("/user/resend-email-verification-token", userId);
         return data;
     } catch (error) {
         const { response } = error;
