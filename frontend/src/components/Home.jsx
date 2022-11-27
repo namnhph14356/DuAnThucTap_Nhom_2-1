@@ -4,6 +4,7 @@ import TopRateMovies from "./user/TopRatedMovies";
 import Container from "./Container";
 import TopRatedWebSeries from "./user/TopRatedWebSeries";
 import TopRatedTVSeries from "./user/TopRatedTVSeries";
+import HeroSlidShow from "./user/HeroSlidShow";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Container>
         <NotVerified />
         {/* sline*/}
+        <HeroSlidShow />
         {/*Most rated movies*/}
         <TopRateMovies />
         <TopRatedWebSeries />
