@@ -27,6 +27,9 @@ export default function HeroSlidShow() {
 
         slideRef.current.classList.add('slide-in-from-right');
     }
+    const handleAnimationEnd = () => {
+        slideRef.current.classList.remove('slide-in-from-right');
+    }
 
     useEffect(() => {
         fetchLatesUPloads();
@@ -35,7 +38,7 @@ export default function HeroSlidShow() {
     return (
         <div className='w-full flex'>
             <div className='w-4/5 aspect-video relative overflow-hidden'>
-                <img ref={slideRef} className='aspect-video object-cover' src={slide.poster} alt="" />
+                <img onAnimationEnd={handleAnimationEnd} ref={slideRef} className='aspect-video object-cover' src={slide.poster} alt="" />
                 <SlideShowController onNextClick={handleOnNextClick} />
             </div>
             <div className='w-1/5 aspect-video bg-red-300'></div>
