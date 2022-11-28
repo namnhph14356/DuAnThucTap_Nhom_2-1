@@ -31,8 +31,8 @@ export default function HeroSlidShow() {
 
     return (
         <div className='w-full flex'>
-            <div className='w-4/5 aspect-video relative'>
-                <img className='aspect-video object-cover' src={slide.poster} alt="" />
+            <div className='w-4/5 aspect-video relative overflow-hidden'>
+                <img className='aspect-video object-cover translate-x-[80%]' src={slide.poster} alt="" />
                 <SlideShowController onNextClick={handleOnNextClick} />
             </div>
             <div className='w-1/5 aspect-video bg-red-300'></div>
