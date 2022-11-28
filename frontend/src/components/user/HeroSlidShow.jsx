@@ -7,9 +7,11 @@ let count = 0;
 
 export default function HeroSlidShow() {
     const [slide, setSlide] = useState({});
+    const [clonedSlide, setClonedSlide] = useState({}); 
     const [slides, setSlides] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const slideRef = useRef();
+    const clonedSlideRef = useRef()
 
     const {updateNotification} = useNotification();
 
@@ -21,14 +23,18 @@ export default function HeroSlidShow() {
         setSlide(movies[0]);
     };
     const handleOnNextClick = () => {
+        setClonedSlide(slides[count])
         count = (count + 1) %  slides.length;
         setSlide(slides[count]);
         setCurrentIndex(count);
 
+        clonedSlideRef.current.classList.add('slide-in-from-left');
         slideRef.current.classList.add('slide-in-from-right');
     }
     const handleAnimationEnd = () => {
         slideRef.current.classList.remove('slide-in-from-right');
+        clonedSlideRef.current.classList.remove('slide-in-from-left');
+        setClonedSlide({})
     }
 
     useEffect(() => {
@@ -39,6 +45,7 @@ export default function HeroSlidShow() {
         <div className='w-full flex'>
             <div className='w-4/5 aspect-video relative overflow-hidden'>
                 <img onAnimationEnd={handleAnimationEnd} ref={slideRef} className='aspect-video object-cover' src={slide.poster} alt="" />
+                <img onAnimationEnd={handleAnimationEnd} ref={clonedSlideRef} className='aspect-video object-cover absolute inset-0' src={clonedSlide.poster} alt="" />
                 <SlideShowController onNextClick={handleOnNextClick} />
             </div>
             <div className='w-1/5 aspect-video bg-red-300'></div>

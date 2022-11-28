@@ -57,6 +57,9 @@ input[type='number']::-webkit-outer-spin-button {
 .slide-in-from-right {
   animation: slideInFromRight 1s ease-in;
 }
+.slide-in-from-left {
+  animation: slideOutToLeft 1s ease-in;
+}
 
 @keyframes slideInFromRight {
   from {
@@ -64,6 +67,15 @@ input[type='number']::-webkit-outer-spin-button {
   }
   to{
     transform: translateX(0%)
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0%)
+  }
+  to{
+    transform: translateX(-100%)
   }
 }
 
