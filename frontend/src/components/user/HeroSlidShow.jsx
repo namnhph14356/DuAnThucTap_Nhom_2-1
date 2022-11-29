@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, forwardRef } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import { getLatestUploads } from "../../api/movie";
 import { useNotification } from "../../hooks";
 
@@ -117,15 +118,17 @@ export default function HeroSlidShow() {
           ref={slideRef}
           title={currentSlide.title}
           src={currentSlide.poster}
+          id={currentSlide.id}
         />
 
         {/* cloned slide */}
         <Slide
           ref={clonedSlideRef}
           onAnimationEnd={handleAnimationEnd}
-          className="absolute inset-0"
+          className=" absolute inset-0"
           src={clonedSlide.poster}
           title={clonedSlide.title}
+          id={currentSlide.id}
         />
 
         <SlideShowController
@@ -168,9 +171,14 @@ const SlideShowController = ({ onNextClick, onPrevClick }) => {
 };
 
 const Slide = forwardRef((props, ref) => {
-  const { title, src, className = "", ...rest } = props;
+  const { title, id, src, className = "", ...rest } = props;
   return (
-    <div ref={ref} className={"w-full cursor-pointer" + className} {...rest}>
+    <Link
+      to={"/movie/" + id}
+      ref={ref}
+      className={"w-full cursor-pointer" + className}
+      {...rest}
+    >
       {src ? (
         <img className="aspect-video object-cover" src={src} alt="" />
       ) : null}
@@ -181,6 +189,6 @@ const Slide = forwardRef((props, ref) => {
           </h1>
         </div>
       ) : null}
-    </div>
+    </Link>
   );
 });
