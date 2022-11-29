@@ -9,7 +9,6 @@ export default function HeroSlidShow() {
   const [currentSlide, setCurrentSlide] = useState({});
   const [clonedSlide, setClonedSlide] = useState({});
   const [slides, setSlides] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const slideRef = useRef();
   const clonedSlideRef = useRef();
 
@@ -22,11 +21,15 @@ export default function HeroSlidShow() {
     setSlides([...movies]);
     setCurrentSlide(movies[0]);
   };
+
+  const startSlideShow = () => {
+    setInterval(handleOnNextClick, 3500);
+  };
+
   const handleOnNextClick = () => {
     setClonedSlide(slides[count]);
     count = (count + 1) % slides.length;
     setCurrentSlide(slides[count]);
-    setCurrentIndex(count);
 
     clonedSlideRef.current.classList.add("slide-out-to-left");
     slideRef.current.classList.add("slide-in-from-right");
@@ -37,7 +40,6 @@ export default function HeroSlidShow() {
     count = (count + slides.length - 1) % slides.length;
     console.log(count);
     setCurrentSlide(slides[count]);
-    setCurrentIndex(count);
 
     clonedSlideRef.current.classList.add("slide-out-to-right");
     slideRef.current.classList.add("slide-in-from-left");
@@ -48,7 +50,7 @@ export default function HeroSlidShow() {
       "slide-out-to-left",
       "slide-in-from-right",
       "slide-out-to-right",
-      "side-in-from-left",
+      "slide-in-from-left",
     ];
     slideRef.current.classList.remove(...classes);
     clonedSlideRef.current.classList.remove(...classes);
@@ -59,6 +61,9 @@ export default function HeroSlidShow() {
     fetchLatesUPloads();
   }, []);
 
+  useEffect(() => {
+    if (slides.length) startSlideShow();
+  }, [slides.length]);
   return (
     <div className="w-full flex">
       <div className="w-4/5 aspect-video relative overflow-hidden">
