@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 import { getLatestUploads } from "../../api/movie";
@@ -9,6 +10,7 @@ export default function HeroSlidShow() {
   const [currentSlide, setCurrentSlide] = useState({});
   const [clonedSlide, setClonedSlide] = useState({});
   const [slides, setSlides] = useState([]);
+  const [visible, setVisible] = useState(true);
   const slideRef = useRef();
   const clonedSlideRef = useRef();
 
@@ -61,17 +63,29 @@ export default function HeroSlidShow() {
     setClonedSlide({});
   };
 
+  const handleOnVisibilityChange = () => {
+    const visibility = document.visibilityState;
+    if (visibility === "hidden") setVisible(false);
+    if (visibility === "visible") setVisible(true);
+  };
+
   useEffect(() => {
     fetchLatesUPloads();
+    document.addEventListener("visibilitychange", handleOnVisibilityChange);
 
     return () => {
       pauseSlideShow();
+      document.removeEventListener(
+        "visibilitychange",
+        handleOnVisibilityChange
+      );
     };
   }, []);
 
   useEffect(() => {
-    if (slides.length) startSlideShow();
-  }, [slides.length]);
+    if (slides.length && visible) startSlideShow();
+    else pauseSlideShow();
+  }, [slides.length, visible]);
   return (
     <div className="w-full flex">
       <div className="w-4/5 aspect-video relative overflow-hidden">
