@@ -26,7 +26,7 @@ export default function HeroSlidShow() {
   };
 
   const startSlideShow = () => {
-    // intervalId = setInterval(handleOnNextClick, 3500);
+    intervalId = setInterval(handleOnNextClick, 3500);
   };
 
   const pauseSlideShow = () => {
@@ -40,7 +40,7 @@ export default function HeroSlidShow() {
     const end = upNextCount + 3;
 
     let newSlides = [...slides];
-    newSlides.slice(upNextCount, end);
+    newSlides = newSlides.slice(upNextCount, end);
 
     if (!newSlides.length) {
       newSlides = [...slides].slice(0, 3);
@@ -64,7 +64,6 @@ export default function HeroSlidShow() {
     pauseSlideShow();
     setClonedSlide(slides[count]);
     count = (count + slides.length - 1) % slides.length;
-    console.log(count);
     setCurrentSlide(slides[count]);
 
     clonedSlideRef.current.classList.add("slide-out-to-right");
@@ -134,7 +133,21 @@ export default function HeroSlidShow() {
           onPrevClick={handleOnPrevClick}
         />
       </div>
-      <div className="w-1/5 aspect-video bg-red-300"></div>
+      <div className="w-1/5 space-y-3 px-3">
+        <h1 className="font-semibold text-2xl text-primary dark:text-white">
+          Up Next
+        </h1>
+        {upNext.map(({ poster, id }) => {
+          return (
+            <img
+              key={id}
+              src={poster}
+              alt=""
+              className="aspect-video object-cover rounded"
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
