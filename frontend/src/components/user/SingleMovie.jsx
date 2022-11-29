@@ -9,7 +9,7 @@ import AddRatingModal from "../modals/AddRatingModal";
 import RatingStar from "../RatingStar";
 import RelatedMovie from "../RelatedMovie";
 
-const convertReviewCount = (count) => {
+const convertReviewCount = (count = 0) => {
   if (count < 999) return count
   return parseInt(count / 1000).toFixed(2) + 'k'
 }
