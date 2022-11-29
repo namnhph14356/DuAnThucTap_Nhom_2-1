@@ -3,11 +3,23 @@ import { AiOutlineStar, AiFillStar } from 'react-icons/ai'
 import ModalContainer from './ModalContainer'
 import Submit from '../form/Submit'
 const ratings = new Array(10).fill("")
-export default function AddRatingModal({ }) {
+export default function AddRatingModal({ onSubmit }) {
     const [selectedRatings, setSelectedRatings] = useState([])
+    const [content, setContent] = useState('')
     const handleMouseEnter = (index) => {
         const ratings = new Array(index + 1).fill("")
         setSelectedRatings([...ratings])
+    }
+    const handleOnChange = ({ target }) => {
+        setContent(target.value)
+    }
+    const handleSubmit = () => {
+        if(!selectedRatings.length) return;
+        const data = {
+            ratings: selectedRatings.length,
+            content
+        }
+        onSubmit(data)
     }
     return (
         <ModalContainer visible ignoreContainer>
@@ -22,9 +34,9 @@ export default function AddRatingModal({ }) {
                         })}
                     </div>
                 </div>
-                <textarea className='w-full h-24 border-2 p-2 dark:text-white text-primary rounded outline-none bg-transparent
+                <textarea value={content} onChange={handleOnChange} className='w-full h-24 border-2 p-2 dark:text-white text-primary rounded outline-none bg-transparent
                 resize-none'></textarea>
-                <Submit value="Rate this movie" />
+                <Submit onClick={handleSubmit} value="Rate this movie" />
             </div>
         </ModalContainer>
     )
