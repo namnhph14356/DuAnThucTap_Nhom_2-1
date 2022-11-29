@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getSingleMovie } from "../../api/movie";
 import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
+import AddRatingModal from "../modals/AddRatingModal";
 import RatingStar from "../RatingStar";
 import RelatedMovie from "../RelatedMovie";
 
@@ -144,5 +145,7 @@ export default function SingleMovie() {
         <RelatedMovie movieId={movieId} />
       </div>
     </Container>
+
+    <AddRatingModal />
   </div>;
 }
