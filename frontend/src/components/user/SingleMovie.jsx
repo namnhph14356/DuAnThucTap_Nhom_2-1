@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getSingleMovie } from "../../api/movie";
 import { useNotification } from "../../hooks";
+import Container from "../Container";
 
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
@@ -33,5 +34,16 @@ export default function SingleMovie() {
       </div>
     );
 
-  return <div>{movie.title}</div>;
+  const { id, trailer, poster, title, reviews = {} } = movie
+  return <div className="dark:bg-primary bg-white">
+    <Container>
+      <video poster={poster} controls src={trailer}></video>
+      <div className="flex justify-between">
+        <h1 className="text-4xl text-highlight dark:text-highlight-dark font-semibold py-3">{title}</h1>
+        <div>
+          <Link className="text-highlight dark:text-highlight-dark" to={'/movie/reviews/'+id}>{reviews.reviewCount}</Link>
+        </div>
+      </div>
+    </Container>
+  </div>;
 }
