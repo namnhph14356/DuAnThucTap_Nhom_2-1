@@ -20,15 +20,22 @@ const convertDate = (date = "") => {
 
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
 
   const { movieId } = useParams();
   const { updateNotification } = useNotification();
-  const {isLoggedIn} = useAuth()
+  const { authInfo } = useAuth()
+  const { isLoggedIn } = authInfo
   const navigate = useNavigate()
 
   const handleOnClickMovie = () => {
-    if(!isLoggedIn) return navigate("/auth/signin")
+    if (!isLoggedIn) return navigate("/auth/signin")
+    setShowRatingModal(true)
+  }
+
+  const hideRatingModal = () => {
+    setShowRatingModal(false)
   }
 
   const fetchMovies = async () => {
@@ -146,6 +153,6 @@ export default function SingleMovie() {
       </div>
     </Container>
 
-    <AddRatingModal />
+    <AddRatingModal visible={showRatingModal} onClose={hideRatingModal} />
   </div>;
 }
