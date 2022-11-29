@@ -9,14 +9,16 @@ import HeroSlidShow from "./user/HeroSlidShow";
 export default function Home() {
   return (
     <div className="dark:bg-primary bg-white min-h-screen ">
-      <Container className='px-2 xl:p-0 '>
+      <Container className="px-2 xl:p-0 ">
         <NotVerified />
         {/* sline*/}
         <HeroSlidShow />
         {/*Most rated movies*/}
-        <TopRateMovies />
-        <TopRatedWebSeries />
-        <TopRatedTVSeries />
+        <div className="space-y-3 py-8">
+          <TopRateMovies />
+          <TopRatedWebSeries />
+          <TopRatedTVSeries />
+        </div>
       </Container>
     </div>
   );
