@@ -44,7 +44,8 @@ export default function SingleMovie() {
       </div>
     );
 
-  const { id, trailer, poster, title, storyLine, director = {}, reviews = {}, writers = [], cast = [], language, releseDate } = movie
+  const { id, trailer, poster, title, storyLine, director = {},
+    reviews = {}, writers = [], cast = [], language, releseDate, genres = [], type } = movie
   return <div className="dark:bg-primary bg-white min-h-screen pb-10">
     <Container>
       <video poster={poster} controls src={trailer}></video>
@@ -58,10 +59,12 @@ export default function SingleMovie() {
       </div>
       <div className="space-y-3">
         <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
+
         <div className="flex space-x-2">
           <p className="text-light-subtle dark:text-dark-subtle font-semibold">Director:</p>
           <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{director.name}</p>
         </div>
+
         <div className="flex">
           <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">Writer:</p>
           <div className="space-x-2">
@@ -72,24 +75,44 @@ export default function SingleMovie() {
             })}
           </div>
         </div>
+
         <div className="flex">
           <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">Cast:</p>
           <div className="flex space-x-2">
             {cast.map((c) => {
               return c.leadActor ? (
                 <p key={c.profile.id} className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{c.profile.name}</p>
-              ):null
+              ) : null
             })}
           </div>
         </div>
+
         <div className="flex space-x-2">
           <p className="text-light-subtle dark:text-dark-subtle font-semibold">Language:</p>
           <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{language}</p>
         </div>
+
         <div className="flex space-x-2">
           <p className="text-light-subtle dark:text-dark-subtle font-semibold">Relese Date:</p>
           <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{convertDate(releseDate)}</p>
         </div>
+
+        <div className="flex">
+          <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">Genres:</p>
+          <div className="flex space-x-2">
+            {genres.map((g) => {
+              return (
+                <p key={g} className="text-highlight dark:text-highlight-dark">{g}</p>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="flex space-x-2">
+          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Type:</p>
+          <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{type}</p>
+        </div>
+
       </div>
     </Container>
   </div>;
