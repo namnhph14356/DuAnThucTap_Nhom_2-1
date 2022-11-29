@@ -33,6 +33,7 @@ export default function HeroSlidShow() {
   };
 
   const handleOnNextClick = () => {
+    pauseSlideShow();
     setClonedSlide(slides[count]);
     count = (count + 1) % slides.length;
     setCurrentSlide(slides[count]);
@@ -42,6 +43,7 @@ export default function HeroSlidShow() {
   };
 
   const handleOnPrevClick = () => {
+    pauseSlideShow();
     setClonedSlide(slides[count]);
     count = (count + slides.length - 1) % slides.length;
     console.log(count);
@@ -61,6 +63,7 @@ export default function HeroSlidShow() {
     slideRef.current.classList.remove(...classes);
     clonedSlideRef.current.classList.remove(...classes);
     setClonedSlide({});
+    startSlideShow();
   };
 
   const handleOnVisibilityChange = () => {
@@ -90,7 +93,7 @@ export default function HeroSlidShow() {
     <div className="w-full flex">
       <div className="w-4/5 aspect-video relative overflow-hidden">
         <img
-          onAnimationEnd={handleAnimationEnd}
+          // onAnimationEnd={handleAnimationEnd}
           ref={slideRef}
           className="aspect-video object-cover"
           src={currentSlide.poster}
