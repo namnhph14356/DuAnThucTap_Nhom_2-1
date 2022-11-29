@@ -125,7 +125,7 @@ export default function HeroSlidShow() {
         <Slide
           ref={clonedSlideRef}
           onAnimationEnd={handleAnimationEnd}
-          className=" absolute inset-0"
+          className="absolute inset-0"
           src={clonedSlide.poster}
           title={clonedSlide.title}
           id={currentSlide.id}
@@ -176,7 +176,7 @@ const Slide = forwardRef((props, ref) => {
     <Link
       to={"/movie/" + id}
       ref={ref}
-      className={"w-full cursor-pointer" + className}
+      className={"w-full cursor-pointer block " + className}
       {...rest}
     >
       {src ? (
