@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getSingleMovie } from "../../api/movie";
-import { useNotification } from "../../hooks";
+import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import RatingStar from "../RatingStar";
 import RelatedMovie from "../RelatedMovie";
@@ -23,6 +23,12 @@ export default function SingleMovie() {
 
   const { movieId } = useParams();
   const { updateNotification } = useNotification();
+  const {isLoggedIn} = useAuth()
+  const navigate = useNavigate()
+
+  const handleOnClickMovie = () => {
+    if(!isLoggedIn) return navigate("/auth/signin")
+  }
 
   const fetchMovies = async () => {
     const { error, movie } = await getSingleMovie(movieId);
@@ -55,7 +61,7 @@ export default function SingleMovie() {
         <div className="flex flex-col items-end">
           <RatingStar rating={reviews.ratingAvg} />
           <Link className="text-highlight dark:text-highlight-dark" to={'/movie/reviews/' + id}>{convertReviewCount(reviews.reviewCount)} Reviews</Link>
-          <button className="text-highlight dark:text-highlight-dark hover:underline">Rate The Movie</button>
+          <button onClick={handleOnClickMovie} className="text-highlight dark:text-highlight-dark hover:underline">Rate The Movie</button>
         </div>
       </div>
       <div className="space-y-3">
