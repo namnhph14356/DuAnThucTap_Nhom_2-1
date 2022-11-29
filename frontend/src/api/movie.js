@@ -114,7 +114,7 @@ export const searchMovieForAdmin = async (title) => {
 export const getTopRatedMovies = async (type) => {
   try {
     let endpoint = "/movie/top-rated";
-    if(type) endpoint = endpoint + "?type=" + type;
+    if (type) endpoint = endpoint + "?type=" + type;
     const { data } = await client(endpoint);
     return data;
   } catch (error) {
@@ -123,11 +123,19 @@ export const getTopRatedMovies = async (type) => {
 };
 
 export const getLatestUploads = async () => {
-  try{
-    const {data} = await client("/movie/latest-uploads");
+  try {
+    const { data } = await client("/movie/latest-uploads");
     return data;
-  }
-  catch(error){
+  } catch (error) {
     return cathError(error);
   }
-}
+};
+
+export const getSingleMovie = async (id) => {
+  try {
+    const { data } = await client("/movie/single/" + id);
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
