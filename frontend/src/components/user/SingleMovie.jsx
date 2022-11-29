@@ -6,6 +6,7 @@ import { getSingleMovie } from "../../api/movie";
 import { useNotification } from "../../hooks";
 import Container from "../Container";
 import RatingStar from "../RatingStar";
+import RelatedMovie from "../RelatedMovie";
 
 const convertReviewCount = (count) => {
   if (count < 999) return count
@@ -118,19 +119,23 @@ export default function SingleMovie() {
       <div className="mt-5">
         <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">Cast:</h1>
         <div className="grid grid-cols-10">
-            {cast.map((c) => {
-              return(
-                <div key={c.profile.id} className="flex flex-col items-center">
-                  <img className="w-24 h-24 aspect-square object-cover rounded-full" src={c.profile.avatar} alt="" />
-                  <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{c.profile.name}</p>
-                  <span className="text-light-subtle dark:text-dark-subtle text-sm">as</span>
-                  <p className="text-light-subtle dark:text-dark-subtle text-lg">
-                    {c.roleAs}
-                  </p>
-                </div>
-              )
-            })}
+          {cast.map((c) => {
+            return (
+              <div key={c.profile.id} className="flex flex-col items-center">
+                <img className="w-24 h-24 aspect-square object-cover rounded-full" src={c.profile.avatar} alt="" />
+                <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{c.profile.name}</p>
+                <span className="text-light-subtle dark:text-dark-subtle text-sm">as</span>
+                <p className="text-light-subtle dark:text-dark-subtle text-lg">
+                  {c.roleAs}
+                </p>
+              </div>
+            )
+          })}
         </div>
+      </div>
+
+      <div className="mt-3">
+        <RelatedMovie movieId={movieId} />
       </div>
     </Container>
   </div>;
