@@ -4,9 +4,10 @@ import ModalContainer from './ModalContainer'
 import Submit from '../form/Submit'
 const ratings = new Array(10).fill("")
 export default function AddRatingModal({ }) {
-    const [selectedRatings, setSelectedRatings] = useState([1,2,3])
+    const [selectedRatings, setSelectedRatings] = useState([])
     const handleMouseEnter = (index) => {
-
+        const ratings = new Array(index + 1).fill("")
+        setSelectedRatings([...ratings])
     }
     return (
         <ModalContainer visible ignoreContainer>
