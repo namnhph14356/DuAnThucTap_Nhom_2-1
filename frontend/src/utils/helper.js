@@ -20,7 +20,7 @@ export const renderItem = (result) => {
           alt={result.name}
           className="w-16 h-16 object-cover"
         />
-        <p className="dark:text-white font-semibold">{result.name}</p>
+        <p className="dark:text-white font-semibold hover:underline">{result.name} Reviews</p>
       </div>
     );
   };
