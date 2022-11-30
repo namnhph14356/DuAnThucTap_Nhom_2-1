@@ -14,6 +14,15 @@ export default function MovieUpload({ visible, onClose }) {
   const [busy, setBusy] = useState(false);
 
   const { updateNotification } = useNotification();
+
+  const resetState = () => {
+    setVideoSelected(false)
+    setVideoUploaded(false)
+    setUploadProgress(0)
+    setVideoInfo({})
+  }
+
+
   const handleTypeError = (error) => {
     updateNotification("error", error);
   };
@@ -58,6 +67,7 @@ export default function MovieUpload({ visible, onClose }) {
     if(error) return updateNotification("error", error)
 
     updateNotification("success", "Movie uploads successfully!");
+    resetState()
     onClose();
   };
   return (
