@@ -139,3 +139,12 @@ export const getSingleMovie = async (id) => {
     return cathError(error);
   }
 };
+
+export const getRelatedMovies = async (id) => {
+  try {
+    const { data } = await client("/movie/related/" + id);
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
