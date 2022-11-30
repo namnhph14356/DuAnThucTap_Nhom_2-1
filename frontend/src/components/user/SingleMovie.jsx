@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { getSingleMovie } from "../../api/movie";
 import { useNotification } from "../../hooks";
 import Container from "../Container";
+import RatingStar from "../RatingStar";
 
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
@@ -40,7 +41,8 @@ export default function SingleMovie() {
       <video poster={poster} controls src={trailer}></video>
       <div className="flex justify-between">
         <h1 className="text-4xl text-highlight dark:text-highlight-dark font-semibold py-3">{title}</h1>
-        <div>
+        <div className="flex flex-col items-end">
+          <RatingStar rating={reviews.ratingAvg} />
           <Link className="text-highlight dark:text-highlight-dark" to={'/movie/reviews/'+id}>{reviews.reviewCount}</Link>
         </div>
       </div>
