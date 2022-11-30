@@ -18,8 +18,8 @@ export default function HeroSlidShow() {
 
   const { updateNotification } = useNotification();
 
-  const fetchLatesUPloads = async () => {
-    const { error, movies } = await getLatestUploads();
+  const fetchLatestUPloads = async (signal) => {
+    const { error, movies } = await getLatestUploads(signal);
     if (error) return updateNotification("error", error);
 
     setSlides([...movies]);
@@ -92,7 +92,8 @@ export default function HeroSlidShow() {
   };
 
   useEffect(() => {
-    fetchLatesUPloads();
+    const ac = new AbortController()
+    fetchLatestUPloads(ac.signal);
     document.addEventListener("visibilitychange", handleOnVisibilityChange);
 
     return () => {
@@ -101,6 +102,7 @@ export default function HeroSlidShow() {
         "visibilitychange",
         handleOnVisibilityChange
       );
+      ac.abort()
     };
   }, []);
 
