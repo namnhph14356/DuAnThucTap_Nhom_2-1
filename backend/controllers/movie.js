@@ -99,8 +99,9 @@ exports.createMovie = async (req, res) => {
   await newMovie.save();
 
   res.status(201).json({
-    id: newMovie._id,
-    title,
+    movie:{
+      id: newMovie._id,
+      title,}
   });
 };
 
