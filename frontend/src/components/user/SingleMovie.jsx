@@ -7,6 +7,11 @@ import { useNotification } from "../../hooks";
 import Container from "../Container";
 import RatingStar from "../RatingStar";
 
+const convertReviewCount = (count) => {
+  if (count < 999) return count
+  return parseInt(count / 1000).toFixed(2) + 'k'
+}
+
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
   const [movie, setMovie] = useState({});
@@ -43,7 +48,7 @@ export default function SingleMovie() {
         <h1 className="text-4xl text-highlight dark:text-highlight-dark font-semibold py-3">{title}</h1>
         <div className="flex flex-col items-end">
           <RatingStar rating={reviews.ratingAvg} />
-          <Link className="text-highlight dark:text-highlight-dark" to={'/movie/reviews/'+id}>{reviews.reviewCount}</Link>
+          <Link className="text-highlight dark:text-highlight-dark" to={'/movie/reviews/' + id}>{convertReviewCount(reviews.reviewCount)}</Link>
         </div>
       </div>
     </Container>
