@@ -40,16 +40,33 @@ export default function SingleMovie() {
       </div>
     );
 
-  const { id, trailer, poster, title, reviews = {} } = movie
-  return <div className="dark:bg-primary bg-white">
+  const { id, trailer, poster, title, storyLine, director = {}, reviews = {}, writers = [] } = movie
+  return <div className="dark:bg-primary bg-white min-h-screen">
     <Container>
       <video poster={poster} controls src={trailer}></video>
       <div className="flex justify-between">
         <h1 className="text-4xl text-highlight dark:text-highlight-dark font-semibold py-3">{title}</h1>
         <div className="flex flex-col items-end">
           <RatingStar rating={reviews.ratingAvg} />
-          <Link className="text-highlight dark:text-highlight-dark" to={'/movie/reviews/' + id}>{convertReviewCount(reviews.reviewCount)}</Link>
+          <Link className="text-highlight dark:text-highlight-dark" to={'/movie/reviews/' + id}>{convertReviewCount(reviews.reviewCount)} Reviews</Link>
           <button className="text-highlight dark:text-highlight-dark hover:underline">Rate The Movie</button>
+        </div>
+      </div>
+      <div className="space-y-3">
+        <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
+        <div className="flex space-x-2">
+          <p className="text-light-subtle dark:text-dark-subtle font-semibold">Director:</p>
+          <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{director.name}</p>
+        </div>
+        <div className="flex">
+          <p className="text-light-subtle dark:text-dark-subtle font-semibold mr-2">Writer:</p>
+          <div className="space-x-2">
+            {writers.map((w) => {
+              return (
+                <p className="text-highlight dark:text-highlight-dark hover:underline cursor-pointer">{w.name}</p>
+              )
+            })}
+          </div>
         </div>
       </div>
     </Container>
