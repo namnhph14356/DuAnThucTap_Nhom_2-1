@@ -5,7 +5,7 @@ import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import { useParams } from "react-router-dom";
 import { getReviewByMovie } from "../../api/review";
-import { useNotification } from "../../hooks";
+import { useAuth, useNotification } from "../../hooks";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
@@ -13,7 +13,10 @@ const getNameInitial = (name = "") => {
 
 export default function MovieReviews() {
   const [reviews, setReviews] = useState([]);
+  const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const { movieId } = useParams();
+  const { authInfo } = useAuth();
+  const profileId = authInfo.profile?.id;
 
   const { updateNotification } = useNotification();
 
@@ -22,6 +25,16 @@ export default function MovieReviews() {
     if (error) return updateNotification("error", error);
 
     setReviews([...reviews]);
+  };
+
+  const findProfileOwnersReview = () => {
+    if (profileOwnersReview) return setProfileOwnersReview(null);
+
+    const matched = reviews.find((review) => review.owner.id === profileId);
+    if (!matched)
+      return updateNotification("error", "You don't have any review!");
+
+    setProfileOwnersReview(matched);
   };
 
   useEffect(() => {
@@ -38,20 +51,31 @@ export default function MovieReviews() {
             This is the title
           </h1>
 
-          <CustomButtonLink label="Find My Review" />
+          {profileId ? (
+            <CustomButtonLink
+              label={profileOwnersReview ? "View All" : "Find My Review"}
+              onClick={findProfileOwnersReview}
+            />
+          ) : null}
         </div>
 
-        <div className="space-y-3 mt-3">
-          {reviews.map((review) => (
-            <ReviewCard review={review} key={review.id} />
-          ))}
-        </div>
+        {profileOwnersReview ? (
+          <ReviewCard review={profileOwnersReview} />
+        ) : (
+          <div className="space-y-3 mt-3">
+            {reviews.map((review) => (
+              <ReviewCard review={review} key={review.id} />
+            ))}
+          </div>
+        )}
       </Container>
     </div>
   );
 }
 
 const ReviewCard = ({ review }) => {
+  if (!review) return null;
+
   const { owner, content, rating } = review;
   return (
     <div className="flex space-x-3">
