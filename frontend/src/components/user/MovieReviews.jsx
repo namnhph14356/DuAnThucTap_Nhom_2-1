@@ -8,6 +8,7 @@ import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../modals/ConfirmModal";
 import NotFoundText from "../NotFoundText";
+import EditRatingModal from "../modals/EditRatingModal";
 import { deleteReview, getReviewByMovie } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 
@@ -19,7 +20,9 @@ export default function MovieReviews() {
   const [reviews, setReviews] = useState([]);
   const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
+  const [selectedReview, setSelectedReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const { movieId } = useParams();
@@ -44,6 +47,17 @@ export default function MovieReviews() {
       return updateNotification("error", "You don't have any review!");
 
     setProfileOwnersReview(matched);
+  };
+
+  const handleOnEditClick = () => {
+    const { id, content, rating } = profileOwnersReview;
+    setSelectedReview({
+      id,
+      content,
+      rating,
+    });
+
+    setShowEditModal(true);
   };
 
   const handleDeleteConfirm = async () => {
@@ -96,7 +110,7 @@ export default function MovieReviews() {
               <button onClick={displayConfirmModal} type="button">
                 <BsTrash />
               </button>
-              <button type="button">
+              <button onClick={handleOnEditClick} type="button">
                 <BsPencilSquare />
               </button>
             </div>
@@ -118,6 +132,8 @@ export default function MovieReviews() {
         title="Are you sure?"
         subtitle="This action will remove this review permanently."
       />
+
+      <EditRatingModal visible={showEditModal} initialState={selectedReview} />
     </div>
   );
 }
