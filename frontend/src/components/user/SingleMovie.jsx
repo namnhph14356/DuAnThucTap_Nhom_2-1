@@ -9,7 +9,7 @@ import AddRatingModal from "../modals/AddRatingModal";
 import ProfileModal from "../modals/ProfileModal";
 import RatingStar from "../RatingStar";
 import RelatedMovie from "../RelatedMovie";
-import CustomButtonLink from "./CustomButtonLink";
+import CustomButtonLink from "../CustomButtonLink";
 
 const convertReviewCount = (count = 0) => {
   if (count < 999) return count;
@@ -55,12 +55,12 @@ export default function SingleMovie() {
   };
 
   const handleProfileClick = (profile) => {
-    setSelectedProfile(profile)
-    setShowProfileModal(true)
+    setSelectedProfile(profile);
+    setShowProfileModal(true);
   };
 
   const hideProfileModal = () => {
-    setShowProfileModal(false)
+    setShowProfileModal(false);
   };
 
   useEffect(() => {
@@ -115,7 +115,10 @@ export default function SingleMovie() {
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
 
           <ListWithLable label="Director:">
-            <CustomButtonLink label={director.name} onClick = {() => handleProfileClick(director)}  />
+            <CustomButtonLink
+              label={director.name}
+              onClick={() => handleProfileClick(director)}
+            />
           </ListWithLable>
 
           <ListWithLable label="Writer:">
@@ -161,7 +164,7 @@ export default function SingleMovie() {
       <ProfileModal
         visible={showProfileModal}
         onClose={hideProfileModal}
-        profileId = {selectedProfile.id}
+        profileId={selectedProfile.id}
       />
 
       <AddRatingModal
