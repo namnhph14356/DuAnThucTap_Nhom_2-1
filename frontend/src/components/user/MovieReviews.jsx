@@ -1,7 +1,11 @@
 import React from "react";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
+import RatingStar from "../RatingStar";
 
+const getNameInitial = (name = "") => {
+  return name[0].toUpperCase();
+};
 export default function MovieReviews() {
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10">
@@ -10,7 +14,7 @@ export default function MovieReviews() {
           <h1 className="text-2xl font-semibold dark:text-white text-secondary">
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
               Reviews for:
-            </span>
+            </span>{" "}
             This is the title
           </h1>
 
@@ -20,3 +24,21 @@ export default function MovieReviews() {
     </div>
   );
 }
+
+const ReviewCard = ({ review }) => {
+  const { owner, content, rating } = review;
+  return (
+    <div className="flex space-x-3">
+      <div className="flex items-center justify-center w-14 h-14 rounded-full bg-light-subtle dark:bg-dark-subtle text-white text-xl select-none">
+        {getNameInitial(owner.name)}
+      </div>
+      <div>
+        <h1 className="dark:text-white text-secondary font-semibold text-lg">
+          John Doe
+        </h1>
+        <RatingStar rating={rating} />
+        <p className="text-light-subtle dark:text-dark-subtle">{content}</p>
+      </div>
+    </div>
+  );
+};
