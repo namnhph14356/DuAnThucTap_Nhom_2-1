@@ -25,3 +25,17 @@ export const getReviewByMovie = async (movieId) => {
     return cathError(error);
   }
 };
+
+export const deleteReview = async (reviewId) => {
+  const token = getToken();
+  try {
+    const { data } = await client.delete(`/review/${reviewId}`, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};

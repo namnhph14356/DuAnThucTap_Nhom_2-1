@@ -7,7 +7,7 @@ import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../modals/ConfirmModal";
-import { getReviewByMovie } from "../../api/review";
+import { deleteReview, getReviewByMovie } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 
 const getNameInitial = (name = "") => {
@@ -18,6 +18,7 @@ export default function MovieReviews() {
   const [reviews, setReviews] = useState([]);
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const { movieId } = useParams();
   const { authInfo } = useAuth();
@@ -40,6 +41,22 @@ export default function MovieReviews() {
       return updateNotification("error", "You don't have any review!");
 
     setProfileOwnersReview(matched);
+  };
+
+  const handleDeleteConfirm = async () => {
+    setBusy(true);
+    const { error, message } = await deleteReview(profileOwnersReview.id);
+    setBusy(false);
+    if (error) return updateNotification("error", error);
+
+    updateNotification("success", message);
+
+    const updatedReviews = reviews.filter(
+      (r) => r.id !== profileOwnersReview.id
+    );
+    setReviews([...updatedReviews]);
+    setProfileOwnersReview(null);
+    hideConfirmModal();
   };
 
   const displayConfirmModal = () => setShowConfirmModal(true);
@@ -91,6 +108,8 @@ export default function MovieReviews() {
       <ConfirmModal
         visible={showConfirmModal}
         onCancel={hideConfirmModal}
+        onConfirm={handleDeleteConfirm}
+        busy={busy}
         title="Are you sure?"
         subtitle="This action will remove this review permanently."
       />
