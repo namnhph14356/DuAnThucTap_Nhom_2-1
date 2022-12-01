@@ -92,7 +92,7 @@ export default function HeroSlidShow() {
   };
 
   useEffect(() => {
-    const ac = new AbortController()
+    const ac = new AbortController();
     fetchLatestUPloads(ac.signal);
     document.addEventListener("visibilitychange", handleOnVisibilityChange);
 
@@ -102,7 +102,7 @@ export default function HeroSlidShow() {
         "visibilitychange",
         handleOnVisibilityChange
       );
-      ac.abort()
+      ac.abort();
     };
   }, []);
 
@@ -114,7 +114,7 @@ export default function HeroSlidShow() {
   }, [slides.length, visible]);
   return (
     <div className="w-full flex">
-      <div className="w-4/5 aspect-video relative overflow-hidden">
+      <div className="md:w-4/5 w-full aspect-video relative overflow-hidden">
         {/* current slide */}
         <Slide
           ref={slideRef}
@@ -138,7 +138,7 @@ export default function HeroSlidShow() {
           onPrevClick={handleOnPrevClick}
         />
       </div>
-      <div className="w-1/5 space-y-3 px-3">
+      <div className="w-1/5 md:block hidden space-y-3 px-3">
         <h1 className="font-semibold text-2xl text-primary dark:text-white">
           Up Next
         </h1>
