@@ -76,8 +76,29 @@ export default function MovieReviews() {
     hideConfirmModal();
   };
 
+  const handleOnReviewUpdate = (review) => {
+    const updatedReview = {
+      ...profileOwnersReview,
+      rating: review.rating,
+      content: review.content,
+    };
+
+    setProfileOwnersReview({ ...updatedReview });
+
+    const newReviews = reviews.map((r) => {
+      if (r.id === updatedReview.id) return updatedReview;
+      return r;
+    });
+
+    setReviews([...newReviews]);
+  };
+
   const displayConfirmModal = () => setShowConfirmModal(true);
   const hideConfirmModal = () => setShowConfirmModal(false);
+  const hideEditModal = () => {
+    setShowEditModal(false);
+    setSelectedReview(null);
+  };
 
   useEffect(() => {
     if (movieId) fetchReviews();
@@ -133,7 +154,12 @@ export default function MovieReviews() {
         subtitle="This action will remove this review permanently."
       />
 
-      <EditRatingModal visible={showEditModal} initialState={selectedReview} />
+      <EditRatingModal
+        visible={showEditModal}
+        initialState={selectedReview}
+        onSuccess={handleOnReviewUpdate}
+        onClose={hideEditModal}
+      />
     </div>
   );
 }
