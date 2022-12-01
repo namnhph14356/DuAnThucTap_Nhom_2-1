@@ -1,12 +1,32 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
+import { useParams } from "react-router-dom";
+import { getReviewByMovie } from "../../api/review";
+import { useNotification } from "../../hooks";
 
 const getNameInitial = (name = "") => {
   return name[0].toUpperCase();
 };
+
 export default function MovieReviews() {
+  const [reviews, setReviews] = useState([]);
+  const { movieId } = useParams();
+
+  const { updateNotification } = useNotification();
+
+  const fetchReviews = async () => {
+    const { reviews, error } = await getReviewByMovie(movieId);
+    if (error) return updateNotification("error", error);
+
+    setReviews([...reviews]);
+  };
+
+  useEffect(() => {
+    if (movieId) fetchReviews();
+  }, [movieId]);
   return (
     <div className="dark:bg-primary bg-white min-h-screen pb-10">
       <Container className="xl:px-0 px-2 py-8">
@@ -19,6 +39,12 @@ export default function MovieReviews() {
           </h1>
 
           <CustomButtonLink label="Find My Review" />
+        </div>
+
+        <div className="space-y-3 mt-3">
+          {reviews.map((review) => (
+            <ReviewCard review={review} key={review.id} />
+          ))}
         </div>
       </Container>
     </div>
