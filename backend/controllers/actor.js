@@ -88,8 +88,8 @@ exports.searchActor = async (req, res) => {
   const { name } = req.query;
 
   // const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
-  if(!name.trim()) return sendError(res, "Invalid request!")
-  const result = await Actor.find({ name: {$regex: name, $options: "i"}, });
+  if (!name.trim()) return sendError(res, "Invalid request!");
+  const result = await Actor.find({ name: { $regex: name, $options: "i" } });
 
   const actors = result.map((actor) => formatActor(actor));
 
@@ -104,7 +104,7 @@ exports.getLatestActors = async (req, res) => {
   res.json(actors);
 };
 
-exports.getSingletActor = async (req, res) => {
+exports.getSingleActor = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) return sendError(res, "Invalid request!");
@@ -112,7 +112,7 @@ exports.getSingletActor = async (req, res) => {
   const actor = await Actor.findById(id);
   if (!actor) return sendError(res, "Invalid request!, actor not found", 404);
 
-  res.json(formatActor(actor));
+  res.json({ actor: formatActor(actor) });
 };
 
 exports.getActors = async (req, res) => {
