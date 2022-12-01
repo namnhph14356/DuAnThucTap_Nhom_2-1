@@ -17,6 +17,7 @@ const getNameInitial = (name = "") => {
 
 export default function MovieReviews() {
   const [reviews, setReviews] = useState([]);
+  const [movieTitle, setMovieTitle] = useState("");
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -28,10 +29,11 @@ export default function MovieReviews() {
   const { updateNotification } = useNotification();
 
   const fetchReviews = async () => {
-    const { reviews, error } = await getReviewByMovie(movieId);
+    const { movie, error } = await getReviewByMovie(movieId);
     if (error) return updateNotification("error", error);
 
-    setReviews([...reviews]);
+    setReviews([...movie.reviews]);
+    setMovieTitle(movie.title);
   };
 
   const findProfileOwnersReview = () => {
@@ -74,7 +76,7 @@ export default function MovieReviews() {
             <span className="text-light-subtle dark:text-dark-subtle font-normal">
               Reviews for:
             </span>{" "}
-            This is the title
+            {movieTitle}
           </h1>
 
           {profileId ? (
