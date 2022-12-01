@@ -7,6 +7,7 @@ import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
 import ConfirmModal from "../modals/ConfirmModal";
+import NotFoundText from "../NotFoundText";
 import { deleteReview, getReviewByMovie } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 
@@ -83,6 +84,8 @@ export default function MovieReviews() {
             />
           ) : null}
         </div>
+
+        <NotFoundText text="No Reviews !" visible={!reviews.length} />
 
         {profileOwnersReview ? (
           <div>
