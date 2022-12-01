@@ -84,7 +84,7 @@ exports.relatedMovieAggregation = (tags, movieId) => {
       $project: {
         title: 1,
         poster: "$poster.url",
-        responsivePosters: "$poster.responsive"
+        responsivePosters: "$poster.responsive",
       },
     },
     {
@@ -94,6 +94,13 @@ exports.relatedMovieAggregation = (tags, movieId) => {
 };
 
 exports.topRatedMoviesPipeline = (type) => {
+  const matchOptions = {
+    reviews: { $exists: true },
+    status: { $eq: "public" },
+  };
+
+  if (type) matchOptions.type = { $eq: type };
+
   return [
     {
       $lookup: {
@@ -104,11 +111,7 @@ exports.topRatedMoviesPipeline = (type) => {
       },
     },
     {
-      $match: {
-        reviews: { $exists: true },
-        status: { $eq: "public" },
-        type: { $eq: type },
-      },
+      $match: matchOptions,
     },
     {
       $project: {
