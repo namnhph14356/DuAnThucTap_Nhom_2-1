@@ -7,6 +7,10 @@ import { useNotification } from "../../hooks";
 
 let count = 0;
 let intervalId;
+
+let newTime = 0;
+let lastTime = 0;
+
 export default function HeroSlidShow() {
   const [currentSlide, setCurrentSlide] = useState({});
   const [clonedSlide, setClonedSlide] = useState({});
@@ -27,7 +31,12 @@ export default function HeroSlidShow() {
   };
 
   const startSlideShow = () => {
-    intervalId = setInterval(handleOnNextClick, 3500);
+    intervalId = setInterval(() => {
+      newTime = Date.now();
+      const delta = newTime - lastTime;
+      if (delta < 4000) return clearInterval(intervalId);
+      handleOnNextClick();
+    }, 3500);
   };
 
   const pauseSlideShow = () => {
@@ -51,6 +60,7 @@ export default function HeroSlidShow() {
   };
 
   const handleOnNextClick = () => {
+    lastTime = Date.now();
     pauseSlideShow();
     setClonedSlide(slides[count]);
     count = (count + 1) % slides.length;
