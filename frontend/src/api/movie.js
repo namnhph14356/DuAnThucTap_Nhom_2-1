@@ -124,7 +124,7 @@ export const getTopRatedMovies = async (type, signal) => {
 
 export const getLatestUploads = async (signal) => {
   try {
-    const { data } = await client("/movie/latest-uploads", {signal});
+    const { data } = await client("/movie/latest-uploads", { signal });
     return data;
   } catch (error) {
     return cathError(error);
@@ -143,6 +143,15 @@ export const getSingleMovie = async (id) => {
 export const getRelatedMovies = async (id) => {
   try {
     const { data } = await client("/movie/related/" + id);
+    return data;
+  } catch (error) {
+    return cathError(error);
+  }
+};
+
+export const searchPublicMovies = async (title) => {
+  try {
+    const { data } = await client("/movie/search-public?title=" + title);
     return data;
   } catch (error) {
     return cathError(error);
