@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { BsTrash, BsPencilSquare } from "react-icons/bs";
+
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
-import { useParams } from "react-router-dom";
 import { getReviewByMovie } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 
@@ -60,7 +62,17 @@ export default function MovieReviews() {
         </div>
 
         {profileOwnersReview ? (
-          <ReviewCard review={profileOwnersReview} />
+          <div>
+            <ReviewCard review={profileOwnersReview} />
+            <div className="flex space-x-3 dark:text-white text-primary text-xl p-3">
+              <button type="button">
+                <BsTrash />
+              </button>
+              <button type="button">
+                <BsPencilSquare />
+              </button>
+            </div>
+          </div>
         ) : (
           <div className="space-y-3 mt-3">
             {reviews.map((review) => (
