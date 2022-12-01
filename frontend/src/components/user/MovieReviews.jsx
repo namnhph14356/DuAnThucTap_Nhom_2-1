@@ -6,6 +6,7 @@ import { BsTrash, BsPencilSquare } from "react-icons/bs";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import RatingStar from "../RatingStar";
+import ConfirmModal from "../modals/ConfirmModal";
 import { getReviewByMovie } from "../../api/review";
 import { useAuth, useNotification } from "../../hooks";
 
@@ -16,6 +17,8 @@ const getNameInitial = (name = "") => {
 export default function MovieReviews() {
   const [reviews, setReviews] = useState([]);
   const [profileOwnersReview, setProfileOwnersReview] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const { movieId } = useParams();
   const { authInfo } = useAuth();
   const profileId = authInfo.profile?.id;
@@ -38,6 +41,9 @@ export default function MovieReviews() {
 
     setProfileOwnersReview(matched);
   };
+
+  const displayConfirmModal = () => setShowConfirmModal(true);
+  const hideConfirmModal = () => setShowConfirmModal(false);
 
   useEffect(() => {
     if (movieId) fetchReviews();
@@ -65,7 +71,7 @@ export default function MovieReviews() {
           <div>
             <ReviewCard review={profileOwnersReview} />
             <div className="flex space-x-3 dark:text-white text-primary text-xl p-3">
-              <button type="button">
+              <button onClick={displayConfirmModal} type="button">
                 <BsTrash />
               </button>
               <button type="button">
@@ -81,6 +87,13 @@ export default function MovieReviews() {
           </div>
         )}
       </Container>
+
+      <ConfirmModal
+        visible={showConfirmModal}
+        onCancel={hideConfirmModal}
+        title="Are you sure?"
+        subtitle="This action will remove this review permanently."
+      />
     </div>
   );
 }
