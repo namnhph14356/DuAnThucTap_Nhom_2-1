@@ -42,14 +42,6 @@ app.use(errorHandler);
 //   }
 // );
 
-// app.listen(8000, () => {
-//   console.log("the port is listening on port 8000");
-// });
-
-const uri = process.env.MONGO_URI;
-const db = uri || "mongodb://0.0.0.0:27017/review_app";
-mongoose.connect(db).then(() => console.log("Connect database successfully!"));
-// Content
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running port ${PORT}`);
